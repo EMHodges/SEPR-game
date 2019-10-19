@@ -1,3 +1,7 @@
+html {
+    scroll-behavior: smooth;
+}
+
 .jumbo-background {
     background-color: #D5FFE7;
 }
