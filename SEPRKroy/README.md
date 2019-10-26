@@ -1,6 +1,6 @@
 # Setup
 
-Little tutorial on how to get started with IntelliJ and our project
+Little tutorial on how to get setup IntelliJ IDEA and git with our project
 
 ## Step 1.
 Download Git Bash here https://git-scm.com/downloads to use a CLI for git, 
