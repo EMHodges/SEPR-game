@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.desktop;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.mozarellabytes.kroy.KroyMain;
