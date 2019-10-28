@@ -2,7 +2,7 @@ package com.mozarellabytes.kroy.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.mozarellabytes.kroy.KroyMain;
+import com.mozarellabytes.kroy.Kroy;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
@@ -12,7 +12,7 @@ public class DesktopLauncher {
 		config.resizable = false;
 		config.title = "Kroy";
 		config.vSyncEnabled = true;
-//		config.fullscreen = true;
-		new LwjglApplication(new KroyMain(), config);
+		config.forceExit = true;
+		new LwjglApplication(new Kroy(), config);
 	}
 }
