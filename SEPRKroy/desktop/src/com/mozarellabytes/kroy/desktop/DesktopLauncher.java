@@ -12,6 +12,7 @@ public class DesktopLauncher {
 		config.resizable = false;
 		config.title = "Kroy";
 		config.vSyncEnabled = true;
+//		config.fullscreen = true;
 		new LwjglApplication(new KroyMain(), config);
 	}
 }
