@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy;
+package com.mozarellabytes.kroy.Screen;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Sound;
@@ -6,17 +6,18 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
+import com.mozarellabytes.kroy.Kroy;
 
 public class GameScreen implements Screen {
 
-    final Kroy game;
+    private final Kroy game;
 
     private Sound errorSound;
     private Rectangle donutShape;
     private Texture donutImage;
     private OrthographicCamera camera;
 
-    public GameScreen(Kroy game) {
+    GameScreen(Kroy game) {
         this.game = game;
 
         errorSound = Gdx.audio.newSound(Gdx.files.internal("error.mp3"));
@@ -26,8 +27,8 @@ public class GameScreen implements Screen {
         donutImage = new Texture(Gdx.files.internal("donut.png"));
 
         donutShape = new Rectangle();
-        donutShape.width = donutImage.getWidth()/2;
-        donutShape.height = donutImage.getHeight()/2;
+        donutShape.width = (float) donutImage.getWidth()/2;
+        donutShape.height = (float) donutImage.getHeight()/2;
         donutShape.x = camera.viewportWidth/2 - donutShape.getWidth();
         donutShape.y = camera.viewportHeight/2 - donutShape.getHeight();
     }
@@ -99,8 +100,8 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * @param width
-     * @param height
+     * @param width of window
+     * @param height of window
      * @see ApplicationListener#resize(int, int)
      */
     @Override
