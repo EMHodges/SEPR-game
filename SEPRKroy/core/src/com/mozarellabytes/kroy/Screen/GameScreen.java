@@ -5,6 +5,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Kroy;
 
@@ -16,6 +17,8 @@ public class GameScreen implements Screen {
     private Rectangle donutShape;
     private Texture donutImage;
     private OrthographicCamera camera;
+    private int points;
+    private float w;
 
     GameScreen(Kroy game) {
         this.game = game;
@@ -31,6 +34,12 @@ public class GameScreen implements Screen {
         donutShape.height = (float) donutImage.getHeight()/2;
         donutShape.x = camera.viewportWidth/2 - donutShape.getWidth();
         donutShape.y = camera.viewportHeight/2 - donutShape.getHeight();
+
+        GlyphLayout layout = new GlyphLayout();
+        String item = "Points: ";
+        layout.setText(game.font, item);
+        w = layout.width;
+
     }
 
     /**
@@ -57,11 +66,13 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(donutImage, donutShape.x, donutShape.y, donutShape.width, donutShape.height);
+        game.font.draw(game.batch, "Points: " + points, 10, camera.viewportHeight - 10);
         game.batch.end();
 
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (donutShape.x > 0) {
                 donutShape.x -= 200 * Gdx.graphics.getDeltaTime() * 2;
+                points++;
             } else {
                 errorSound.play();
             }
@@ -70,6 +81,7 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (donutShape.x + donutShape.width < camera.viewportWidth) {
                 donutShape.x += 200 * Gdx.graphics.getDeltaTime() * 2;
+                points++;
             } else {
                 errorSound.play();
             }
@@ -78,6 +90,7 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (donutShape.y + donutShape.height < camera.viewportHeight) {
                 donutShape.y += 200 * Gdx.graphics.getDeltaTime() * 2;
+                points++;
             } else {
                 errorSound.play();
             }
@@ -86,6 +99,7 @@ public class GameScreen implements Screen {
         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (donutShape.y > 0) {
                 donutShape.y -= 200 * Gdx.graphics.getDeltaTime() * 2;
+                points++;
             } else {
                 errorSound.play();
             }
