@@ -14,8 +14,9 @@ public class GameScreen implements Screen {
     private final Kroy game;
 
     private Sound errorSound;
-    private Rectangle donutShape;
+    private Rectangle bigDonut;
     private Texture donutImage;
+    private Rectangle smallDonut;
     private OrthographicCamera camera;
     private int points;
     private float w;
@@ -27,18 +28,24 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        donutImage = new Texture(Gdx.files.internal("donut.png"));
+        donutImage = new Texture(Gdx.files.internal("donut2.png"));
 
-        donutShape = new Rectangle();
-        donutShape.width = (float) donutImage.getWidth()/2;
-        donutShape.height = (float) donutImage.getHeight()/2;
-        donutShape.x = camera.viewportWidth/2 - donutShape.getWidth();
-        donutShape.y = camera.viewportHeight/2 - donutShape.getHeight();
+        bigDonut = new Rectangle();
+        bigDonut.width = (float) donutImage.getWidth()/2;
+        bigDonut.height = (float) donutImage.getHeight()/2;
+        bigDonut.x = camera.viewportWidth/2 - bigDonut.getWidth();
+        bigDonut.y = camera.viewportHeight/2 - bigDonut.getHeight();
 
         GlyphLayout layout = new GlyphLayout();
         String item = "Points: ";
         layout.setText(game.font, item);
         w = layout.width;
+
+        smallDonut = new Rectangle();
+        smallDonut.width = (float) donutImage.getWidth()/4;
+        smallDonut.height = (float) donutImage.getHeight()/4;
+        smallDonut.x = 100;
+        smallDonut.y = 100;
 
     }
 
@@ -65,41 +72,44 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.batch.draw(donutImage, donutShape.x, donutShape.y, donutShape.width, donutShape.height);
+        game.batch.draw(donutImage, smallDonut.x, smallDonut.y, smallDonut.width, smallDonut.height);
+        game.batch.draw(donutImage, bigDonut.x, bigDonut.y, bigDonut.width, bigDonut.height);
         game.font.draw(game.batch, "Points: " + points, 10, camera.viewportHeight - 10);
         game.batch.end();
 
+        if (bigDonut.overlaps(smallDonut)) {
+            points++;
+            smallDonut.x = (float) ((Math.random() * ((camera.viewportWidth - 0) + 1)) + 0);
+            smallDonut.y = (float) ((Math.random() * ((camera.viewportHeight - 0) + 1)) + 0);;
+        }
+
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if (donutShape.x > 0) {
-                donutShape.x -= 200 * Gdx.graphics.getDeltaTime() * 2;
-                points++;
+            if (bigDonut.x > 0) {
+                bigDonut.x -= 200 * Gdx.graphics.getDeltaTime() * 2;
             } else {
                 errorSound.play();
             }
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if (donutShape.x + donutShape.width < camera.viewportWidth) {
-                donutShape.x += 200 * Gdx.graphics.getDeltaTime() * 2;
-                points++;
+            if (bigDonut.x + bigDonut.width < camera.viewportWidth) {
+                bigDonut.x += 200 * Gdx.graphics.getDeltaTime() * 2;
             } else {
                 errorSound.play();
             }
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-            if (donutShape.y + donutShape.height < camera.viewportHeight) {
-                donutShape.y += 200 * Gdx.graphics.getDeltaTime() * 2;
-                points++;
+            if (bigDonut.y + bigDonut.height < camera.viewportHeight) {
+                bigDonut.y += 200 * Gdx.graphics.getDeltaTime() * 2;
             } else {
                 errorSound.play();
             }
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            if (donutShape.y > 0) {
-                donutShape.y -= 200 * Gdx.graphics.getDeltaTime() * 2;
-                points++;
+            if (bigDonut.y > 0) {
+                bigDonut.y -= 200 * Gdx.graphics.getDeltaTime() * 2;
             } else {
                 errorSound.play();
             }
