@@ -79,13 +79,14 @@ public class GameScreen implements Screen {
 
         if (bigDonut.overlaps(smallDonut)) {
             points++;
-            smallDonut.x = (float) ((Math.random() * ((camera.viewportWidth - 0) + 1)) + 0);
-            smallDonut.y = (float) ((Math.random() * ((camera.viewportHeight - 0) + 1)) + 0);;
+            smallDonut.x = (float) ((Math.random() * ((camera.viewportWidth - smallDonut.width) + 1)) + 0);
+            smallDonut.y = (float) ((Math.random() * ((camera.viewportHeight - smallDonut.height) + 1)) + 0);;
+            eat();
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (bigDonut.x > 0) {
-                bigDonut.x -= 200 * Gdx.graphics.getDeltaTime() * 2;
+                bigDonut.x -= 200 * Gdx.graphics.getDeltaTime() * 4;
             } else {
                 errorSound.play();
             }
@@ -93,7 +94,7 @@ public class GameScreen implements Screen {
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             if (bigDonut.x + bigDonut.width < camera.viewportWidth) {
-                bigDonut.x += 200 * Gdx.graphics.getDeltaTime() * 2;
+                bigDonut.x += 200 * Gdx.graphics.getDeltaTime() * 4;
             } else {
                 errorSound.play();
             }
@@ -101,7 +102,7 @@ public class GameScreen implements Screen {
 
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
             if (bigDonut.y + bigDonut.height < camera.viewportHeight) {
-                bigDonut.y += 200 * Gdx.graphics.getDeltaTime() * 2;
+                bigDonut.y += 200 * Gdx.graphics.getDeltaTime() * 4;
             } else {
                 errorSound.play();
             }
@@ -109,7 +110,7 @@ public class GameScreen implements Screen {
 
         if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             if (bigDonut.y > 0) {
-                bigDonut.y -= 200 * Gdx.graphics.getDeltaTime() * 2;
+                bigDonut.y -= 200 * Gdx.graphics.getDeltaTime() * 4;
             } else {
                 errorSound.play();
             }
@@ -131,6 +132,12 @@ public class GameScreen implements Screen {
     @Override
     public void resize(int width, int height) {
 
+    }
+
+    private void eat() {
+        bigDonut.width += 10;
+        bigDonut.height += 10;
+        points++;
     }
 
     /**

@@ -18,6 +18,7 @@ public class Kroy extends Game {
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		font.getData().setScale(2);
 		this.setScreen(new MainMenuScreen(this));
 	}
 
