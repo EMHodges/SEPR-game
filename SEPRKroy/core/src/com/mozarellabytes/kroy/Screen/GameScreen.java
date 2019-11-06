@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
 import com.mozarellabytes.kroy.Kroy;
 
 public class GameScreen implements Screen {
@@ -19,10 +21,14 @@ public class GameScreen implements Screen {
     private Rectangle smallDonut;
     private OrthographicCamera camera;
     private int points;
-    private float w;
+    private long timer;
+    private long startTime;
+    private boolean isPaused;
 
     GameScreen(Kroy game) {
         this.game = game;
+
+        startTime = System.currentTimeMillis();
 
         errorSound = Gdx.audio.newSound(Gdx.files.internal("error.mp3"));
         camera = new OrthographicCamera();
@@ -37,16 +43,16 @@ public class GameScreen implements Screen {
         bigDonut.y = camera.viewportHeight/2 - bigDonut.getHeight();
 
         GlyphLayout layout = new GlyphLayout();
-        String item = "Points: ";
-        layout.setText(game.font, item);
-        w = layout.width;
+        String points = "Points: ";
+        String time = "Time: ";
+        layout.setText(game.font, points);
+        layout.setText(game.font, time);
 
         smallDonut = new Rectangle();
         smallDonut.width = (float) donutImage.getWidth()/4;
         smallDonut.height = (float) donutImage.getHeight()/4;
         smallDonut.x = 100;
         smallDonut.y = 100;
-
     }
 
     /**
@@ -64,6 +70,7 @@ public class GameScreen implements Screen {
      */
     @Override
     public void render(float delta) {
+
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
@@ -71,18 +78,28 @@ public class GameScreen implements Screen {
 
         game.batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
-        game.batch.draw(donutImage, smallDonut.x, smallDonut.y, smallDonut.width, smallDonut.height);
-        game.batch.draw(donutImage, bigDonut.x, bigDonut.y, bigDonut.width, bigDonut.height);
-        game.font.draw(game.batch, "Points: " + points, 10, camera.viewportHeight - 10);
-        game.batch.end();
+        timer = ((System.currentTimeMillis() - startTime) / 1000);
 
         if (bigDonut.overlaps(smallDonut)) {
             points++;
-            smallDonut.x = (float) ((Math.random() * ((camera.viewportWidth - smallDonut.width) + 1)) + 0);
-            smallDonut.y = (float) ((Math.random() * ((camera.viewportHeight - smallDonut.height) + 1)) + 0);;
             eat();
+            if (points/2 > 50) {
+                dispose();
+                Gdx.app.exit();
+                System.exit(0);
+            } else {
+                smallDonut.x = (float) ((Math.random() * ((camera.viewportWidth - smallDonut.width) + 1)) + 0);
+                smallDonut.y = (float) ((Math.random() * ((camera.viewportHeight - smallDonut.height) + 1)) + 0);;
+            }
         }
+
+        game.batch.begin();
+        game.batch.draw(donutImage, smallDonut.x, smallDonut.y, smallDonut.width, smallDonut.height);
+        game.batch.draw(donutImage, bigDonut.x, bigDonut.y, bigDonut.width, bigDonut.height);
+        game.font.draw(game.batch, "Points: " + points/2, 10, camera.viewportHeight - 10);
+        game.font.draw(game.batch, "Time: " + timer, camera.viewportWidth - 150, camera.viewportHeight - 10);
+        game.batch.end();
+
 
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (bigDonut.x > 0) {
