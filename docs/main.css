@@ -6,6 +6,10 @@ html {
     background-color: #D5FFE7;
 }
 
+.jumbo-background1 {
+    background-color: #F4DAFE;
+}
+
 .jumbotron {
     margin-bottom: 0;
 }
@@ -15,9 +19,13 @@ html {
 }
 
 section {
-    margin-bottom: 2em;
+    margin-bottom: 0;
 }
 
 .card {
     margin-bottom: 1em;
+}
+
+.link {
+    margin-bottom: 0.75em;
 }
