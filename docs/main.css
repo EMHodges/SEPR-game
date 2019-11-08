@@ -5,3 +5,19 @@ html {
 .jumbo-background {
     background-color: #D5FFE7;
 }
+
+.jumbotron {
+    margin-bottom: 0;
+}
+
+.card-title {
+    margin-bottom: 0;
+}
+
+section {
+    margin-bottom: 2em;
+}
+
+.card {
+    margin-bottom: 1em;
+}
