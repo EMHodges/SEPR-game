@@ -51,8 +51,8 @@ public class GameScreen implements Screen {
         smallDonut = new Rectangle();
         smallDonut.width = (float) donutImage.getWidth()/4;
         smallDonut.height = (float) donutImage.getHeight()/4;
-        smallDonut.x = 100;
         smallDonut.y = 100;
+        smallDonut.x = 100;
     }
 
     /**
@@ -100,6 +100,11 @@ public class GameScreen implements Screen {
         game.font.draw(game.batch, "Time: " + timer, camera.viewportWidth - 150, camera.viewportHeight - 10);
         game.batch.end();
 
+        if (bigDonut.overlaps(smallDonut)) {
+            points++;
+            smallDonut.x = (float) ((Math.random() * ((camera.viewportWidth - 0) + 1)) + 0);
+            smallDonut.y = (float) ((Math.random() * ((camera.viewportHeight - 0) + 1)) + 0);;
+        }
 
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             if (bigDonut.x > 0) {

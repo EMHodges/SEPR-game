@@ -26,7 +26,6 @@ public class MainMenuScreen implements Screen {
         String item = "Tap anywhere to begin...";
         layout.setText(game.font, item);
         w = layout.width;
-
     }
 
     /**

@@ -14,7 +14,6 @@ public class Kroy extends Game {
 	// Method called once when the application is created.
 	@Override
 	public void create () {
-		//Gdx.graphics.setWindowedMode(Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		batch = new SpriteBatch();
 		font = new BitmapFont();
