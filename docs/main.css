@@ -38,5 +38,6 @@ section {
 }
 
 embed {
-     min-height: 100vh
+     height: 750px;
+     width: 100%;
  }
