@@ -6376,8 +6376,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 331.168701171875,
-									"top": 132,
+									"left": 315.168701171875,
+									"top": 116,
 									"width": 94.66259765625,
 									"height": 13,
 									"alpha": 2.356194490192345,
@@ -6395,8 +6395,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 368.5,
-									"top": 122,
+									"left": 352.5,
+									"top": 106,
 									"height": 13,
 									"alpha": 2.356194490192345,
 									"distance": 35
@@ -6412,8 +6412,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 378.5,
-									"top": 161,
+									"left": 362.5,
+									"top": 145,
 									"height": 13,
 									"alpha": -2.356194490192345,
 									"distance": 20
@@ -6421,8 +6421,8 @@
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 384,
-							"top": 144,
+							"left": 368,
+							"top": 128,
 							"width": 20,
 							"height": 20,
 							"nameLabel": {
@@ -6463,8 +6463,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 288,
-											"top": 240,
+											"left": -48,
+											"top": 224,
 											"height": 13
 										},
 										{
@@ -6474,8 +6474,8 @@
 												"$ref": "AAAAAAFuJpGXnfpSsY4="
 											},
 											"font": "Arial;13;1",
-											"left": 573,
-											"top": 407,
+											"left": 405,
+											"top": 399,
 											"width": 67.20263671875,
 											"height": 13,
 											"text": "Game lose"
@@ -6488,8 +6488,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 288,
-											"top": 240,
+											"left": -48,
+											"top": 224,
 											"width": 38.27001953125,
 											"height": 13,
 											"text": "(from )"
@@ -6502,15 +6502,15 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 288,
-											"top": 240,
+											"left": -48,
+											"top": 224,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 568,
-									"top": 400,
+									"left": 400,
+									"top": 392,
 									"width": 77.20263671875,
 									"height": 25,
 									"stereotypeLabel": {
@@ -6537,8 +6537,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 144,
-									"top": 120,
+									"left": -24,
+									"top": 112,
 									"width": 10,
 									"height": 10
 								},
@@ -6553,8 +6553,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 144,
-									"top": 120,
+									"left": -24,
+									"top": 112,
 									"width": 10,
 									"height": 10
 								},
@@ -6568,15 +6568,15 @@
 										"$ref": "AAAAAAFuJpGXnPpQB7k="
 									},
 									"font": "Arial;13;0",
-									"left": 568,
-									"top": 425,
+									"left": 400,
+									"top": 417,
 									"width": 77.20263671875
 								}
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 568,
-							"top": 400,
+							"left": 400,
+							"top": 392,
 							"width": 77.20263671875,
 							"height": 40,
 							"nameCompartment": {
@@ -6620,8 +6620,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 384,
-											"top": 176,
+											"left": 368,
+											"top": 144,
 											"height": 13
 										},
 										{
@@ -6631,8 +6631,8 @@
 												"$ref": "AAAAAAFuJpyNKfrwhUc="
 											},
 											"font": "Arial;13;1",
-											"left": 421,
-											"top": 207,
+											"left": 413,
+											"top": 191,
 											"width": 50,
 											"height": 13,
 											"text": "Idle"
@@ -6645,8 +6645,8 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 384,
-											"top": 176,
+											"left": 368,
+											"top": 144,
 											"width": 38.27001953125,
 											"height": 13,
 											"text": "(from )"
@@ -6659,15 +6659,15 @@
 											},
 											"visible": false,
 											"font": "Arial;13;0",
-											"left": 384,
-											"top": 176,
+											"left": 368,
+											"top": 144,
 											"height": 13,
 											"horizontalAlignment": 1
 										}
 									],
 									"font": "Arial;13;0",
-									"left": 416,
-									"top": 200,
+									"left": 408,
+									"top": 184,
 									"width": 60,
 									"height": 25,
 									"stereotypeLabel": {
@@ -6694,8 +6694,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 160,
-									"top": 88,
+									"left": 152,
+									"top": 72,
 									"width": 10,
 									"height": 10
 								},
@@ -6710,8 +6710,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 160,
-									"top": 88,
+									"left": 152,
+									"top": 72,
 									"width": 10,
 									"height": 10
 								},
@@ -6725,15 +6725,15 @@
 										"$ref": "AAAAAAFuJpyNKfruJ7c="
 									},
 									"font": "Arial;13;0",
-									"left": 416,
-									"top": 225,
+									"left": 408,
+									"top": 209,
 									"width": 60
 								}
 							],
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 416,
-							"top": 200,
+							"left": 408,
+							"top": 184,
 							"width": 60,
 							"height": 40,
 							"nameCompartment": {
@@ -6770,8 +6770,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 426,
-									"top": 165,
+									"left": 414,
+									"top": 149,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -6791,8 +6791,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 438,
-									"top": 156,
+									"left": 425,
+									"top": 139,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -6812,8 +6812,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 403,
-									"top": 184,
+									"left": 391,
+									"top": 168,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -6831,7 +6831,7 @@
 								"$ref": "AAAAAAFuJoUdtPjodIs="
 							},
 							"lineStyle": 1,
-							"points": "402:164;429:199",
+							"points": "387:148;419:183",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFuJpzSDvsZDdU="
@@ -6854,8 +6854,8 @@
 							},
 							"font": "Arial;13;0",
 							"containerChangeable": true,
-							"left": 592,
-							"top": 488,
+							"left": 424,
+							"top": 480,
 							"width": 26,
 							"height": 26
 						},
@@ -6879,11 +6879,11 @@
 										"$ref": "AAAAAAFuJrG8n/zFBZ8="
 									},
 									"font": "Arial;13;0",
-									"left": 495,
-									"top": 455,
+									"left": 327,
+									"top": 447,
 									"width": 104.04443359375,
 									"height": 13,
-									"alpha": -1.5883388899292223,
+									"alpha": -1.588338806595889,
 									"distance": 57.0087712549569,
 									"hostEdge": {
 										"$ref": "AAAAAAFuJrG8n/zGQpI="
@@ -6902,8 +6902,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 633,
-									"top": 456,
+									"left": 465,
+									"top": 448,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -6923,8 +6923,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 589,
-									"top": 457,
+									"left": 421,
+									"top": 449,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -6942,7 +6942,7 @@
 								"$ref": "AAAAAAFuJpGXnPpRNaU="
 							},
 							"lineStyle": 1,
-							"points": "605:440;604:487",
+							"points": "437:432;436:479",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFuJrG8n/zHqBE="
@@ -7131,12 +7131,12 @@
 										"$ref": "AAAAAAFuSqzOHJHCT1c="
 									},
 									"font": "Arial;13;0",
-									"left": 529,
-									"top": 353,
+									"left": 270,
+									"top": 367,
 									"width": 158.24072265625,
 									"height": 13,
-									"alpha": 0.6820971109654174,
-									"distance": 86.14522621712709,
+									"alpha": -1.5371017156657774,
+									"distance": 89.05054744357274,
 									"hostEdge": {
 										"$ref": "AAAAAAFuSqzOHJHDQA0="
 									},
@@ -7154,8 +7154,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 538,
-									"top": 342,
+									"left": 468,
+									"top": 364,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -7175,8 +7175,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 516,
-									"top": 382,
+									"left": 424,
+									"top": 365,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -7194,7 +7194,7 @@
 								"$ref": "AAAAAAFuSqvnTpFtV5Y="
 							},
 							"lineStyle": 1,
-							"points": "480:352;568:399",
+							"points": "439:352;439:391",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFuSqzOHZHEuOk="
@@ -7226,17 +7226,17 @@
 										"$ref": "AAAAAAFuSrVzgZMJdns="
 									},
 									"font": "Arial;13;0",
-									"left": 159,
-									"top": 264,
-									"width": 167.857421875,
+									"left": 166,
+									"top": 256,
+									"width": 164.24560546875,
 									"height": 13,
-									"alpha": -4.73389086611083,
-									"distance": 93.02150289046077,
+									"alpha": -4.735373284217103,
+									"distance": 87.02298546935747,
 									"hostEdge": {
 										"$ref": "AAAAAAFuSrVzgZMKPbw="
 									},
 									"edgePosition": 1,
-									"text": "At least one active Fire Truck"
+									"text": "Atleast one active Fire Truck"
 								},
 								{
 									"_type": "EdgeLabelView",
@@ -7250,7 +7250,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"left": 306,
-									"top": 265,
+									"top": 257,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -7271,7 +7271,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"left": 350,
-									"top": 266,
+									"top": 258,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -7289,7 +7289,7 @@
 								"$ref": "AAAAAAFuSqvnTpFtV5Y="
 							},
 							"lineStyle": 1,
-							"points": "367:329;336:328;336:216;415:218",
+							"points": "367:329;336:328;336:200;407:202",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFuSrVzgZMLA+Q="
@@ -7321,8 +7321,8 @@
 										"$ref": "AAAAAAFuSrmvX5NjLFs="
 									},
 									"font": "Arial;13;0",
-									"left": 424,
-									"top": 159,
+									"left": 416,
+									"top": 143,
 									"width": 101.37841796875,
 									"height": 13,
 									"alpha": -1.9797045273548364,
@@ -7344,8 +7344,8 @@
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 533,
-									"top": 172,
+									"left": 525,
+									"top": 156,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -7365,8 +7365,8 @@
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 489,
-									"top": 173,
+									"left": 481,
+									"top": 157,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -7383,7 +7383,7 @@
 							"tail": {
 								"$ref": "AAAAAAFuJpyNKfrviDE="
 							},
-							"points": "445:200;445:179;504:179;504:219;475:219",
+							"points": "437:184;437:163;496:163;496:203;467:203",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAFuSrmvX5Nlzk4="
@@ -7397,75 +7397,75 @@
 						},
 						{
 							"_type": "UMLTransitionView",
-							"_id": "AAAAAAFuUSXdvXI1gpA=",
+							"_id": "AAAAAAFuS/Xa88ahpPE=",
 							"_parent": {
 								"$ref": "AAAAAAFuIgiZT/q7CDM="
 							},
 							"model": {
-								"$ref": "AAAAAAFuUSXdvXI0PgI="
+								"$ref": "AAAAAAFuS/Xa88ag0zY="
 							},
 							"subViews": [
 								{
 									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFuUSXdvXI2jDE=",
+									"_id": "AAAAAAFuS/Xa88ai7Bw=",
 									"_parent": {
-										"$ref": "AAAAAAFuUSXdvXI1gpA="
+										"$ref": "AAAAAAFuS/Xa88ahpPE="
 									},
 									"model": {
-										"$ref": "AAAAAAFuUSXdvXI0PgI="
+										"$ref": "AAAAAAFuS/Xa88ag0zY="
 									},
 									"font": "Arial;13;0",
 									"left": 447,
-									"top": 264,
+									"top": 260,
 									"width": 120.87841796875,
 									"height": 13,
-									"alpha": 1.6753385653297812,
-									"distance": 65.19202405202648,
+									"alpha": 1.5398645575347407,
+									"distance": 69.00724599634447,
 									"hostEdge": {
-										"$ref": "AAAAAAFuUSXdvXI1gpA="
+										"$ref": "AAAAAAFuS/Xa88ahpPE="
 									},
 									"edgePosition": 1,
 									"text": "Fire Truck Destroyed"
 								},
 								{
 									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFuUSXdvXI3KQk=",
+									"_id": "AAAAAAFuS/Xa88ajqYo=",
 									"_parent": {
-										"$ref": "AAAAAAFuUSXdvXI1gpA="
+										"$ref": "AAAAAAFuS/Xa88ahpPE="
 									},
 									"model": {
-										"$ref": "AAAAAAFuUSXdvXI0PgI="
+										"$ref": "AAAAAAFuS/Xa88ag0zY="
 									},
 									"visible": null,
 									"font": "Arial;13;0",
-									"left": 471,
-									"top": 269,
+									"left": 467,
+									"top": 259,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
 									"hostEdge": {
-										"$ref": "AAAAAAFuUSXdvXI1gpA="
+										"$ref": "AAAAAAFuS/Xa88ahpPE="
 									},
 									"edgePosition": 1
 								},
 								{
 									"_type": "EdgeLabelView",
-									"_id": "AAAAAAFuUSXdvXI4VjI=",
+									"_id": "AAAAAAFuS/Xa88ak2c8=",
 									"_parent": {
-										"$ref": "AAAAAAFuUSXdvXI1gpA="
+										"$ref": "AAAAAAFuS/Xa88ahpPE="
 									},
 									"model": {
-										"$ref": "AAAAAAFuUSXdvXI0PgI="
+										"$ref": "AAAAAAFuS/Xa88ag0zY="
 									},
 									"visible": false,
 									"font": "Arial;13;0",
-									"left": 427,
-									"top": 268,
+									"left": 423,
+									"top": 261,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
 									"hostEdge": {
-										"$ref": "AAAAAAFuUSXdvXI1gpA="
+										"$ref": "AAAAAAFuS/Xa88ahpPE="
 									},
 									"edgePosition": 1
 								}
@@ -7478,16 +7478,16 @@
 								"$ref": "AAAAAAFuJpyNKfrviDE="
 							},
 							"lineStyle": 1,
-							"points": "444:240;441:311",
+							"points": "437:224;440:311",
 							"showVisibility": true,
 							"nameLabel": {
-								"$ref": "AAAAAAFuUSXdvXI2jDE="
+								"$ref": "AAAAAAFuS/Xa88ai7Bw="
 							},
 							"stereotypeLabel": {
-								"$ref": "AAAAAAFuUSXdvXI3KQk="
+								"$ref": "AAAAAAFuS/Xa88ajqYo="
 							},
 							"propertyLabel": {
-								"$ref": "AAAAAAFuUSXdvXI4VjI="
+								"$ref": "AAAAAAFuS/Xa88ak2c8="
 							}
 						}
 					]
@@ -7540,14 +7540,6 @@
 								"$ref": "AAAAAAFuIgiZT/q6F+I="
 							},
 							"name": "Checking Fire Trucks"
-						},
-						{
-							"_type": "UMLState",
-							"_id": "AAAAAAFuSrSsK5KxLQM=",
-							"_parent": {
-								"$ref": "AAAAAAFuIgiZT/q6F+I="
-							},
-							"name": "Fire Truck destroyed"
 						}
 					],
 					"transitions": [
@@ -7589,29 +7581,6 @@
 						},
 						{
 							"_type": "UMLTransition",
-							"_id": "AAAAAAFuSqw2e5GUvxs=",
-							"_parent": {
-								"$ref": "AAAAAAFuIgiZT/q6F+I="
-							},
-							"source": {
-								"$ref": "AAAAAAFuJpyNKfruJ7c="
-							},
-							"target": {
-								"$ref": "AAAAAAFuSrSsK5KxLQM="
-							},
-							"triggers": [
-								{
-									"_type": "UMLEvent",
-									"_id": "AAAAAAFuSqxE1ZGmr6s=",
-									"_parent": {
-										"$ref": "AAAAAAFuSqw2e5GUvxs="
-									},
-									"name": "Fire Truck destroyed"
-								}
-							]
-						},
-						{
-							"_type": "UMLTransition",
 							"_id": "AAAAAAFuSqzOHJHCT1c=",
 							"_parent": {
 								"$ref": "AAAAAAFuIgiZT/q6F+I="
@@ -7635,19 +7604,6 @@
 						},
 						{
 							"_type": "UMLTransition",
-							"_id": "AAAAAAFuSrU3TJL3czE=",
-							"_parent": {
-								"$ref": "AAAAAAFuIgiZT/q6F+I="
-							},
-							"source": {
-								"$ref": "AAAAAAFuSrSsK5KxLQM="
-							},
-							"target": {
-								"$ref": "AAAAAAFuSqvnTpFs3GA="
-							}
-						},
-						{
-							"_type": "UMLTransition",
 							"_id": "AAAAAAFuSrVzgZMJdns=",
 							"_parent": {
 								"$ref": "AAAAAAFuIgiZT/q6F+I="
@@ -7665,7 +7621,7 @@
 									"_parent": {
 										"$ref": "AAAAAAFuSrVzgZMJdns="
 									},
-									"name": "At least one active Fire Truck"
+									"name": "Atleast one active Fire Truck"
 								}
 							]
 						},
@@ -7689,6 +7645,29 @@
 										"$ref": "AAAAAAFuSrmvX5NjLFs="
 									},
 									"name": "Spawn Fire Truck"
+								}
+							]
+						},
+						{
+							"_type": "UMLTransition",
+							"_id": "AAAAAAFuS/Xa88ag0zY=",
+							"_parent": {
+								"$ref": "AAAAAAFuIgiZT/q6F+I="
+							},
+							"source": {
+								"$ref": "AAAAAAFuJpyNKfruJ7c="
+							},
+							"target": {
+								"$ref": "AAAAAAFuSqvnTpFs3GA="
+							},
+							"triggers": [
+								{
+									"_type": "UMLEvent",
+									"_id": "AAAAAAFuS/X3Fcay7FA=",
+									"_parent": {
+										"$ref": "AAAAAAFuS/Xa88ag0zY="
+									},
+									"name": "Fire Truck Destroyed"
 								}
 							]
 						},
