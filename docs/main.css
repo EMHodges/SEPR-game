@@ -48,3 +48,7 @@ embed {
      height: 750px;
      width: 100%;
 }
+
+.desc {
+    margin-bottom: 0;
+}
