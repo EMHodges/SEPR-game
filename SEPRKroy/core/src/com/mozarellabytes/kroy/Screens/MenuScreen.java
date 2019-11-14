@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy.Screen;
+package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Game;
@@ -10,14 +10,14 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.mozarellabytes.kroy.Kroy;
 
-public class MainMenuScreen implements Screen {
+public class MenuScreen implements Screen {
 
     private final Kroy game;
     private OrthographicCamera camera;
     private Texture logoImage;
     private float w;
 
-    public MainMenuScreen(final Kroy game) {
+    public MenuScreen(final Kroy game) {
         this.game = game;
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
@@ -56,7 +56,7 @@ public class MainMenuScreen implements Screen {
         game.batch.end();
 
         if (Gdx.input.isTouched()) {
-            game.setScreen(new GameScreen(game));
+            game.setScreen(new DonutScreen(game));
             dispose();
         }
     }

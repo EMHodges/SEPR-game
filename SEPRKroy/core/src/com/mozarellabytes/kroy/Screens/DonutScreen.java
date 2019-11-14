@@ -1,4 +1,4 @@
-package com.mozarellabytes.kroy.Screen;
+package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Sound;
@@ -7,11 +7,9 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.TimeUtils;
-import com.badlogic.gdx.utils.Timer;
 import com.mozarellabytes.kroy.Kroy;
 
-public class GameScreen implements Screen {
+public class DonutScreen implements Screen {
 
     private final Kroy game;
 
@@ -25,7 +23,7 @@ public class GameScreen implements Screen {
     private long startTime;
     private boolean isPaused;
 
-    GameScreen(Kroy game) {
+    DonutScreen(Kroy game) {
         this.game = game;
 
         startTime = System.currentTimeMillis();
