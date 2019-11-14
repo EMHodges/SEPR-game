@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.mozarellabytes.kroy.Screens.MenuScreen;
+import com.mozarellabytes.kroy.Screens.SplashScreen;
 
 public class Kroy extends Game {
 
@@ -18,7 +19,7 @@ public class Kroy extends Game {
 		batch = new SpriteBatch();
 		font = new BitmapFont();
 		font.getData().setScale(2);
-		this.setScreen(new MenuScreen(this));
+		this.setScreen(new SplashScreen(this));
 	}
 
 	// Method called by the game loop from the application every time rendering should be performed. Game logic updates are usually also performed in this method.
