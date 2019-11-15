@@ -30,11 +30,11 @@ public class DonutScreen implements Screen {
 
         startTime = System.currentTimeMillis();
 
-        errorSound = Gdx.audio.newSound(Gdx.files.internal("error.mp3"));
+        errorSound = Gdx.audio.newSound(Gdx.files.internal("sounds/error.mp3"));
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        donutImage = new Texture(Gdx.files.internal("donut2.png"), true);
+        donutImage = new Texture(Gdx.files.internal("images/donut2.png"), true);
         donutImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         bigDonut = new Rectangle();

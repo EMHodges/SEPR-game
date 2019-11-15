@@ -5,7 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.mozarellabytes.kroy.Screens.MenuScreen;
 import com.mozarellabytes.kroy.Screens.SplashScreen;
 
 public class Kroy extends Game {

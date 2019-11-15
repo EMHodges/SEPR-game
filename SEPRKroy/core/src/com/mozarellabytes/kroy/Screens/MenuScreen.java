@@ -15,7 +15,7 @@ public class MenuScreen implements Screen {
     private final Kroy game;
     private OrthographicCamera camera;
     private Texture logoImage;
-    private float layoutWidth;
+    private Texture backgroundImage;
     private Rectangle playButton;
     private Texture playIdleTexture;
     private Texture playHoverTexture;
@@ -30,16 +30,13 @@ public class MenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        logoImage = new Texture(Gdx.files.internal("logo.png"), true);
-        playIdleTexture = new Texture(Gdx.files.internal("play.png"), true);
+        logoImage = new Texture(Gdx.files.internal("images/logo.png"), true);
+        backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+        backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        playIdleTexture = new Texture(Gdx.files.internal("images/play.png"), true);
         playIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        playHoverTexture = new Texture(Gdx.files.internal("playHover.png"), true);
+        playHoverTexture = new Texture(Gdx.files.internal("images/playHover.png"), true);
         playHoverTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-
-        GlyphLayout layout = new GlyphLayout();
-        String item = "Tap anywhere to begin...";
-        layout.setText(game.font, item);
-        layoutWidth = layout.width;
 
         ih = new MenuInputHandler(this);
 
@@ -55,7 +52,7 @@ public class MenuScreen implements Screen {
     }
 
     public void toGameScreen() {
-        game.setScreen(new DonutScreen(game));
+        game.setScreen(new GameScreen(game));
         this.dispose();
     }
 
@@ -98,9 +95,9 @@ public class MenuScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
+        game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
         game.batch.draw(logoImage, camera.viewportWidth/2 - logoImage.getWidth()/2, camera.viewportHeight/2 - logoImage.getHeight()/2, logoImage.getWidth(), logoImage.getHeight());
         game.batch.draw(currentPlayTexture, playButton.x, playButton.y, playButton.width, playButton.height);
-//        game.font.draw(game.batch, "Tap anywhere to begin...", camera.viewportWidth/2 - layoutWidth/2, (float) (camera.viewportHeight*0.35));
         game.batch.end();
     }
 
