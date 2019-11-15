@@ -31,8 +31,10 @@ public class MenuScreen implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
         logoImage = new Texture(Gdx.files.internal("logo.png"), true);
-        playIdleTexture = new Texture(Gdx.files.internal("play.png"));
-        playHoverTexture = new Texture(Gdx.files.internal("playHover.png"));
+        playIdleTexture = new Texture(Gdx.files.internal("play.png"), true);
+        playIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        playHoverTexture = new Texture(Gdx.files.internal("playHover.png"), true);
+        playHoverTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         GlyphLayout layout = new GlyphLayout();
         String item = "Tap anywhere to begin...";
@@ -42,6 +44,7 @@ public class MenuScreen implements Screen {
         ih = new MenuInputHandler(this);
 
         currentPlayTexture = playIdleTexture;
+
         playButton = new Rectangle();
         playButton.width = currentPlayTexture.getWidth()/3;
         playButton.height = currentPlayTexture.getHeight()/3;

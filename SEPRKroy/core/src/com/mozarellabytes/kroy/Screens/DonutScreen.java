@@ -32,7 +32,8 @@ public class DonutScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        donutImage = new Texture(Gdx.files.internal("donut2.png"));
+        donutImage = new Texture(Gdx.files.internal("donut2.png"), true);
+        donutImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         bigDonut = new Rectangle();
         bigDonut.width = (float) donutImage.getWidth()/2;
