@@ -2,8 +2,18 @@ package com.mozarellabytes.kroy.Utilities;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.mozarellabytes.kroy.Screens.MenuScreen;
+
+import java.awt.*;
 
 public class MenuInputHandler implements InputProcessor {
+
+    private MenuScreen menu;
+
+    public MenuInputHandler(MenuScreen menu) {
+        this.menu = menu;
+    }
+
     /**
      * Called when a key was pressed
      *
@@ -48,7 +58,15 @@ public class MenuInputHandler implements InputProcessor {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        // https://github.com/libgdx/libgdx/wiki/Coordinate-systems#screen-or-image-coordinates
+        screenY = menu.getScreenY() - screenY;
+        Rectangle playButton = menu.getPlayButton();
+        if (playButton.contains(screenX, screenY)) {
+            menu.toGameScreen();
+            return true;
+        } else {
+            return false;
+        }
     }
 
     /**
@@ -87,7 +105,15 @@ public class MenuInputHandler implements InputProcessor {
      */
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+        screenY = menu.getScreenY() - screenY;
+        Rectangle playButton = menu.getPlayButton();
+        if (playButton.contains(screenX, screenY)) {
+            menu.hoverPlayButton();
+            return true;
+        } else {
+            menu.idlePlayButton();
+            return false;
+        }
     }
 
     /**
