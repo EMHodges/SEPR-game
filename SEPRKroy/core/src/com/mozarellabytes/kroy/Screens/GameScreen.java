@@ -23,12 +23,9 @@ public class GameScreen implements Screen {
     public GameScreen(Kroy game) {
         this.game = game;
 
-        float w = Gdx.graphics.getWidth();
-        float h = Gdx.graphics.getHeight();
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 40, 24);
-        camera.update();
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / 48f);
@@ -40,6 +37,30 @@ public class GameScreen implements Screen {
     @Override
     public void show() {
 
+    }
+
+    public void cameraZoomIn() {
+        camera.zoom -= 0.02;
+    }
+
+    public void cameraZoomOut() {
+        camera.zoom += 0.02;
+    }
+
+    public void cameraMoveUp() {
+        camera.translate(0, 1);
+    }
+
+    public void cameraMoveDown() {
+        camera.translate(0, -1);
+    }
+
+    public void cameraMoveRight() {
+        camera.translate(1, 0);
+    }
+
+    public void cameraMoveLeft() {
+        camera.translate(-1, 0);
     }
 
     @Override
