@@ -13,13 +13,11 @@ public class SplashScreen implements Screen {
     private final Kroy game;
     private Texture backgroundLogo;
     private long startTime;
-    private Stage stage;
 
     public SplashScreen(Kroy game) {
         this.game = game;
         backgroundLogo = new Texture(Gdx.files.internal("backgroundLogo.png"), true);
         backgroundLogo.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-//        stage = new Stage(new ScreenViewport());
     }
 
     @Override
