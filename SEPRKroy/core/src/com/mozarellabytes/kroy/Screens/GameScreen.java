@@ -18,16 +18,14 @@ import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
 
 public class GameScreen implements Screen {
 
+    private Texture fireTruckTexture;
     private Kroy game;
     private TiledMap map;
     private TiledMapRenderer renderer;
     private OrthographicCamera camera;
     private GameInputHandler ih;
 
-    /*
-    private SpriteBatch sb;
     private FireTruck player;
-    */
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -44,20 +42,14 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
-        /*
-        sb = new SpriteBatch();
         player = new FireTruck();
         player.setOrigin(0f, 0f);
-        */
+
     }
 
     @Override
     public void show() {
 
-    }
-
-    public int getScreenY() {
-        return Gdx.graphics.getHeight();
     }
 
     @Override
@@ -67,14 +59,10 @@ public class GameScreen implements Screen {
         camera.update();
         renderer.setView(camera);
         renderer.render();
+        game.batch.setProjectionMatrix(camera.combined);
         game.batch.begin();
+        player.draw(game.batch);
         game.batch.end();
-
-        /*
-        sb.begin();
-        player.draw(sb);        Supposed to draw the firetruck
-        sb.end();
-        */
     }
 
     @Override

@@ -101,8 +101,6 @@ public class MenuScreen implements Screen {
         game.batch.end();
     }
 
-
-
     /**
      * @param width of window
      * @param height of window
@@ -142,6 +140,10 @@ public class MenuScreen implements Screen {
      */
     @Override
     public void dispose() {
-
+        logoImage.dispose();
+        backgroundImage.dispose();
+        currentPlayTexture.dispose();
+        playHoverTexture.dispose();
+        playIdleTexture.dispose();
     }
 }
