@@ -3,6 +3,7 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Screens.MenuScreen;
@@ -12,6 +13,10 @@ import java.awt.*;
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
+    public boolean wPressed;
+    public boolean aPressed;
+    public boolean sPressed;
+    public boolean dPressed;
 
     public GameInputHandler(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
@@ -25,11 +30,25 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.ESCAPE){
-            Gdx.app.exit();
-            System.exit(1);
+        switch (keycode) {
+            case Input.Keys.W:
+                gameScreen.truck.setMoveUp(true);
+                break;
+            case Input.Keys.A:
+                gameScreen.truck.setMoveLeft(true);
+                break;
+            case Input.Keys.S:
+                gameScreen.truck.setMoveDown(true);
+                break;
+            case Input.Keys.D:
+                gameScreen.truck.setMoveRight(true);
+                break;
+            case Input.Keys.ESCAPE:
+                Gdx.app.exit();
+                System.exit(1);
+                break;
         }
-        return false;
+        return true;
     }
 
     /**
@@ -40,7 +59,21 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        switch (keycode) {
+            case Input.Keys.W:
+                gameScreen.truck.setMoveUp(false);
+                break;
+            case Input.Keys.A:
+                gameScreen.truck.setMoveLeft(false);
+                break;
+            case Input.Keys.S:
+                gameScreen.truck.setMoveDown(false);
+                break;
+            case Input.Keys.D:
+                gameScreen.truck.setMoveRight(false);
+                break;
+        }
+        return true;
     }
 
     /**
@@ -65,8 +98,6 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        // https://github.com/libgdx/libgdx/wiki/Coordinate-systems#screen-or-image-coordinates
-        //screenY = gameScreen.getScreenY() - screenY;
         return false;
     }
 
@@ -94,7 +125,11 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        return false;
+        Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
+        Vector3 position = gameScreen.camera.unproject(clickCoordinates);
+        gameScreen.truck.setPosition(((int) (position.x * Constants.TILE_WxH)), (int) (position.y * Constants.TILE_WxH)-(48f+24f));
+        Gdx.app.log("Player", gameScreen.truck.getX() + ", " + gameScreen.truck.getY());
+        return true;
     }
 
     /**
