@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -22,9 +24,10 @@ public class GameScreen implements Screen {
     private OrthographicCamera camera;
     private GameInputHandler ih;
 
+    /*
     private SpriteBatch sb;
-
     private FireTruck player;
+    */
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -41,8 +44,11 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
+        /*
         sb = new SpriteBatch();
         player = new FireTruck();
+        player.setOrigin(0f, 0f);
+        */
     }
 
     @Override
@@ -63,9 +69,12 @@ public class GameScreen implements Screen {
         renderer.render();
         game.batch.begin();
         game.batch.end();
+
+        /*
         sb.begin();
-        player.draw(sb);
+        player.draw(sb);        Supposed to draw the firetruck
         sb.end();
+        */
     }
 
     @Override

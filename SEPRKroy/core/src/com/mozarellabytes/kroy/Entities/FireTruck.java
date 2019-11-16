@@ -19,6 +19,7 @@ public class FireTruck extends Sprite {
         sprite = new Sprite(texture);
     }
 
+
     protected void move() {
 
 
