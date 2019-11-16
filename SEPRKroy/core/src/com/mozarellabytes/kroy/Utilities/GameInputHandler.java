@@ -25,14 +25,9 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean keyDown(int keycode) {
-        if (keycode == Input.Keys.W) {
-            gameScreen.cameraMoveUp();
-        } else if (keycode == Input.Keys.S) {
-            gameScreen.cameraMoveDown();
-        } else if (keycode == Input.Keys.D) {
-            gameScreen.cameraMoveRight();
-        } else if (keycode == Input.Keys.A) {
-            gameScreen.cameraMoveLeft();
+        if (keycode == Input.Keys.ESCAPE){
+            Gdx.app.exit();
+            System.exit(1);
         }
         return false;
     }
@@ -45,10 +40,6 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean keyUp(int keycode) {
-        if (keycode == Input.Keys.ESCAPE) {
-            Gdx.app.exit();
-            System.exit(0);
-        }
         return false;
     }
 
@@ -126,11 +117,6 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean scrolled(int amount) {
-        if (amount == 1) {
-            gameScreen.cameraZoomIn();
-        } else {
-            gameScreen.cameraZoomOut();
-        }
         return false;
     }
 }

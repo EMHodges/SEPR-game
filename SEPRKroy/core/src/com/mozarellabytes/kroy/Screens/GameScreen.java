@@ -4,10 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.maps.tiled.TiledMap;
-import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
@@ -30,6 +29,8 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / 48f);
 
+        Gdx.app.log("Map", String.valueOf(map.getLayers().get("collision").getProperties().toString()));
+
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
     }
@@ -39,28 +40,8 @@ public class GameScreen implements Screen {
 
     }
 
-    public void cameraZoomIn() {
-        camera.zoom -= 0.02;
-    }
-
-    public void cameraZoomOut() {
-        camera.zoom += 0.02;
-    }
-
-    public void cameraMoveUp() {
-        camera.translate(0, 1);
-    }
-
-    public void cameraMoveDown() {
-        camera.translate(0, -1);
-    }
-
-    public void cameraMoveRight() {
-        camera.translate(1, 0);
-    }
-
-    public void cameraMoveLeft() {
-        camera.translate(-1, 0);
+    public int getScreenY() {
+        return Gdx.graphics.getHeight();
     }
 
     @Override
