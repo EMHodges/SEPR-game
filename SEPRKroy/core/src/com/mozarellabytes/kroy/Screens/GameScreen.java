@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Kroy;
+import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
 
@@ -23,11 +24,11 @@ public class GameScreen implements Screen {
         this.game = game;
 
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, 40, 24);
+        camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / 48f);
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
 
         Gdx.app.log("Map", String.valueOf(map.getLayers().get("collision").getProperties().toString()));
 
