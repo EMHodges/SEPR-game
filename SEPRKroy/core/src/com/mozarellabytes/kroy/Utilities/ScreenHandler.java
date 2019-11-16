@@ -1,41 +1,21 @@
 package com.mozarellabytes.kroy.Utilities;
 
-import com.badlogic.gdx.Screen;
+import com.mozarellabytes.kroy.Kroy;
+import com.mozarellabytes.kroy.Screens.ControlsScreen;
+import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Screens.MenuScreen;
 
-public class ScreenHandler implements Screen {
+public class ScreenHandler {
 
-    @Override
-    public void show() {
-
+    public static void ToMenu(Kroy game) {
+        game.setScreen(new MenuScreen(game));
     }
 
-    @Override
-    public void render(float delta) {
-
+    public static void ToGame(Kroy game) {
+        game.setScreen(new GameScreen(game));
     }
 
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-
+    public static void ToControls(Kroy game) {
+        game.setScreen(new ControlsScreen(game));
     }
 }

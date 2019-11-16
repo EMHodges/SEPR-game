@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
@@ -19,6 +21,10 @@ public class GameScreen implements Screen {
     private TiledMapRenderer renderer;
     private OrthographicCamera camera;
     private GameInputHandler ih;
+
+    private SpriteBatch sb;
+
+    private FireTruck player;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -34,6 +40,9 @@ public class GameScreen implements Screen {
 
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
+
+        sb = new SpriteBatch();
+        player = new FireTruck();
     }
 
     @Override
@@ -54,6 +63,9 @@ public class GameScreen implements Screen {
         renderer.render();
         game.batch.begin();
         game.batch.end();
+        sb.begin();
+        player.draw(sb);
+        sb.end();
     }
 
     @Override

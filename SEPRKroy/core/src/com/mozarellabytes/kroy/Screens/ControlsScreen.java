@@ -1,8 +1,13 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Screen;
+import com.mozarellabytes.kroy.Kroy;
 
 public class ControlsScreen implements Screen {
+
+    public ControlsScreen(Kroy game) {
+
+    }
 
     @Override
     public void show() {
