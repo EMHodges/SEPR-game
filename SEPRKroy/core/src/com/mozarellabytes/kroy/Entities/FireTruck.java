@@ -10,7 +10,7 @@ public class FireTruck extends Sprite {
     private int HP, AP, range, type, reserve;
 
     public FireTruck() {
-        super(new Texture(Gdx.files.internal("frame00001.png")));
+        super(new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000.png")));
     }
 
 
