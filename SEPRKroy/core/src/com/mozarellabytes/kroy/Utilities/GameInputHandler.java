@@ -3,10 +3,13 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
+import java.util.ArrayList;
 import java.util.Stack;
+import java.util.Vector;
 
 public class GameInputHandler implements InputProcessor {
 
@@ -40,6 +43,9 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();
                 System.exit(1);
+                break;
+            case Input.Keys.L:
+                Gdx.app.log("Path", gameScreen.truck.getPath().toString());
                 break;
         }
         return true;
@@ -92,7 +98,11 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        return false;
+        Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
+        Vector3 position = gameScreen.camera.unproject(clickCoordinates);
+        gameScreen.truck.resetTilePath();
+        gameScreen.truck.addTileToPath(position);
+        return true;
     }
 
     /**
@@ -106,6 +116,7 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // this is where the path is completed and the truck should start to follow the route
         return false;
     }
 
@@ -119,10 +130,13 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
+        ArrayList<Vector3> path = gameScreen.truck.getPath();
         Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-        gameScreen.truck.setPosition(((int) (position.x * Constants.TILE_WxH)), (int) (position.y * Constants.TILE_WxH)-(48f+24f));
-        Gdx.app.log("Player", gameScreen.truck.getX() + ", " + gameScreen.truck.getY());
+        position = new Vector3(((int) position.x), ((int) position.y), 0);
+        if (!path.contains(position)) {
+            gameScreen.truck.addTileToPath(position);
+        }
         return true;
     }
 

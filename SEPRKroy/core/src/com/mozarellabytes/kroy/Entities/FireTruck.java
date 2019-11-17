@@ -1,13 +1,11 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.mozarellabytes.kroy.Utilities.Constants;
-import com.mozarellabytes.kroy.Utilities.GameInputHandler;
+import com.badlogic.gdx.math.Vector3;
 
-import java.util.Stack;
+import java.util.ArrayList;
 
 public class FireTruck extends Sprite {
 
@@ -20,6 +18,7 @@ public class FireTruck extends Sprite {
     private Texture lookRight;
     private Texture lookUp;
     private Texture lookDown;
+    public ArrayList path;
 
     public FireTruck() {
         super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png")));
@@ -27,7 +26,20 @@ public class FireTruck extends Sprite {
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png"));
         lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000.png"));
         lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000.png"));
+        path = new ArrayList();
         speed = 3;
+    }
+
+    public ArrayList getPath() {
+        return path;
+    }
+
+    public void addTileToPath(Vector3 coordinate) {
+        path.add(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
+    }
+
+    public void resetTilePath() {
+        path.clear();
     }
 
     public void move() {
