@@ -7,6 +7,8 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
+import java.util.Stack;
+
 public class FireTruck extends Sprite {
 
     private int HP, AP, range, type, reserve, speed;

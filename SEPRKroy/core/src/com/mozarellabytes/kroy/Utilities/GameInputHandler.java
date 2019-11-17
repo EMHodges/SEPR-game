@@ -4,19 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector3;
-import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Screens.MenuScreen;
 
-import java.awt.*;
+import java.util.Stack;
 
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
-    public boolean wPressed;
-    public boolean aPressed;
-    public boolean sPressed;
-    public boolean dPressed;
 
     public GameInputHandler(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
