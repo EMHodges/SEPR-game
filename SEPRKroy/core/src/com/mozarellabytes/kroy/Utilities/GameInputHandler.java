@@ -3,13 +3,9 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-
-import java.util.ArrayList;
-import java.util.Stack;
-import java.util.Vector;
 
 public class GameInputHandler implements InputProcessor {
 
@@ -117,6 +113,8 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is where the path is completed and the truck should start to follow the route
+        gameScreen.truck.followPath();
+        gameScreen.truck.setMove(true);
         return false;
     }
 
@@ -130,11 +128,18 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        ArrayList<Vector3> path = gameScreen.truck.getPath();
         Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 position = gameScreen.camera.unproject(clickCoordinates);
         position = new Vector3(((int) position.x), ((int) position.y), 0);
-        if (!path.contains(position)) {
+        int i=0;
+        boolean alreadyVisited = false;
+        while (i < gameScreen.truck.getPath().size && !alreadyVisited) {
+            if (position.equals(gameScreen.truck.getPath().get(i))) {
+                alreadyVisited = true;
+            }
+            i++;
+        }
+        if (!alreadyVisited) {
             gameScreen.truck.addTileToPath(position);
         }
         return true;

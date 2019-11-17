@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.utils.Queue;
+import com.mozarellabytes.kroy.Utilities.Constants;
 
 import java.util.ArrayList;
 
@@ -18,7 +20,9 @@ public class FireTruck extends Sprite {
     private Texture lookRight;
     private Texture lookUp;
     private Texture lookDown;
-    public ArrayList path;
+    private Vector3 location;
+    public Queue<Vector3> path;
+    private boolean moving;
 
     public FireTruck() {
         super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png")));
@@ -26,20 +30,47 @@ public class FireTruck extends Sprite {
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png"));
         lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000.png"));
         lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000.png"));
-        path = new ArrayList();
+        path = new Queue<Vector3>();
+        location = new Vector3(0, 0, 0);
+        moving = false;
         speed = 3;
     }
 
-    public ArrayList getPath() {
+    public Queue<Vector3> getPath() {
         return path;
     }
 
     public void addTileToPath(Vector3 coordinate) {
-        path.add(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
+        path.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
     }
 
     public void resetTilePath() {
         path.clear();
+    }
+
+    public void setMove(boolean t) {
+        moving = t;
+    }
+
+    public void followPath() {
+        Gdx.app.log("Path", path.toString());
+        if (path.size > 0) {
+            if (path.first().x > location.x) {
+                this.translateX(48f);
+            } else if (path.first().x < location.x) {
+                this.translateX(-48f);
+            }
+            if (path.first().y > location.y) {
+                this.translateY(48f);
+            } else if (path.first().y < location.y) {
+                this.translateY(-48f);
+            }
+            location.x = path.first().x;
+            location.y = path.first().y;
+            path.removeFirst();
+        } else {
+            moving = false;
+        }
     }
 
     public void move() {
@@ -51,6 +82,10 @@ public class FireTruck extends Sprite {
             this.translateY(this.speed*-1);
         } else if (upMove) {
             this.translateY(this.speed);
+        }
+
+        if (moving) {
+            followPath();
         }
     }
 
