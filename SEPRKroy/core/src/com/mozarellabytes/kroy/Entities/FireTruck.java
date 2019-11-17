@@ -1,6 +1,8 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
@@ -12,6 +14,7 @@ import java.util.ArrayList;
 public class FireTruck extends Sprite {
 
     private int HP, AP, range, type, reserve, speed;
+    private int x, y;
     private boolean rightMove;
     private boolean leftMove;
     private boolean downMove;
@@ -34,6 +37,32 @@ public class FireTruck extends Sprite {
         location = new Vector3(0, 0, 0);
         moving = false;
         speed = 3;
+
+        x = 9;
+        y = 3;
+    }
+
+    public void arrowMove() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            x -= 1;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            x += 1;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            y -= 1;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            y += 1;
+        }
+    }
+
+    public int getCellX() {
+        return this.x;
+    }
+
+    public int getCellY() {
+        return this.y;
     }
 
     public Queue<Vector3> getPath() {
@@ -56,14 +85,14 @@ public class FireTruck extends Sprite {
         Gdx.app.log("Path", path.toString());
         if (path.size > 0) {
             if (path.first().x > location.x) {
-                this.translateX(48f);
+                this.translateX(48f/2);
             } else if (path.first().x < location.x) {
-                this.translateX(-48f);
+                this.translateX(-48f/2);
             }
             if (path.first().y > location.y) {
-                this.translateY(48f);
+                this.translateY(48f/2);
             } else if (path.first().y < location.y) {
-                this.translateY(-48f);
+                this.translateY(-48f/2);
             }
             location.x = path.first().x;
             location.y = path.first().y;
