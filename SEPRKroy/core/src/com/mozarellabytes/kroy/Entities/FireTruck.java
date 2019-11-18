@@ -57,6 +57,13 @@ public class FireTruck extends Sprite {
         }
     }
 
+    public void mouseMove() {
+        if (this.moving) {
+            followPath();
+        }
+
+    }
+
     public int getCellX() {
         return this.x;
     }
@@ -66,91 +73,28 @@ public class FireTruck extends Sprite {
     }
 
     public Queue<Vector3> getPath() {
-        return path;
+        return this.path;
     }
 
     public void addTileToPath(Vector3 coordinate) {
-        path.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
+        this.path.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
     }
 
     public void resetTilePath() {
-        path.clear();
+        this.path.clear();
     }
 
-    public void setMove(boolean t) {
-        moving = t;
+    public void setMoving(boolean t) {
+        this.moving = t;
     }
 
     public void followPath() {
-        Gdx.app.log("Path", path.toString());
-        if (path.size > 0) {
-            if (path.first().x > location.x) {
-                this.translateX(48f/2);
-            } else if (path.first().x < location.x) {
-                this.translateX(-48f/2);
-            }
-            if (path.first().y > location.y) {
-                this.translateY(48f/2);
-            } else if (path.first().y < location.y) {
-                this.translateY(-48f/2);
-            }
-            location.x = path.first().x;
-            location.y = path.first().y;
+        if (this.path.size > 0) {
+            this.x = (int) path.first().x;
+            this.y = (int) path.first().y;
             path.removeFirst();
         } else {
             moving = false;
-        }
-    }
-
-    public void move() {
-        if (rightMove) {
-            this.translateX(this.speed);
-        } else if (leftMove) {
-            this.translateX(this.speed*-1);
-        } else if (downMove) {
-            this.translateY(this.speed*-1);
-        } else if (upMove) {
-            this.translateY(this.speed);
-        }
-
-        if (moving) {
-            followPath();
-        }
-    }
-
-    public void setMoveLeft(boolean t) {
-        if (rightMove && t) {
-            rightMove = false;
-        } else {
-            leftMove = t;
-            this.setTexture(lookLeft);
-        }
-    }
-
-    public void setMoveRight(boolean t) {
-        if (leftMove && t) {
-            leftMove = false;
-        } else {
-            rightMove = t;
-            this.setTexture(lookRight);
-        }
-    }
-
-    public void setMoveDown(boolean t) {
-        if (upMove && t) {
-            upMove = false;
-        } else {
-            downMove = t;
-            this.setTexture(lookDown);
-        }
-    }
-
-    public void setMoveUp(boolean t) {
-        if (downMove && t) {
-            downMove = false;
-        } else {
-            upMove = t;
-            this.setTexture(lookUp);
         }
     }
 

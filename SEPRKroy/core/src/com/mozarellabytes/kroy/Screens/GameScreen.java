@@ -53,8 +53,6 @@ public class GameScreen implements Screen {
         truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
         //truck.setPosition(2*Constants.TILE_WxH, 1*Constants.TILE_WxH);
 
-        Gdx.app.log("Map", String.valueOf(map.getLayers().get("collisions")));
-
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
         decorationLayersIndices = new int[]    {mapLayers.getIndex("background"),
@@ -92,15 +90,15 @@ public class GameScreen implements Screen {
 
         playerLayer.setCell(truck.getCellX(), truck.getCellY(), new TiledMapTileLayer.Cell());
         truck.arrowMove();
+        truck.mouseMove();
         playerLayer.setCell(truck.getCellX(), truck.getCellY(), cell);
 
         //truck.move();
 
-        /*
-        sb.begin();
-        truck.draw(sb);
-        sb.end();
-        */
+//        sb.begin();
+//        truck.draw(sb);
+//        sb.end();
+
     }
 
     private void addEntitiesToLayer() {
