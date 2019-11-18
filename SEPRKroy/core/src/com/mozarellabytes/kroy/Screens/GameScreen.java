@@ -92,15 +92,15 @@ public class GameScreen implements Screen {
 
         playerLayer.setCell(truck.getCellX(), truck.getCellY(), new TiledMapTileLayer.Cell());
         truck.arrowMove();
+        truck.mouseMove();
         playerLayer.setCell(truck.getCellX(), truck.getCellY(), cell);
 
         //truck.move();
 
-        /*
-        sb.begin();
-        truck.draw(sb);
-        sb.end();
-        */
+//        sb.begin();
+//        truck.draw(sb);
+//        sb.end();
+
     }
 
     private void addEntitiesToLayer() {

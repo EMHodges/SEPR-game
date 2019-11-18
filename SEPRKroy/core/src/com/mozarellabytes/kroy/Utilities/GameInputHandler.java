@@ -24,24 +24,15 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
-            case Input.Keys.W:
-                gameScreen.truck.setMoveUp(true);
-                break;
-            case Input.Keys.A:
-                gameScreen.truck.setMoveLeft(true);
-                break;
-            case Input.Keys.S:
-                gameScreen.truck.setMoveDown(true);
-                break;
-            case Input.Keys.D:
-                gameScreen.truck.setMoveRight(true);
-                break;
             case Input.Keys.ESCAPE:
                 Gdx.app.exit();
                 System.exit(1);
                 break;
             case Input.Keys.L:
                 Gdx.app.log("Path", gameScreen.truck.getPath().toString());
+                break;
+            case Input.Keys.T:
+                gameScreen.truck.translateX(48f);
                 break;
         }
         return true;
@@ -55,21 +46,7 @@ public class GameInputHandler implements InputProcessor {
      */
     @Override
     public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case Input.Keys.W:
-                gameScreen.truck.setMoveUp(false);
-                break;
-            case Input.Keys.A:
-                gameScreen.truck.setMoveLeft(false);
-                break;
-            case Input.Keys.S:
-                gameScreen.truck.setMoveDown(false);
-                break;
-            case Input.Keys.D:
-                gameScreen.truck.setMoveRight(false);
-                break;
-        }
-        return true;
+        return false;
     }
 
     /**
@@ -114,7 +91,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is where the path is completed and the truck should start to follow the route
         gameScreen.truck.followPath();
-        gameScreen.truck.setMove(true);
+        gameScreen.truck.setMoving(true);
         return false;
     }
 
@@ -131,15 +108,11 @@ public class GameInputHandler implements InputProcessor {
         Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 position = gameScreen.camera.unproject(clickCoordinates);
         position = new Vector3(((int) position.x), ((int) position.y), 0);
-        int i=0;
-        boolean alreadyVisited = false;
-        while (i < gameScreen.truck.getPath().size && !alreadyVisited) {
-            if (position.equals(gameScreen.truck.getPath().get(i))) {
-                alreadyVisited = true;
+        if (gameScreen.truck.path.size > 1) {
+            if (!gameScreen.truck.path.last().equals(position)) {
+                gameScreen.truck.addTileToPath(position);
             }
-            i++;
-        }
-        if (!alreadyVisited) {
+        } else {
             gameScreen.truck.addTileToPath(position);
         }
         return true;
