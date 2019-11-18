@@ -32,7 +32,7 @@ public class GameInputHandler implements InputProcessor {
                 Gdx.app.log("Path", gameScreen.truck.getPath().toString());
                 break;
             case Input.Keys.T:
-                gameScreen.truck.translateX(48f);
+                gameScreen.truck.translateX(48f/10);
                 break;
         }
         return true;
@@ -90,7 +90,6 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is where the path is completed and the truck should start to follow the route
-        gameScreen.truck.followPath();
         gameScreen.truck.setMoving(true);
         return false;
     }

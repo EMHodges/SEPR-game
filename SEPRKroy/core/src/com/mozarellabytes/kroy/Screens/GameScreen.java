@@ -47,7 +47,7 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
-        //sb = new SpriteBatch();
+        sb = new SpriteBatch();
 
         truck = new FireTruck();
         truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -90,14 +90,14 @@ public class GameScreen implements Screen {
 
         playerLayer.setCell(truck.getCellX(), truck.getCellY(), new TiledMapTileLayer.Cell());
         truck.arrowMove();
-        truck.mouseMove();
+        truck.mouseMove(delta);
         playerLayer.setCell(truck.getCellX(), truck.getCellY(), cell);
 
         //truck.move();
 
-//        sb.begin();
-//        truck.draw(sb);
-//        sb.end();
+        sb.begin();
+        truck.draw(sb);
+        sb.end();
 
     }
 

@@ -36,7 +36,7 @@ public class FireTruck extends Sprite {
         path = new Queue<Vector3>();
         location = new Vector3(0, 0, 0);
         moving = false;
-        speed = 3;
+        speed = 2;
 
         x = 9;
         y = 3;
@@ -57,9 +57,9 @@ public class FireTruck extends Sprite {
         }
     }
 
-    public void mouseMove() {
+    public void mouseMove(float delta) {
         if (this.moving) {
-            followPath();
+            followPath(delta);
         }
 
     }
@@ -88,10 +88,10 @@ public class FireTruck extends Sprite {
         this.moving = t;
     }
 
-    public void followPath() {
+    public void followPath(float delta) {
         if (this.path.size > 0) {
-            this.x = (int) path.first().x;
-            this.y = (int) path.first().y;
+            this.x = (int) ((int) path.first().x + (speed * delta * 0.02));
+            this.y = (int) ((int) path.first().y + (speed * delta * 0.02));
             path.removeFirst();
         } else {
             moving = false;
