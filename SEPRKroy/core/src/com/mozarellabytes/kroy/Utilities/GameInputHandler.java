@@ -31,9 +31,6 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.L:
                 Gdx.app.log("Path", gameScreen.truck.getPath().toString());
                 break;
-            case Input.Keys.T:
-                gameScreen.truck.translateX(48f/10);
-                break;
         }
         return true;
     }
@@ -73,6 +70,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 position = gameScreen.camera.unproject(clickCoordinates);
+        Gdx.app.log("Coords", position.toString());
         gameScreen.truck.resetTilePath();
         gameScreen.truck.addTileToPath(position);
         return true;

@@ -43,25 +43,24 @@ public class FireTruck extends Sprite {
     }
 
     public void arrowMove() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
             x -= 1;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.D)) {
             x += 1;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.S)) {
             y -= 1;
         }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+        if (Gdx.input.isKeyPressed(Input.Keys.W)) {
             y += 1;
         }
     }
 
-    public void mouseMove(float delta) {
+    public void mouseMove() {
         if (this.moving) {
-            followPath(delta);
+            followPath();
         }
-
     }
 
     public int getCellX() {
@@ -88,10 +87,10 @@ public class FireTruck extends Sprite {
         this.moving = t;
     }
 
-    public void followPath(float delta) {
+    public void followPath() {
         if (this.path.size > 0) {
-            this.x = (int) ((int) path.first().x + (speed * delta * 0.02));
-            this.y = (int) ((int) path.first().y + (speed * delta * 0.02));
+            this.x = (int) path.first().x;
+            this.y = (int) path.first().y;
             path.removeFirst();
         } else {
             moving = false;

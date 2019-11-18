@@ -5,6 +5,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapLayer;
@@ -23,7 +24,7 @@ public class GameScreen implements Screen {
 
     private Kroy game;
     private TiledMap map;
-    private TiledMapRenderer renderer;
+    private OrthogonalTiledMapRenderer renderer;
     private TiledMapTileLayer playerLayer;
     public OrthographicCamera camera;
     private GameInputHandler ih;
@@ -32,7 +33,6 @@ public class GameScreen implements Screen {
 
     public FireTruck truck;
     private TiledMapTileLayer.Cell cell;
-    private SpriteBatch sb;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -46,8 +46,6 @@ public class GameScreen implements Screen {
 
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
-
-        sb = new SpriteBatch();
 
         truck = new FireTruck();
         truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -66,8 +64,10 @@ public class GameScreen implements Screen {
         //We'll make a loop to cycle through all entities dynamically instantiated later
         //(and call that method from render())
         cell = new TiledMapTileLayer.Cell();
+
+        // can we get around setting the map tile as the truck
         cell.setTile(new StaticTiledMapTile(truck));
-        playerLayer.setCell(9, 3, cell);
+//        playerLayer.setCell(9, 3, cell);
 
     }
 
@@ -88,15 +88,12 @@ public class GameScreen implements Screen {
         renderer.setView(camera);
         renderer.render(decorationLayersIndices);
 
-        playerLayer.setCell(truck.getCellX(), truck.getCellY(), new TiledMapTileLayer.Cell());
         truck.arrowMove();
-        truck.mouseMove(delta);
-        playerLayer.setCell(truck.getCellX(), truck.getCellY(), cell);
+        truck.mouseMove();
 
-        //truck.move();
-
+        Batch sb = renderer.getBatch();
         sb.begin();
-        truck.draw(sb);
+        sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
         sb.end();
 
     }
