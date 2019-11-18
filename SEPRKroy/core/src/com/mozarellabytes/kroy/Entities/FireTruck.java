@@ -62,7 +62,7 @@ public class FireTruck extends Sprite {
 
         FixtureDef fdef = new FixtureDef();
         CircleShape shape = new CircleShape();
-        shape.setRadius(9);
+        shape.setRadius(2);
         fdef.shape = shape;
         b2body.createFixture(fdef).setUserData(this);
     }
@@ -110,6 +110,17 @@ public class FireTruck extends Sprite {
     public void resetTilePath() {
         this.path.clear();
         this.timeMoved = System.currentTimeMillis();
+    }
+
+    public boolean isValidMove(Vector3 coordinate) {
+        if (gameScreen.isRoad(((int) coordinate.x), ((int) coordinate.y))) {
+            if (!gameScreen.truck.path.last().equals(coordinate)) {
+                if (Math.abs(gameScreen.truck.path.last().x - coordinate.x) == 1 || Math.abs(gameScreen.truck.path.last().y - coordinate.y) == 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     public void setMoving(boolean t) {

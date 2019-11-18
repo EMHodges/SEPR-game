@@ -17,6 +17,8 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
+import java.util.Iterator;
+
 public class GameScreen implements Screen {
 
     private Kroy game;
@@ -55,24 +57,22 @@ public class GameScreen implements Screen {
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
-        decorationLayersIndices = new int[]    {mapLayers.getIndex("background"),
+        decorationLayersIndices = new int[] {mapLayers.getIndex("background"),
                                                 mapLayers.getIndex("entities"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("transparentStructures")};
 
-        playerLayer = (TiledMapTileLayer) mapLayers.get("entities");
-        //Assigns the instantiated truck sprite to a cell on the entities layer.
-        //We'll make a loop to cycle through all entities dynamically instantiated later
-        //(and call that method from render())
-        cell = new TiledMapTileLayer.Cell();
-
-        // can we get around setting the map tile as the truck
-        cell.setTile(new StaticTiledMapTile(truck));
-//        playerLayer.setCell(9, 3, cell);
-
         debugRenderer = new Box2DDebugRenderer();
 
+    }
+
+    public boolean isRoad(int x, int y) {
+        if (((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x,y).getTile().getProperties().get("road").equals(true)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
