@@ -43,8 +43,8 @@ public class GameScreen implements Screen {
 
         this.trucks = new FireTruck[2];
 
-        this.trucks[0] = new FireTruck(this, 9, 3, 0.5);
-        this.trucks[1] = new FireTruck(this, 10, 3, 0.2);
+        this.trucks[0] = new FireTruck(this, 9, 3, 0.5, "red");
+        this.trucks[1] = new FireTruck(this, 10, 3, 0.2, "blue");
 
         for (int i=0; i<2; i++) {
             this.trucks[i].setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -91,6 +91,11 @@ public class GameScreen implements Screen {
             truck.arrowMove();
             truck.mouseMove();
             sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
+            if (truck.trailPath != null) {
+                for (int i=0;i<truck.trailPath.size;i++) {
+                    sb.draw(truck.getTrailImage(), truck.trailPath.get(i).x, truck.trailPath.get(i).y, truck.getTrail().getWidth(), truck.getTrail().getHeight());
+                }
+            }
         }
         sb.end();
 

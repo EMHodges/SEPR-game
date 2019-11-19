@@ -74,8 +74,8 @@ public class GameInputHandler implements InputProcessor {
         if (gameScreen.activeTruck != null) {
             Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
             Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-
             position = new Vector3(((int) position.x), ((int) position.y), 0);
+
             if (gameScreen.activeTruck.path.size > 1) {
                 if (gameScreen.activeTruck.isValidMove(position)) {
                     gameScreen.activeTruck.addTileToPath(position);
@@ -85,8 +85,6 @@ public class GameInputHandler implements InputProcessor {
                     gameScreen.activeTruck.addTileToPath(position);
                 }
             }
-
-            Gdx.app.log("Path", gameScreen.activeTruck.path.toString());
 
         }
         return true;

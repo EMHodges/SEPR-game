@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.3.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="40" height="24" tilewidth="48" tileheight="48" infinite="0" nextlayerid="13" nextobjectid="21">
+<map version="1.2" tiledversion="1.3.0" orientation="orthogonal" renderorder="right-down" compressionlevel="0" width="40" height="24" tilewidth="48" tileheight="48" infinite="0" nextlayerid="15" nextobjectid="21">
  <tileset firstgid="1" name="color city cops tileset" tilewidth="48" tileheight="48" tilecount="168" columns="8">
   <image source="ccc_tileset.png" width="385" height="1008"/>
   <tile id="62">
@@ -46,7 +46,45 @@
    </properties>
   </tile>
  </tileset>
- <tileset firstgid="269" source="extras.tsx"/>
+ <tileset firstgid="269" name="extras" tilewidth="48" tileheight="48" tilecount="176" columns="8">
+  <image source="tileset_extras.png" width="384" height="1056"/>
+  <tile id="0">
+   <animation>
+    <frame tileid="0" duration="80"/>
+    <frame tileid="8" duration="80"/>
+    <frame tileid="16" duration="80"/>
+    <frame tileid="24" duration="80"/>
+    <frame tileid="32" duration="80"/>
+    <frame tileid="40" duration="80"/>
+    <frame tileid="48" duration="80"/>
+    <frame tileid="56" duration="80"/>
+   </animation>
+  </tile>
+  <tile id="1">
+   <animation>
+    <frame tileid="1" duration="90"/>
+    <frame tileid="9" duration="90"/>
+    <frame tileid="17" duration="90"/>
+    <frame tileid="25" duration="90"/>
+    <frame tileid="33" duration="90"/>
+    <frame tileid="41" duration="90"/>
+    <frame tileid="49" duration="90"/>
+    <frame tileid="57" duration="90"/>
+   </animation>
+  </tile>
+  <tile id="2">
+   <animation>
+    <frame tileid="2" duration="80"/>
+    <frame tileid="10" duration="80"/>
+    <frame tileid="18" duration="80"/>
+    <frame tileid="26" duration="80"/>
+    <frame tileid="34" duration="80"/>
+    <frame tileid="42" duration="80"/>
+    <frame tileid="50" duration="80"/>
+    <frame tileid="58" duration="80"/>
+   </animation>
+  </tile>
+ </tileset>
  <layer id="1" name="background" width="40" height="24" opacity="0.94">
   <data encoding="base64" compression="zlib">
    eAGllj1uFEEQhQcwSPxcAeRDEJDhG+AABBGaEyBCwk7XEiGRCTaDY8xR9ii8b+hvVTQ7ayGCp6qurnr9uqpn7dtpWm7/AZ+maWr/ic+p/9Zx19nmVfsktY+naQ+eFd/YaJO/b8k7h8o51o/nXITvYfiAur4X/1X8Nx33Y83VXif2uqPFPg0fa/wtwMNe7Z1nYz3nUXz4PMuct5nxiw584mimzhxror2psWVffec0Vn1okFN7l77n0awma7BVH2s18g7VU/UZa9mvgOd9wFzQB894DrGxf87V/kXnYv9O6VPjOX1VI5r4Bi6maR7fXX3beZ/LOX31Lvay6ssZnLMCHmbc8cd80SZafN4b+btuw9lE9NLD4xp/7F9ia599E/Rz1Ad/7nfJ/WMb6wrmy9zaCaCP2uRgj1qoH/WhYUsfM2W2W/P1HfqOu95D1ofMacHmvMPLaB2R/T19QE+9V9VH/Jy+2jO4Mss9NerqXMczsr7aZR94pm9ynG/lIP+mIxzHWrXZP7nRAj/94/fF/skhN1a92PTkMvxr/7BgS1/21jeE3RWw9m7aqi8arnhv7mHRSy9Tu4LZ4TMj9uWMvTJfu6UvtTPv797v+r+44c97WfmrPnjnjuxP6dE+fzsu6SV7FfZPfef611Ir+D6o4d7OwplVfr4x1qO+lhgcnl9r8NHN/exf1nN84suYa/9a9oG/x+pSJ/rQUevV9yNx/Js+n5a1+h7EH6Fu7K7DWOXHV5+/z/CiQ11Y8s7pY7/yt6zhOfX7Hj7exUIN3LsOz8ke8UP4Dtjxd8U1vUeTdfCh+0uAD+jZLhaM+j4mNm8gv7sz9dEyowEtvHNsYgffEpb+tQL7R21/EwfnquWO0bZkf8F2f8+Z4WyV75TvGfVO1ff+W/o4A1CDJmHdKS5j1PlWuEf6s9+CM0JH/Dn3POandr0vf4+vE5eTu1V9aLJv6st5xxxza0yuopn8PwAX+/6vYy5xOFnL7TfSEkOfmpjxqbtzb77ZCvTJrT56cqreGDxz6gB6sKKu3yUup++anpHrbD/kTvrU/hxAbNRHbOyba3LZ/9pRfWJ1jTb1tfhCPdixr34X2vR6GfVt9d/+UaPeMbfvrT1RX7Vq1KovfK1j7Q2aKtjzrta4jxbfG/4dWM+hN1XXKb8lh7MKH7Wstcf/b24S/wXweaDm
@@ -65,6 +103,11 @@
  <layer id="8" name="transparentStructures" width="40" height="24" opacity="0.46">
   <data encoding="base64" compression="zlib">
    eAFjYBgFoyEw/ENAcJB7sRrovppB7sZR56GGgCaUO9jTFqqrBw8PFn4wevC4jHouWQw0agkJximSoBakFBR2qkCsBuKMgmEdAt5A3/kMax+Oeg5XCJThkhgk4uVI7tAFsvWQ+KNM6oSAKdAYM+oYNWoKNAQARSoFuw==
+  </data>
+ </layer>
+ <layer id="13" name="draw" width="40" height="24">
+  <data encoding="base64" compression="zlib">
+   eAHt0DENAAAMAkHqX0s9dq8ChiNh/1xiBAgQIECAAAEC7QI7yX97sz4CBAi0CRz1EgNn
   </data>
  </layer>
  <layer id="5" name="collisions" width="40" height="24" visible="0" opacity="0.6">
