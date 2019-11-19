@@ -2,26 +2,18 @@ package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Utilities.Constants;
-
-import java.util.ArrayList;
 
 public class FireTruck extends Sprite {
 
     private int HP, AP, range, type, reserve;
     private double speed;
     private float x, y;
-    private boolean rightMove;
-    private boolean leftMove;
-    private boolean downMove;
-    private boolean upMove;
     private Texture lookLeft;
     private Texture lookRight;
     private Texture lookUp;
@@ -29,12 +21,10 @@ public class FireTruck extends Sprite {
     private Vector3 location;
     public Queue<Vector3> path;
     private boolean moving;
-    private long timeMoved;
+
+    private Vector3 lastCoordinate;
 
     private GameScreen gameScreen;
-
-    private BodyDef bodyDef;
-    private Body b2body;
 
     public FireTruck(GameScreen gameScreen) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png")));
@@ -51,21 +41,6 @@ public class FireTruck extends Sprite {
         x = 9;
         y = 3;
 
-        defineFireTruck();
-    }
-
-    private void defineFireTruck() {
-        bodyDef = new BodyDef();
-        bodyDef.position.set(10, 10);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.gravityScale = 0f;
-        b2body = this.gameScreen.world.createBody(bodyDef);
-
-        FixtureDef fdef = new FixtureDef();
-        CircleShape shape = new CircleShape();
-        shape.setRadius(2);
-        fdef.shape = shape;
-        b2body.createFixture(fdef).setUserData(this);
     }
 
     public void arrowMove() {
@@ -114,7 +89,6 @@ public class FireTruck extends Sprite {
 
     public void resetTilePath() {
         this.path.clear();
-        this.timeMoved = System.currentTimeMillis();
     }
 
     public boolean isValidMove(Vector3 coordinate) {
@@ -136,6 +110,20 @@ public class FireTruck extends Sprite {
         if (this.path.size > 0) {
             this.x = path.first().x;
             this.y = path.first().y;
+
+            // because first coordinate in path would not have a lastCoordinate
+            if (lastCoordinate != null) {
+                if (path.first().x > lastCoordinate.x) {
+                    this.setTexture(lookRight);
+                } else if (path.first().x < lastCoordinate.x) {
+                    this.setTexture(lookLeft);
+                } else if (path.first().y > lastCoordinate.y) {
+                    this.setTexture(lookUp);
+                } else if (path.first().y < lastCoordinate.y) {
+                    this.setTexture(lookDown);
+                }
+            }
+            lastCoordinate = path.first();
             path.removeFirst();
         } else {
             moving = false;
