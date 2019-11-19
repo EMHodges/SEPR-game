@@ -24,21 +24,20 @@ public class FireTruck extends Sprite {
 
     private GameScreen gameScreen;
 
-    public FireTruck(GameScreen gameScreen) {
+    public FireTruck(GameScreen gameScreen, float x, float y, double speed) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png")));
 
         this.gameScreen = gameScreen;
+        this.x = x;
+        this.y = y;
+        this.speed = speed;
+
         lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000.png"));
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png"));
         lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000.png"));
         lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000.png"));
         path = new Queue<Vector3>();
         moving = false;
-        speed = 0.5;
-
-        x = 9;
-        y = 3;
-
     }
 
     public void arrowMove() {
@@ -60,6 +59,10 @@ public class FireTruck extends Sprite {
         if (this.moving) {
             followPath();
         }
+    }
+
+    public Vector3 getPosition() {
+        return new Vector3(getCellX(), getCellY(), 0);
     }
 
     public float getCellX() {
@@ -91,8 +94,8 @@ public class FireTruck extends Sprite {
 
     public boolean isValidMove(Vector3 coordinate) {
         if (gameScreen.isRoad(((int) coordinate.x), ((int) coordinate.y))) {
-            if (!gameScreen.truck.path.last().equals(coordinate)) {
-                if (Math.abs(gameScreen.truck.path.last().x - coordinate.x) <= 1 && Math.abs(gameScreen.truck.path.last().y - coordinate.y) <= 1) {
+            if (!this.path.last().equals(coordinate)) {
+                if (Math.abs(this.path.last().x - coordinate.x) <= 1 && Math.abs(this.path.last().y - coordinate.y) <= 1) {
                     return true;
                 }
             }
@@ -125,6 +128,7 @@ public class FireTruck extends Sprite {
             path.removeFirst();
         } else {
             moving = false;
+            gameScreen.activeTruck = null;
         }
     }
 

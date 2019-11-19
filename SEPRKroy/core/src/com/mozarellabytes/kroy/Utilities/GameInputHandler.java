@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Queue;
+import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 public class GameInputHandler implements InputProcessor {
@@ -27,7 +28,7 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.L:
-                Gdx.app.log("Path", gameScreen.truck.getPath().toString());
+                Gdx.app.log("Path", gameScreen.activeTruck.getPath().toString());
                 break;
         }
         return true;
@@ -47,31 +48,46 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-        Gdx.app.log("Coords", position.toString());
-        gameScreen.truck.resetTilePath();
-        gameScreen.truck.addTileToPath(position);
+        position = new Vector3(((int) position.x), ((int) position.y), 0);
+
+        if (gameScreen.isRoad(((int) position.x), ((int) position.y))) {
+            if (gameScreen.checkClick(position)) {
+                gameScreen.activeTruck.resetTilePath();
+                gameScreen.activeTruck.addTileToPath(position);
+            }
+        }
+
         return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is where the path is completed and the truck should start to follow the route
-        gameScreen.truck.setMoving(true);
-        return false;
+        if (gameScreen.activeTruck != null) {
+            gameScreen.activeTruck.setMoving(true);
+        }
+        return true;
     }
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
-        Vector3 position = gameScreen.camera.unproject(clickCoordinates);
+        if (gameScreen.activeTruck != null) {
+            Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
+            Vector3 position = gameScreen.camera.unproject(clickCoordinates);
 
-        position = new Vector3(((int) position.x), ((int) position.y), 0);
-        if (gameScreen.truck.path.size > 1) {
-            if (gameScreen.truck.isValidMove(position)) {
-                gameScreen.truck.addTileToPath(position);
+            position = new Vector3(((int) position.x), ((int) position.y), 0);
+            if (gameScreen.activeTruck.path.size > 1) {
+                if (gameScreen.activeTruck.isValidMove(position)) {
+                    gameScreen.activeTruck.addTileToPath(position);
+                }
+            } else {
+                if (gameScreen.isRoad(((int) position.x), ((int) position.y))) {
+                    gameScreen.activeTruck.addTileToPath(position);
+                }
             }
-        } else {
-            gameScreen.truck.addTileToPath(position);
+
+            Gdx.app.log("Path", gameScreen.activeTruck.path.toString());
+
         }
         return true;
     }

@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
@@ -24,7 +25,8 @@ public class GameScreen implements Screen {
     private int[] decorationLayersIndices;
     private int[] backgroundLayerIndex;
 
-    public FireTruck truck;
+    public FireTruck activeTruck;
+    public FireTruck[] trucks;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -39,8 +41,14 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
-        truck = new FireTruck(this);
-        truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
+        this.trucks = new FireTruck[2];
+
+        this.trucks[0] = new FireTruck(this, 9, 3, 0.5);
+        this.trucks[1] = new FireTruck(this, 10, 3, 0.2);
+
+        for (int i=0; i<2; i++) {
+            this.trucks[i].setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
+        }
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
@@ -77,12 +85,13 @@ public class GameScreen implements Screen {
         //Renders the background
         renderer.render(backgroundLayerIndex);
 
-        truck.arrowMove();
-        truck.mouseMove();
-
         Batch sb = renderer.getBatch();
         sb.begin();
-        sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
+        for (FireTruck truck : this.trucks) {
+            truck.arrowMove();
+            truck.mouseMove();
+            sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
+        }
         sb.end();
 
         //Renders the trees/buildings
@@ -113,5 +122,16 @@ public class GameScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+    }
+
+    public boolean checkClick(Vector3 position) {
+        for (FireTruck truck : this.trucks) {
+            if (position.equals(truck.getPosition())) {
+                this.activeTruck = truck;
+                Gdx.app.log("Active truck", this.activeTruck.getPosition().toString());
+                return true;
+            }
+        }
+        return false;
     }
 }
