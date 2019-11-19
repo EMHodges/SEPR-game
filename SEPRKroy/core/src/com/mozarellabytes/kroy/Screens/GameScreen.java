@@ -21,7 +21,6 @@ public class GameScreen implements Screen {
     private Kroy game;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
-    private TiledMapTileLayer playerLayer;
     public OrthographicCamera camera;
     private GameInputHandler ih;
     private MapLayers mapLayers;
@@ -29,9 +28,6 @@ public class GameScreen implements Screen {
     private int[] backgroundLayerIndex;
 
     public FireTruck truck;
-
-    public World world;
-    private Box2DDebugRenderer debugRenderer;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -46,20 +42,15 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
-        world = new World(new Vector2(0, -10), true);
-
         truck = new FireTruck(this);
         truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
         backgroundLayerIndex = new int[] {mapLayers.getIndex("background")};
-        decorationLayersIndices = new int[] {   mapLayers.getIndex("entities"),
-                                                mapLayers.getIndex("structures"),
+        decorationLayersIndices = new int[] {   mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
-
-        debugRenderer = new Box2DDebugRenderer();
 
     }
 
@@ -100,9 +91,6 @@ public class GameScreen implements Screen {
 
         //Renders the trees/buildings
         renderer.render(decorationLayersIndices);
-
-        debugRenderer.render(world, camera.combined);
-        world.step(1/Constants.TARGET_FPS, 6, 2);
     }
 
     @Override

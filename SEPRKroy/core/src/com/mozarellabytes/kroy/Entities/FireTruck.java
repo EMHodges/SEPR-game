@@ -5,7 +5,6 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -18,7 +17,6 @@ public class FireTruck extends Sprite {
     private Texture lookRight;
     private Texture lookUp;
     private Texture lookDown;
-    private Vector3 location;
     public Queue<Vector3> path;
     private boolean moving;
 
@@ -35,7 +33,6 @@ public class FireTruck extends Sprite {
         lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000.png"));
         lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000.png"));
         path = new Queue<Vector3>();
-        location = new Vector3(0, 0, 0);
         moving = false;
         speed = 0.5;
 
