@@ -8,9 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.physics.box2d.World;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
@@ -51,7 +48,6 @@ public class GameScreen implements Screen {
         decorationLayersIndices = new int[] {   mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
-
     }
 
     public boolean isRoad(int x, int y) {
@@ -117,6 +113,5 @@ public class GameScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
-        //sb.dispose();
     }
 }
