@@ -4,10 +4,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
@@ -22,8 +25,11 @@ public class GameScreen implements Screen {
     public OrthographicCamera camera;
     private GameInputHandler ih;
     private MapLayers mapLayers;
-    private int[] decorationLayersIndices;
-    private int[] backgroundLayerIndex;
+    private int[] decorationLayersIndices, backgroundLayerIndex;
+
+    private TiledMapTileLayer pathLayer;
+    private TiledMapTileLayer.Cell pathCell, emptyCell;
+    private Sprite redTile;
 
     public FireTruck activeTruck;
     public FireTruck[] trucks;
@@ -52,11 +58,23 @@ public class GameScreen implements Screen {
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
-        backgroundLayerIndex = new int[] {mapLayers.getIndex("background")};
+        backgroundLayerIndex = new int[] {  mapLayers.getIndex("background"),
+                                            mapLayers.getIndex(("path"))
+                                         };
+
         decorationLayersIndices = new int[] {   mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
+
+        pathLayer = (TiledMapTileLayer) mapLayers.get("path");
+
+        redTile = new Sprite(new Texture(Gdx.files.internal("sprites/redtile.png")));
+        pathCell = new TiledMapTileLayer.Cell();
+        emptyCell = new TiledMapTileLayer.Cell();
+        pathCell.setTile(new StaticTiledMapTile(redTile));
     }
+
+
 
     public boolean isRoad(int x, int y) {
         if (((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x,y).getTile().getProperties().get("road").equals(true)) {
@@ -82,6 +100,8 @@ public class GameScreen implements Screen {
 
         renderer.setView(camera);
 
+        drawPath();
+
         //Renders the background
         renderer.render(backgroundLayerIndex);
 
@@ -101,6 +121,18 @@ public class GameScreen implements Screen {
 
         //Renders the trees/buildings
         renderer.render(decorationLayersIndices);
+    }
+
+    private void drawPath() {
+        for (FireTruck truck : this.trucks) {
+            for (Vector3 vector : truck.getPath()) {
+                pathLayer.setCell((int) vector.x, (int) vector.y, pathCell);
+            }
+        }
+    }
+
+    public void clearPathCell(int x, int y) {
+        pathLayer.setCell(x, y, emptyCell);
     }
 
     @Override

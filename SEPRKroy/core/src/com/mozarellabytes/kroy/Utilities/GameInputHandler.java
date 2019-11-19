@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Entities.FireTruck;
@@ -12,12 +14,9 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
-    private Texture redTile;
 
     public GameInputHandler(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-
-        redTile = new Texture(Gdx.files.internal("sprites/redtile.png"));
     }
 
     @Override
@@ -48,12 +47,13 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-        position = new Vector3(((int) position.x), ((int) position.y), 0);
+        position = new Vector3((int) position.x, (int) position.y, 0);
 
-        if (gameScreen.isRoad(((int) position.x), ((int) position.y))) {
+        if (gameScreen.isRoad((int) position.x, (int) position.y)) {
             if (gameScreen.checkClick(position)) {
                 gameScreen.activeTruck.resetTilePath();
                 gameScreen.activeTruck.addTileToPath(position);
+
             }
         }
 
