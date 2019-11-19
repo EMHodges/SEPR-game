@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.World;
@@ -16,8 +15,6 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
-
-import java.util.Iterator;
 
 public class GameScreen implements Screen {
 
@@ -29,10 +26,9 @@ public class GameScreen implements Screen {
     private GameInputHandler ih;
     private MapLayers mapLayers;
     private int[] decorationLayersIndices;
-    private int[] background;
+    private int[] backgroundLayerIndex;
 
     public FireTruck truck;
-    private TiledMapTileLayer.Cell cell;
 
     public World world;
     private Box2DDebugRenderer debugRenderer;
@@ -54,15 +50,13 @@ public class GameScreen implements Screen {
 
         truck = new FireTruck(this);
         truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
-        //truck.setPosition(2*Constants.TILE_WxH, 1*Constants.TILE_WxH);
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
-        background = new int[] {mapLayers.getIndex("background")};
-        decorationLayersIndices = new int[] {
-                                                mapLayers.getIndex("entities"),
-                                                mapLayers.getIndex("structures2"),
+        backgroundLayerIndex = new int[] {mapLayers.getIndex("background")};
+        decorationLayersIndices = new int[] {   mapLayers.getIndex("entities"),
                                                 mapLayers.getIndex("structures"),
+                                                mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
 
         debugRenderer = new Box2DDebugRenderer();
@@ -92,7 +86,9 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         renderer.setView(camera);
-        renderer.render(background);
+
+        //Renders the background
+        renderer.render(backgroundLayerIndex);
 
         truck.arrowMove();
         truck.mouseMove();
@@ -102,13 +98,11 @@ public class GameScreen implements Screen {
         sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
         sb.end();
 
+        //Renders the trees/buildings
         renderer.render(decorationLayersIndices);
+
         debugRenderer.render(world, camera.combined);
-        world.step(1/60f, 6, 2);
-    }
-
-    private void addEntitiesToLayer() {
-
+        world.step(1/Constants.TARGET_FPS, 6, 2);
     }
 
     @Override
@@ -134,6 +128,7 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         map.dispose();
+        renderer.dispose();
         //sb.dispose();
     }
 }

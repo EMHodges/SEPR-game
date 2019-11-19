@@ -28,6 +28,7 @@ public class FireTruck extends Sprite {
 
     public FireTruck(GameScreen gameScreen) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png")));
+
         this.gameScreen = gameScreen;
         lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000.png"));
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png"));

@@ -13,7 +13,7 @@ public final class Constants {
 
     public static final float TILE_WxH = 48f; //Tile width and height in pixels
 
-    public static final int TARGET_FPS = 60;
+    public static final float TARGET_FPS = 60f;
 
     public static float PPM = 20f;
 
