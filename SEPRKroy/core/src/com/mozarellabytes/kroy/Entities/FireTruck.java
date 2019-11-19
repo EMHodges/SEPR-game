@@ -15,8 +15,9 @@ import java.util.ArrayList;
 
 public class FireTruck extends Sprite {
 
-    private int HP, AP, range, type, reserve, speed;
-    private int x, y;
+    private int HP, AP, range, type, reserve;
+    private double speed;
+    private float x, y;
     private boolean rightMove;
     private boolean leftMove;
     private boolean downMove;
@@ -45,7 +46,7 @@ public class FireTruck extends Sprite {
         path = new Queue<Vector3>();
         location = new Vector3(0, 0, 0);
         moving = false;
-        speed = 2;
+        speed = 0.5;
 
         x = 9;
         y = 3;
@@ -84,18 +85,15 @@ public class FireTruck extends Sprite {
 
     public void mouseMove() {
         if (this.moving) {
-            if (System.currentTimeMillis() - this.timeMoved > 100) {
-                this.timeMoved = System.currentTimeMillis();
-                followPath();
-            }
+            followPath();
         }
     }
 
-    public int getCellX() {
+    public float getCellX() {
         return this.x;
     }
 
-    public int getCellY() {
+    public float getCellY() {
         return this.y;
     }
 
@@ -104,6 +102,13 @@ public class FireTruck extends Sprite {
     }
 
     public void addTileToPath(Vector3 coordinate) {
+        if (this.path.size > 0) {
+            Vector3 previous = this.path.last();
+            int smallValues = (int) (5/speed);
+            for (int i=0; i<smallValues; i++) {
+                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/smallValues)*i + previous.x, (((previous.y - coordinate.y)*-1)/smallValues)*i + previous.y, 0));
+            }
+        }
         this.path.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
     }
 
@@ -115,7 +120,7 @@ public class FireTruck extends Sprite {
     public boolean isValidMove(Vector3 coordinate) {
         if (gameScreen.isRoad(((int) coordinate.x), ((int) coordinate.y))) {
             if (!gameScreen.truck.path.last().equals(coordinate)) {
-                if (Math.abs(gameScreen.truck.path.last().x - coordinate.x) == 1 || Math.abs(gameScreen.truck.path.last().y - coordinate.y) == 1) {
+                if (Math.abs(gameScreen.truck.path.last().x - coordinate.x) <= 1 && Math.abs(gameScreen.truck.path.last().y - coordinate.y) <= 1) {
                     return true;
                 }
             }
@@ -129,8 +134,8 @@ public class FireTruck extends Sprite {
 
     public void followPath() {
         if (this.path.size > 0) {
-            this.x = (int) path.first().x;
-            this.y = (int) path.first().y;
+            this.x = path.first().x;
+            this.y = path.first().y;
             path.removeFirst();
         } else {
             moving = false;
