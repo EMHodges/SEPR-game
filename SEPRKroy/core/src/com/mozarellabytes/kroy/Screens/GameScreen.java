@@ -25,10 +25,9 @@ public class GameScreen implements Screen {
     public OrthographicCamera camera;
     private GameInputHandler ih;
     private MapLayers mapLayers;
-    private int[] decorationLayersIndices;
-    private int[] backgroundLayerIndex;
+    private int[] decorationLayersIndices, backgroundLayerIndex;
 
-    public TiledMapTileLayer pathLayer;
+    private TiledMapTileLayer pathLayer;
     private TiledMapTileLayer.Cell pathCell, emptyCell;
     private Sprite redTile;
 
