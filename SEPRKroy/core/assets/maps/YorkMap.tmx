@@ -72,9 +72,4 @@
    eAHlj0FuxUAMQnP/m/yesvXiSU8IZ1Ipm6qLERgDTj7XdX3+2Pv6+d7fvtM/vtk3XdwzR0t8w+MOc26N5mcdvmHrS+/J4705PU2b3aaTe8vjO+bcGc3POnzD1pded2+czKnPe3PyiU88mZl5y206Hd7DB3n4QDzMieTSlzO5prvDe3jDzNzNc5uOu+9ovk2zTncit+5wy6Bntumj+ZHB29B+9uSM7EB2OZ907yebb/Z0gmTuMHu2mY7WnRm8IBnjKbNl0Y30jmaOp2l4+Y42k79DusHm9c4cb9Nmhw5aI3tCsmDze2eOd7TtjccZ+OZvenZwF6Tz5MOf2G66M/2enbU+3Dvz9J1mf4v5Kcd+yzR900a/e76VPnYbtpvjbfpTzbecMd9uOItncu01b9Na1hqZ0eCDOXt34i37VHO3M+ZvfN/05fNtbqQnZzKpz8zuv+E3n3F6/g==
   </data>
  </layer>
- <objectgroup id="10" name="collisionObjects">
-  <object id="43" x="528" y="816" width="96" height="288"/>
-  <object id="44" x="96" y="768" width="384" height="96"/>
-  <object id="45" x="144" y="624" width="240" height="96"/>
- </objectgroup>
 </map>
