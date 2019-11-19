@@ -29,6 +29,7 @@ public class GameScreen implements Screen {
     private GameInputHandler ih;
     private MapLayers mapLayers;
     private int[] decorationLayersIndices;
+    private int[] background;
 
     public FireTruck truck;
     private TiledMapTileLayer.Cell cell;
@@ -57,7 +58,8 @@ public class GameScreen implements Screen {
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
-        decorationLayersIndices = new int[] {mapLayers.getIndex("background"),
+        background = new int[] {mapLayers.getIndex("background")};
+        decorationLayersIndices = new int[] {
                                                 mapLayers.getIndex("entities"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("structures"),
@@ -90,7 +92,7 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         renderer.setView(camera);
-        renderer.render(decorationLayersIndices);
+        renderer.render(background);
 
         truck.arrowMove();
         truck.mouseMove();
@@ -99,6 +101,8 @@ public class GameScreen implements Screen {
         sb.begin();
         sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
         sb.end();
+
+        renderer.render(decorationLayersIndices);
         debugRenderer.render(world, camera.combined);
         world.step(1/60f, 6, 2);
     }
