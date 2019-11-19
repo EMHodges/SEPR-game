@@ -29,6 +29,10 @@ public class GameScreen implements Screen {
 
     public FireTruck truck;
 
+    // Box2D
+    private World world;
+    private Box2DDebugRenderer b2dr;
+
     public GameScreen(Kroy game) {
         this.game = game;
 
