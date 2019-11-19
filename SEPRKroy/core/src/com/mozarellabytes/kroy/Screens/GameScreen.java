@@ -4,29 +4,37 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.maps.MapLayer;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
-import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
+
+import java.util.Iterator;
 
 public class GameScreen implements Screen {
 
     private Kroy game;
     private TiledMap map;
-    private TiledMapRenderer renderer;
+    private OrthogonalTiledMapRenderer renderer;
+    private TiledMapTileLayer playerLayer;
     public OrthographicCamera camera;
     private GameInputHandler ih;
+    private MapLayers mapLayers;
+    private int[] decorationLayersIndices;
 
     public FireTruck truck;
-    private SpriteBatch sb;
+    private TiledMapTileLayer.Cell cell;
+
+    public World world;
+    private Box2DDebugRenderer debugRenderer;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -41,13 +49,30 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
-        sb = new SpriteBatch();
+        world = new World(new Vector2(0, -10), true);
 
-        truck = new FireTruck();
-        truck.setOrigin(0, 0);
-        truck.setPosition(2*Constants.TILE_WxH, 1*Constants.TILE_WxH);
+        truck = new FireTruck(this);
+        truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
+        //truck.setPosition(2*Constants.TILE_WxH, 1*Constants.TILE_WxH);
 
-        Gdx.app.log("Map", String.valueOf(map.getLayers().get("collisions")));
+        //Orders renderer to start rendering the background, then the player layer, then structures
+        mapLayers = map.getLayers();
+        decorationLayersIndices = new int[] {mapLayers.getIndex("background"),
+                                                mapLayers.getIndex("entities"),
+                                                mapLayers.getIndex("structures2"),
+                                                mapLayers.getIndex("structures"),
+                                                mapLayers.getIndex("transparentStructures")};
+
+        debugRenderer = new Box2DDebugRenderer();
+
+    }
+
+    public boolean isRoad(int x, int y) {
+        if (((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x,y).getTile().getProperties().get("road").equals(true)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -65,13 +90,21 @@ public class GameScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         renderer.setView(camera);
-        renderer.render();
+        renderer.render(decorationLayersIndices);
 
-        truck.move();
+        truck.arrowMove();
+        truck.mouseMove();
 
+        Batch sb = renderer.getBatch();
         sb.begin();
-        truck.draw(sb);
+        sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
         sb.end();
+        debugRenderer.render(world, camera.combined);
+        world.step(1/60f, 6, 2);
+    }
+
+    private void addEntitiesToLayer() {
+
     }
 
     @Override
@@ -97,6 +130,6 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         map.dispose();
-        sb.dispose();
+        //sb.dispose();
     }
 }
