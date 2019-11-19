@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Entities.FireTruck;
@@ -12,12 +14,9 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
-    private Texture redTile;
 
     public GameInputHandler(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
-
-        redTile = new Texture(Gdx.files.internal("sprites/redtile.png"));
     }
 
     @Override
@@ -74,7 +73,6 @@ public class GameInputHandler implements InputProcessor {
         if (gameScreen.activeTruck != null) {
             Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
             Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-
             position = new Vector3(((int) position.x), ((int) position.y), 0);
             if (gameScreen.activeTruck.path.size > 1) {
                 if (gameScreen.activeTruck.isValidMove(position)) {

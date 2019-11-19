@@ -125,10 +125,12 @@ public class FireTruck extends Sprite {
                 }
             }
             lastCoordinate = path.first();
+            gameScreen.clearPathCell((int)path.first().x, (int)path.first().y);
             path.removeFirst();
         } else {
             moving = false;
             gameScreen.activeTruck = null;
+            resetTilePath();
         }
     }
 
