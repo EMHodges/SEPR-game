@@ -109,23 +109,14 @@ public class FireTruck extends Sprite {
 
     public void followPath() {
         if (this.path.size > 0) {
-            this.x = path.first().x;
-            this.y = path.first().y;
+            Vector3 nextTile = path.first();
+            this.x = nextTile.x;
+            this.y = nextTile.y;
 
-            // because first coordinate in path would not have a lastCoordinate
-            if (lastCoordinate != null) {
-                if (path.first().x > lastCoordinate.x) {
-                    this.setTexture(lookRight);
-                } else if (path.first().x < lastCoordinate.x) {
-                    this.setTexture(lookLeft);
-                } else if (path.first().y > lastCoordinate.y) {
-                    this.setTexture(lookUp);
-                } else if (path.first().y < lastCoordinate.y) {
-                    this.setTexture(lookDown);
-                }
-            }
-            lastCoordinate = path.first();
-            gameScreen.clearPathCell((int)path.first().x, (int)path.first().y);
+            changeSprite(nextTile);
+
+            lastCoordinate = nextTile;
+            gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
             path.removeFirst();
         } else {
             moving = false;
@@ -133,9 +124,20 @@ public class FireTruck extends Sprite {
             resetTilePath();
         }
     }
+    private void changeSprite(Vector3 nextTile) {
+        if (lastCoordinate != null) {
+            if (nextTile.x > lastCoordinate.x) { setTexture(lookRight); }
+            else if (nextTile.x < lastCoordinate.x) { setTexture(lookLeft); }
+            else if (nextTile.y > lastCoordinate.y) { setTexture(lookUp);  }
+            else if (nextTile.y < lastCoordinate.y) { setTexture(lookDown);
+            }
+        }
+    }
 
     protected void attack() {
 
+        }
+
     }
 
-}
+
