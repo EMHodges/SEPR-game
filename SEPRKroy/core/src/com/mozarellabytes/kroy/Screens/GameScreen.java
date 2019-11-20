@@ -28,8 +28,7 @@ public class GameScreen implements Screen {
     private int[] decorationLayersIndices, backgroundLayerIndex;
 
     private TiledMapTileLayer pathLayer;
-    private TiledMapTileLayer.Cell pathCell, emptyCell;
-    private Sprite redTile;
+    private TiledMapTileLayer.Cell emptyCell;
 
     public FireTruck activeTruck;
     public FireTruck[] trucks;
@@ -68,10 +67,7 @@ public class GameScreen implements Screen {
 
         pathLayer = (TiledMapTileLayer) mapLayers.get("path");
 
-        redTile = new Sprite(new Texture(Gdx.files.internal("sprites/redtile.png")));
-        pathCell = new TiledMapTileLayer.Cell();
         emptyCell = new TiledMapTileLayer.Cell();
-        pathCell.setTile(new StaticTiledMapTile(redTile));
     }
 
 
@@ -102,7 +98,7 @@ public class GameScreen implements Screen {
 
         drawPath();
 
-        //Renders the background
+
         renderer.render(backgroundLayerIndex);
 
         Batch sb = renderer.getBatch();
@@ -119,14 +115,14 @@ public class GameScreen implements Screen {
         }
         sb.end();
 
-        //Renders the trees/buildings
+
         renderer.render(decorationLayersIndices);
     }
 
     private void drawPath() {
         for (FireTruck truck : this.trucks) {
             for (Vector3 vector : truck.getPath()) {
-                pathLayer.setCell((int) vector.x, (int) vector.y, pathCell);
+                pathLayer.setCell((int) vector.x, (int) vector.y, truck.pathCell);
             }
         }
     }

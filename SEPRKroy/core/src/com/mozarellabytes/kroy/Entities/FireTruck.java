@@ -4,6 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Queue;
@@ -29,6 +31,8 @@ public class FireTruck extends Sprite {
 
     private Rectangle trail;
     private Texture trailImage;
+    public TiledMapTileLayer.Cell pathCell;
+    private Sprite redTile;
 
     private GameScreen gameScreen;
 
@@ -60,6 +64,12 @@ public class FireTruck extends Sprite {
         trail = new Rectangle();
         trail.width = 1;
         trail.height = 1;
+
+
+        //Custom trail color for each truck
+        redTile = new Sprite(new Texture(Gdx.files.internal("sprites/redtile.png")));
+        pathCell = new TiledMapTileLayer.Cell();
+        pathCell.setTile(new StaticTiledMapTile(redTile));
 
     }
 
