@@ -79,18 +79,22 @@ public class FireTruck extends Sprite {
     }
 
     public Vector3 getPosition() {
+
         return new Vector3(getCellX(), getCellY(), 0);
     }
 
     public float getCellX() {
+
         return this.x;
     }
 
     public float getCellY() {
+
         return this.y;
     }
 
     public Queue<Vector3> getPath() {
+
         return this.trailPath;
     }
 
@@ -131,11 +135,12 @@ public class FireTruck extends Sprite {
             this.x = nextTile.x;
             this.y = nextTile.y;
 
-            if (((int) this.x) == this.trailPath.first().x && ((int) this.y) == this.trailPath.first().y) {
-                gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
-                this.trailPath.removeFirst();
+            if (this.trailPath.size != 0) {
+                if (((int) this.x) == this.trailPath.first().x && ((int) this.y) == this.trailPath.first().y) {
+                    gameScreen.clearPathCell((int) nextTile.x, (int) nextTile.y);
+                    this.trailPath.removeFirst();
+                }
             }
-
             changeSprite(nextTile);
 
             lastCoordinate = nextTile;

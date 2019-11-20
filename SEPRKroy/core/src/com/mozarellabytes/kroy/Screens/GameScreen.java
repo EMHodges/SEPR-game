@@ -113,9 +113,13 @@ public class GameScreen implements Screen {
     }
 
     private void drawPath() {
-        for (FireTruck truck : this.trucks) {
-            for (Vector3 vector : truck.getPath()) {
-                pathLayer.setCell((int) vector.x, (int) vector.y, truck.pathCell);
+        if (trucks.length != 0) {
+            for (FireTruck truck : this.trucks) {
+                if (truck.getPath().size != 0) {
+                    for (Vector3 vector : truck.getPath()) {
+                        pathLayer.setCell((int) vector.x, (int) vector.y, truck.pathCell);
+                    }
+                }
             }
         }
     }
