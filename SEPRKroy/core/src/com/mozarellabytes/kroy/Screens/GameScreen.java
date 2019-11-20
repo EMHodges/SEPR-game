@@ -98,7 +98,6 @@ public class GameScreen implements Screen {
 
         drawPath();
 
-
         renderer.render(backgroundLayerIndex);
 
         Batch sb = renderer.getBatch();
@@ -107,14 +106,8 @@ public class GameScreen implements Screen {
             truck.arrowMove();
             truck.mouseMove();
             sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
-            if (truck.trailPath != null) {
-                for (int i=0;i<truck.trailPath.size;i++) {
-                    sb.draw(truck.getTrailImage(), truck.trailPath.get(i).x, truck.trailPath.get(i).y, truck.getTrail().getWidth(), truck.getTrail().getHeight());
-                }
-            }
         }
         sb.end();
-
 
         renderer.render(decorationLayersIndices);
     }

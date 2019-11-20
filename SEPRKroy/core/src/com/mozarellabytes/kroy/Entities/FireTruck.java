@@ -29,10 +29,8 @@ public class FireTruck extends Sprite {
 
     private Vector3 lastCoordinate;
 
-    private Rectangle trail;
-    private Texture trailImage;
     public TiledMapTileLayer.Cell pathCell;
-    private Sprite redTile;
+    private Sprite trail;
 
     private GameScreen gameScreen;
 
@@ -52,33 +50,11 @@ public class FireTruck extends Sprite {
         trailPath = new Queue<Vector3>();
         moving = false;
 
-        if (colour == "red") {
-            trailImage = new Texture(Gdx.files.internal("sprites/firetruck/red_trail.png"), true);
-        } else {
-            trailImage = new Texture(Gdx.files.internal("sprites/firetruck/blue_trail.png"), true);
-
-        }
-
-        trailImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-
-        trail = new Rectangle();
-        trail.width = 1;
-        trail.height = 1;
-
-
         //Custom trail color for each truck
-        redTile = new Sprite(new Texture(Gdx.files.internal("sprites/redtile.png")));
+        trail = new Sprite(new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail.png")));
         pathCell = new TiledMapTileLayer.Cell();
-        pathCell.setTile(new StaticTiledMapTile(redTile));
+        pathCell.setTile(new StaticTiledMapTile(trail));
 
-    }
-
-    public Texture getTrailImage() {
-        return this.trailImage;
-    }
-
-    public Rectangle getTrail() {
-        return this.trail;
     }
 
     public void arrowMove() {
@@ -115,7 +91,7 @@ public class FireTruck extends Sprite {
     }
 
     public Queue<Vector3> getPath() {
-        return this.path;
+        return this.trailPath;
     }
 
     public void addTileToPath(Vector3 coordinate) {
@@ -155,11 +131,14 @@ public class FireTruck extends Sprite {
             this.x = nextTile.x;
             this.y = nextTile.y;
 
-            gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
+            if (((int) this.x) == this.trailPath.first().x && ((int) this.y) == this.trailPath.first().y) {
+                gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
+                this.trailPath.removeFirst();
+            }
+
             changeSprite(nextTile);
 
             lastCoordinate = nextTile;
-            gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
             path.removeFirst();
         } else {
             moving = false;
