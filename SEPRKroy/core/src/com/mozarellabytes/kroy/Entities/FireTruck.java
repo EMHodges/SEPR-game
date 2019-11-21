@@ -123,7 +123,7 @@ public class FireTruck extends Sprite {
             Vector3 previous = this.path.last();
             int smallValues = (int) (5/speed);
             for (int i=0; i<smallValues; i++) {
-                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/smallValues)*i + previous.x, (((previous.y - coordinate.y)*-1)/smallValues)*i + previous.y, 0));
+                this.path.addLast(new Vector3(((coordinate.x - previous.x)/smallValues)*i + previous.x, ((coordinate.y - previous.y)/smallValues)*i + previous.y, 0));
             }
         }
         this.trailPath.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
@@ -157,7 +157,7 @@ public class FireTruck extends Sprite {
 
                 this.x = nextTile.x;
                 this.y = nextTile.y;
-                //  checkTruckCollision();
+
                 gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
                 changeSprite(nextTile);
 
