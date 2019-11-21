@@ -130,6 +130,7 @@ public class FireTruck extends Sprite {
         this.path.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
     }
 
+
     public void resetTilePath() {
         this.path.clear();
     }
@@ -150,18 +151,24 @@ public class FireTruck extends Sprite {
     }
 
     public void followPath() {
-        if (this.path.size > 0) {
+        if (this.path.size > 0 && !checkTruckCollision() ) {
+
             Vector3 nextTile = path.first();
-            this.x = nextTile.x;
-            this.y = nextTile.y;
 
-            gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
-            changeSprite(nextTile);
+                this.x = nextTile.x;
+                this.y = nextTile.y;
+                //  checkTruckCollision();
+                gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
+                changeSprite(nextTile);
 
-            lastCoordinate = nextTile;
-            gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
-            path.removeFirst();
-        } else {
+                lastCoordinate = nextTile;
+                gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
+                path.removeFirst();
+
+
+            }
+
+        else if (this.path.size <= 0){
             moving = false;
             gameScreen.activeTruck = null;
             this.trailPath.clear();
@@ -176,6 +183,50 @@ public class FireTruck extends Sprite {
             }
         }
     }
+
+    public double getSpeed() {
+        return this.speed;
+    }
+
+
+    public boolean checkTruckCollision() {
+        if (!gameScreen.trucks[0].path.isEmpty() && !gameScreen.trucks[1].path.isEmpty()){
+
+            if ((int)gameScreen.trucks[0].path.first().x + 1 == (int)gameScreen.trucks[1].path.first().x &&
+                    (int)gameScreen.trucks[0].path.first().y == (int)gameScreen.trucks[1].path.first().y) {
+                Gdx.app.log("truck0", String.valueOf(gameScreen.trucks[0].path.first().x));
+                Gdx.app.log("truck1", String.valueOf(gameScreen.trucks[1].path.first().x));
+                Gdx.app.log("collision", "collide");
+                Gdx.app.log("truck path", gameScreen.trucks[0].path.toString());
+
+                for(Vector3 vector3: gameScreen.trucks[0].path){
+                    gameScreen.clearPathCell((int) vector3.x, (int) vector3.y);
+                    //   gameScreen.trucks[0].path.removeFirst();
+                }
+                for(Vector3 vector3: gameScreen.trucks[1].path){
+                    gameScreen.clearPathCell((int) vector3.x, (int) vector3.y);
+                    //   gameScreen.trucks[1].path.removeFirst();
+                }
+            //    gameScreen.trucks[0].x = gameScreen.trucks[0].getX()
+             //   moving = false;
+                gameScreen.activeTruck = null;
+                gameScreen.trucks[0].path.clear();
+                gameScreen.trucks[1].path.clear();
+                gameScreen.trucks[0].addTileToPath(new Vector3((int)(gameScreen.trucks[0].x), (int)(gameScreen.trucks[0].y),0));
+                gameScreen.trucks[1].addTileToPath(new Vector3((int)(gameScreen.trucks[1].x), (int)(gameScreen.trucks[1].y),0));
+
+                return true;
+            }
+            Gdx.app.log("truck1path", gameScreen.trucks[0].path.toString());
+            Gdx.app.log("truck2path", gameScreen.trucks[1].path.toString());
+
+        }
+        return false;
+
+    }
+
+
+
 
     protected void attack() {
 
