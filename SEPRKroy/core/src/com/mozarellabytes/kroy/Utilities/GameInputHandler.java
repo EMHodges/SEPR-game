@@ -47,7 +47,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
         Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-        position = new Vector3((int) position.x, (int) position.y, 0);
+        position = new Vector3((int) position.x, (int)position.y, 0);
 
         if (gameScreen.isRoad((int) position.x, (int) position.y)) {
             if (gameScreen.checkClick(position)) {
