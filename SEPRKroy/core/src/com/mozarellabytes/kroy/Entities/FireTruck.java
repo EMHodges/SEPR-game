@@ -11,9 +11,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
-import java.util.ArrayList;
-import java.util.Stack;
-
 public class FireTruck extends Sprite {
 
     private GameScreen gameScreen;
@@ -28,8 +25,8 @@ public class FireTruck extends Sprite {
     public Queue<Vector3> path;
     public Queue<Vector3> trailPath;
     private boolean moving;
-    private Sprite redTile;
-    public Texture trailImage;
+    private Sprite pathColour;
+    private Texture trailImage;
     private Rectangle trail;
 
     private Vector3 lastCoordinate;
@@ -53,10 +50,6 @@ public class FireTruck extends Sprite {
         trailPath = new Queue<Vector3>();
         moving = false;
 
-        redTile = new Sprite(new Texture(Gdx.files.internal("sprites/redtile.png")));
-        pathCell = new TiledMapTileLayer.Cell();
-        pathCell.setTile(new StaticTiledMapTile(redTile));
-
 
         if (colour == "red") {
             trailImage = new Texture(Gdx.files.internal("sprites/firetruck/red_trail.png"), true);
@@ -67,9 +60,9 @@ public class FireTruck extends Sprite {
 
         trailImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        trail = new Rectangle();
-        trail.width = 1;
-        trail.height = 1;
+        pathColour = new Sprite(trailImage);
+        pathCell = new TiledMapTileLayer.Cell();
+        pathCell.setTile(new StaticTiledMapTile(pathColour));
     }
 
     public void arrowMove() {
@@ -111,6 +104,16 @@ public class FireTruck extends Sprite {
     public Queue<Vector3> getPath() {
 
         return this.trailPath;
+    }
+
+    public Rectangle getTrail() {
+
+        return this.trail;
+    }
+
+    public Texture getTrailImage() {
+
+        return this.trailImage;
     }
 
     public void addTileToPath(Vector3 coordinate) {
