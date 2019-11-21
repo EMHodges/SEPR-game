@@ -11,6 +11,8 @@ import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
+import java.io.Console;
+
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
@@ -26,6 +28,9 @@ public class GameInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
+
+                //We'll have to get rid of that bcs the game commits suicide when a truck
+                //is about to finish its path
             case Input.Keys.L:
                 Gdx.app.log("Path", gameScreen.activeTruck.getPath().toString());
                 break;
@@ -87,6 +92,8 @@ public class GameInputHandler implements InputProcessor {
             }
 
         }
+
+
         return true;
     }
 
