@@ -67,7 +67,13 @@ public class GameScreen implements Screen {
 
         pathLayer = (TiledMapTileLayer) mapLayers.get("path");
 
+<<<<<<< master
         emptyCell = new TiledMapTileLayer.Cell();
+=======
+
+        emptyCell = new TiledMapTileLayer.Cell();
+
+>>>>>>> Fixed the diagonal path selection. It is now impossible to go diagonally
     }
 
 
@@ -113,12 +119,21 @@ public class GameScreen implements Screen {
     }
 
     private void drawPath() {
+<<<<<<< master
         if (trucks.length != 0) {
             for (FireTruck truck : this.trucks) {
                 if (truck.getPath().size != 0) {
                     for (Vector3 vector : truck.getPath()) {
                         pathLayer.setCell((int) vector.x, (int) vector.y, truck.pathCell);
                     }
+=======
+        for (FireTruck truck : this.trucks) {
+            for (Vector3 vector : truck.getPath()) {
+                if (((TiledMapTileLayer) mapLayers.get("collisions")).
+                        getCell((int) vector.x, (int) vector.y).getTile().
+                        getProperties().get("road").equals(true)) {
+                    pathLayer.setCell((int) vector.x, (int) vector.y, truck.pathCell);
+>>>>>>> Fixed the diagonal path selection. It is now impossible to go diagonally
                 }
             }
         }
