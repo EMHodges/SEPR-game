@@ -119,9 +119,9 @@ public class FireTruck extends Sprite {
     public void addTileToPath(Vector3 coordinate) {
         if (this.path.size > 0) {
             Vector3 previous = this.path.last();
-            int smallValues = (int) (5/speed);
-            for (int i=0; i<smallValues; i++) {
-                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/smallValues)*i + previous.x, (((previous.y - coordinate.y)*-1)/smallValues)*i + previous.y, 0));
+            int interpolation = (int) (5/speed);
+            for (int i=0; i<interpolation; i++) {
+                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y, 0));
             }
         }
         this.trailPath.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
