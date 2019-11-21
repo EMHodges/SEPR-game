@@ -6,7 +6,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
@@ -15,6 +14,8 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 public class FireTruck extends Sprite {
+
+    private GameScreen gameScreen;
 
     private int HP, AP, range, type, reserve;
     private double speed;
@@ -26,16 +27,15 @@ public class FireTruck extends Sprite {
     public Queue<Vector3> path;
     public Queue<Vector3> trailPath;
     private boolean moving;
+    private Sprite redTile;
 
     private Vector3 lastCoordinate;
 
     public TiledMapTileLayer.Cell pathCell;
-    private Sprite trail;
 
-    private GameScreen gameScreen;
 
-    public FireTruck(GameScreen gameScreen, float x, float y, double speed, String colour) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png")));
+    public FireTruck(GameScreen gameScreen, float x, float y, double speed) {
+        super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png")));
 
         this.gameScreen = gameScreen;
         this.x = x;
@@ -50,11 +50,9 @@ public class FireTruck extends Sprite {
         trailPath = new Queue<Vector3>();
         moving = false;
 
-        //Custom trail color for each truck
-        trail = new Sprite(new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail.png")));
+        redTile = new Sprite(new Texture(Gdx.files.internal("sprites/redtile.png")));
         pathCell = new TiledMapTileLayer.Cell();
-        pathCell.setTile(new StaticTiledMapTile(trail));
-
+        pathCell.setTile(new StaticTiledMapTile(redTile));
     }
 
     public void arrowMove() {
@@ -115,9 +113,9 @@ public class FireTruck extends Sprite {
     }
 
     public boolean isValidMove(Vector3 coordinate) {
-        if (gameScreen.isRoad(((int) coordinate.x), ((int) coordinate.y))) {
+        if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
             if (!this.path.last().equals(coordinate)) {
-                if (Math.abs(this.path.last().x - coordinate.x) <= 1 && Math.abs(this.path.last().y - coordinate.y) <= 1) {
+                if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
                     return true;
                 }
             }
