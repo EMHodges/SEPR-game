@@ -34,8 +34,8 @@ public class FireTruck extends Sprite {
     public TiledMapTileLayer.Cell pathCell;
 
 
-    public FireTruck(GameScreen gameScreen, float x, float y, double speed) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000.png")));
+    public FireTruck(GameScreen gameScreen, float x, float y, double speed, String colour) {
+        super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png")));
 
         this.gameScreen = gameScreen;
         this.x = x;
