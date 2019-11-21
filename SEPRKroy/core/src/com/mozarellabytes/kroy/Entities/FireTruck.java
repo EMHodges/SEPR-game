@@ -65,8 +65,22 @@ public class FireTruck extends Sprite {
         pathCell.setTile(new StaticTiledMapTile(pathColour));
     }
 
-    public void mouseMove() {
+    public void arrowMove() {
+        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
+            x -= 1;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
+            x += 1;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
+            y -= 1;
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            y += 1;
+        }
+    }
 
+    public void mouseMove() {
         if (this.moving) {
             followPath();
         }
@@ -105,18 +119,16 @@ public class FireTruck extends Sprite {
     public void addTileToPath(Vector3 coordinate) {
         if (this.path.size > 0) {
             Vector3 previous = this.path.last();
-            int interpolation = (int) (5 / speed);
-            for (int i=0; i<interpolation; i++) {
-                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y, 0));
+            int smallValues = (int) (5/speed);
+            for (int i=0; i<smallValues; i++) {
+                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/smallValues)*i + previous.x, (((previous.y - coordinate.y)*-1)/smallValues)*i + previous.y, 0));
             }
         }
         this.trailPath.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
         this.path.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
     }
 
-
     public void resetTilePath() {
-
         this.path.clear();
     }
 
@@ -132,31 +144,15 @@ public class FireTruck extends Sprite {
     }
 
     public void setMoving(boolean t) {
-
         this.moving = t;
     }
 
     public void followPath() {
-        if (this.path.size > 0 && !truckCollision() ) {
-
+        if (this.path.size > 0) {
             Vector3 nextTile = path.first();
+            this.x = nextTile.x;
+            this.y = nextTile.y;
 
-<<<<<<< HEAD
-                this.x = nextTile.x;
-                this.y = nextTile.y;
-
-                gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
-                changeSprite(nextTile);
-
-                lastCoordinate = nextTile;
-                gameScreen.clearPathCell((int)nextTile.x, (int)nextTile.y);
-                path.removeFirst();
-
-
-            }
-
-        else if (this.path.size <= 0){
-=======
             if (this.trailPath.size != 0) {
                 if (((int) this.x) == this.trailPath.first().x && ((int) this.y) == this.trailPath.first().y) {
                     gameScreen.clearPathCell((int) nextTile.x, (int) nextTile.y);
@@ -168,7 +164,6 @@ public class FireTruck extends Sprite {
             lastCoordinate = nextTile;
             path.removeFirst();
         } else {
->>>>>>> master
             moving = false;
             gameScreen.activeTruck = null;
             this.trailPath.clear();
@@ -184,41 +179,10 @@ public class FireTruck extends Sprite {
         }
     }
 
-    private boolean truckCollision() {
-        if (!gameScreen.trucks[0].path.isEmpty() && !gameScreen.trucks[1].path.isEmpty()){
-            int truck1X = (int)gameScreen.trucks[0].path.first().x;
-            int truck1Y = (int)gameScreen.trucks[0].path.first().y;
-            int truck2X = (int)gameScreen.trucks[1].path.first().x;
-            int truck2Y = (int)gameScreen.trucks[1].path.first().y;
-            // need to add collisions of when one truck is static, also sometimes the sprites jump
-            // over each other?
-            if (truck1X + 1 == truck2X && truck1Y == truck2Y ||   // only checks if they are moving
-            truck1X - 1 == truck2X && truck1Y == truck2Y ||
-            truck1Y+1 == truck2Y && truck1X == truck2Y ||
-            truck1Y-1 == truck2Y && truck1X == truck2X) {
-                resetTrucks();
-                return true;
-            }
-        }
-        return false;
-
-    }
-
-    private void resetTrucks(){
-        for(FireTruck truck: gameScreen.trucks){
-            for(Vector3 vector3: truck.path) {
-                gameScreen.clearPathCell((int) vector3.x, (int) vector3.y);
-            }
-            gameScreen.activeTruck = null;
-            truck.path.clear();
-            truck.addTileToPath(new Vector3((int)(truck.x), (int)(truck.y),0));
-        }
-    }
-
     protected void attack() {
 
-        }
-
     }
+
+}
 
 
