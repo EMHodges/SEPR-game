@@ -68,6 +68,7 @@ public class GameScreen implements Screen {
         pathLayer = (TiledMapTileLayer) mapLayers.get("path");
 
         emptyCell = new TiledMapTileLayer.Cell();
+
     }
 
 
