@@ -65,22 +65,8 @@ public class FireTruck extends Sprite {
         pathCell.setTile(new StaticTiledMapTile(pathColour));
     }
 
-    public void arrowMove() {
-        if (Gdx.input.isKeyJustPressed(Input.Keys.A)) {
-            x -= 1;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.D)) {
-            x += 1;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.S)) {
-            y -= 1;
-        }
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            y += 1;
-        }
-    }
-
     public void mouseMove() {
+
         if (this.moving) {
             followPath();
         }
@@ -119,9 +105,9 @@ public class FireTruck extends Sprite {
     public void addTileToPath(Vector3 coordinate) {
         if (this.path.size > 0) {
             Vector3 previous = this.path.last();
-            int smallValues = (int) (5/speed);
-            for (int i=0; i<smallValues; i++) {
-                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/smallValues)*i + previous.x, (((previous.y - coordinate.y)*-1)/smallValues)*i + previous.y, 0));
+            int interpolation = (int) (5 / speed);
+            for (int i=0; i<interpolation; i++) {
+                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y, 0));
             }
         }
         this.trailPath.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
@@ -129,6 +115,7 @@ public class FireTruck extends Sprite {
     }
 
     public void resetTilePath() {
+
         this.path.clear();
     }
 
@@ -144,6 +131,7 @@ public class FireTruck extends Sprite {
     }
 
     public void setMoving(boolean t) {
+
         this.moving = t;
     }
 

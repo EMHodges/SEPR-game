@@ -4,13 +4,10 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
@@ -104,10 +101,10 @@ public class GameScreen implements Screen {
         Batch sb = renderer.getBatch();
         sb.begin();
         for (FireTruck truck : this.trucks) {
-            truck.arrowMove();
             truck.mouseMove();
             sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
         }
+
         sb.end();
 
         renderer.render(decorationLayersIndices);
