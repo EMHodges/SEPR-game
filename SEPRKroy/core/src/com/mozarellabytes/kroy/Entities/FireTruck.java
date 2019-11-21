@@ -151,7 +151,7 @@ public class FireTruck extends Sprite {
     }
 
     public void followPath() {
-        if (this.path.size > 0 && !checkTruckCollision() ) {
+        if (this.path.size > 0 && !truckCollision() ) {
 
             Vector3 nextTile = path.first();
 
@@ -184,49 +184,36 @@ public class FireTruck extends Sprite {
         }
     }
 
-    public double getSpeed() {
-        return this.speed;
-    }
-
-
-    public boolean checkTruckCollision() {
+    private boolean truckCollision() {
         if (!gameScreen.trucks[0].path.isEmpty() && !gameScreen.trucks[1].path.isEmpty()){
-
-            if ((int)gameScreen.trucks[0].path.first().x + 1 == (int)gameScreen.trucks[1].path.first().x &&
-                    (int)gameScreen.trucks[0].path.first().y == (int)gameScreen.trucks[1].path.first().y) {
-                Gdx.app.log("truck0", String.valueOf(gameScreen.trucks[0].path.first().x));
-                Gdx.app.log("truck1", String.valueOf(gameScreen.trucks[1].path.first().x));
-                Gdx.app.log("collision", "collide");
-                Gdx.app.log("truck path", gameScreen.trucks[0].path.toString());
-
-                for(Vector3 vector3: gameScreen.trucks[0].path){
-                    gameScreen.clearPathCell((int) vector3.x, (int) vector3.y);
-                    //   gameScreen.trucks[0].path.removeFirst();
-                }
-                for(Vector3 vector3: gameScreen.trucks[1].path){
-                    gameScreen.clearPathCell((int) vector3.x, (int) vector3.y);
-                    //   gameScreen.trucks[1].path.removeFirst();
-                }
-            //    gameScreen.trucks[0].x = gameScreen.trucks[0].getX()
-             //   moving = false;
-                gameScreen.activeTruck = null;
-                gameScreen.trucks[0].path.clear();
-                gameScreen.trucks[1].path.clear();
-                gameScreen.trucks[0].addTileToPath(new Vector3((int)(gameScreen.trucks[0].x), (int)(gameScreen.trucks[0].y),0));
-                gameScreen.trucks[1].addTileToPath(new Vector3((int)(gameScreen.trucks[1].x), (int)(gameScreen.trucks[1].y),0));
-
+            int truck1X = (int)gameScreen.trucks[0].path.first().x;
+            int truck1Y = (int)gameScreen.trucks[0].path.first().y;
+            int truck2X = (int)gameScreen.trucks[1].path.first().x;
+            int truck2Y = (int)gameScreen.trucks[1].path.first().y;
+            // need to add collisions of when one truck is static, also sometimes the sprites jump
+            // over each other?
+            if (truck1X + 1 == truck2X && truck1Y == truck2Y ||   // only checks if they are moving
+            truck1X - 1 == truck2X && truck1Y == truck2Y ||
+            truck1Y+1 == truck2Y && truck1X == truck2Y ||
+            truck1Y-1 == truck2Y && truck1X == truck2X) {
+                resetTrucks();
                 return true;
             }
-            Gdx.app.log("truck1path", gameScreen.trucks[0].path.toString());
-            Gdx.app.log("truck2path", gameScreen.trucks[1].path.toString());
-
         }
         return false;
 
     }
 
-
-
+    private void resetTrucks(){
+        for(FireTruck truck: gameScreen.trucks){
+            for(Vector3 vector3: truck.path) {
+                gameScreen.clearPathCell((int) vector3.x, (int) vector3.y);
+            }
+            gameScreen.activeTruck = null;
+            truck.path.clear();
+            truck.addTileToPath(new Vector3((int)(truck.x), (int)(truck.y),0));
+        }
+    }
 
     protected void attack() {
 
