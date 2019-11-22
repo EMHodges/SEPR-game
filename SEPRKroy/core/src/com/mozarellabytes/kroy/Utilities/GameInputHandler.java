@@ -23,11 +23,11 @@ public class GameInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
-
-                //We'll have to get rid of that bcs the game commits suicide when a truck
-                //is about to finish its path
-            case Input.Keys.L:
-                Gdx.app.log("Path", gameScreen.activeTruck.getPath().toString());
+            case Input.Keys.R:
+                gameScreen.station.spawn(0.2, "red");
+                break;
+            case Input.Keys.B:
+                gameScreen.station.spawn(0.5, "blue");
                 break;
         }
         return true;

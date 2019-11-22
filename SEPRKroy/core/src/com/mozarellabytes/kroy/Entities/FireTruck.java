@@ -74,16 +74,15 @@ public class FireTruck extends Sprite {
     }
 
     public Vector3 getPosition() {
-
-        return new Vector3(getCellX(), getCellY(), 0);
+        return new Vector3(getX(), getY(), 0);
     }
 
-    public float getCellX() {
+    public float getX() {
 
         return this.x;
     }
 
-    public float getCellY() {
+    public float getY() {
 
         return this.y;
     }
@@ -161,6 +160,14 @@ public class FireTruck extends Sprite {
 
     protected void attack() {
 
+    }
+
+    public void repair() {
+        this.HP++;
+    }
+
+    public void refill() {
+        this.reserve++;
     }
 
     public int getHP(){
