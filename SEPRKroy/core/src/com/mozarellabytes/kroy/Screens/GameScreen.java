@@ -17,6 +17,11 @@ import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
 import java.awt.*;
+import java.sql.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
 
 public class GameScreen implements Screen {
 
@@ -33,7 +38,7 @@ public class GameScreen implements Screen {
     private TiledMapTileLayer.Cell emptyCell;
 
     public FireTruck activeTruck;
-    public FireTruck[] trucks;
+    public ArrayList<FireTruck> trucks;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -50,13 +55,14 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
-        this.trucks = new FireTruck[2];
+        this.trucks = new ArrayList<FireTruck>();
 
-        this.trucks[0] = new FireTruck(this, 9, 3, 0.5, "red");
-        this.trucks[1] = new FireTruck(this, 10, 3, 0.2, "blue");
+        this.trucks.add(new FireTruck(this, 10, 3, 0.5, "red"));
+        this.trucks.add(new FireTruck(this, 10, 3, 0.2, "blue"));
+
 
         for (int i=0; i<2; i++) {
-            this.trucks[i].setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
+            this.trucks.get(i).setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
         }
 
         //Orders renderer to start rendering the background, then the player layer, then structures
@@ -123,7 +129,7 @@ public class GameScreen implements Screen {
       //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
       //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,0.1f,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
       //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getReserve(),Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-            Gdx.app.log("truck 0 x", String.valueOf(trucks[0].getPosition().x));
+            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
         }
 
         shape.end();
@@ -157,12 +163,18 @@ public class GameScreen implements Screen {
     }
 
     public boolean checkClick(Vector3 position) {
-        for (FireTruck truck : this.trucks) {
-            if (position.equals(truck.getPosition())) {
-                this.activeTruck = truck;
-                Gdx.app.log("Active truck", this.activeTruck.getPosition().toString());
-                return true;
-            }
+        if (position.equals(this.trucks.get(1).getPosition())) {
+            this.activeTruck = this.trucks.get(1);
+            Gdx.app.log("Active truck", this.activeTruck.getPosition().toString());
+
+            return true;
+        }
+        if (position.equals(this.trucks.get(0).getPosition())) {
+            this.activeTruck = this.trucks.get(0);
+
+            Gdx.app.log("Active truck", this.activeTruck.getPosition().toString());
+
+            return true;
         }
         return false;
     }
