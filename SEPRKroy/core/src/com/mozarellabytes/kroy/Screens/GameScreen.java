@@ -2,9 +2,11 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
@@ -14,12 +16,15 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
+import java.awt.*;
+
 public class GameScreen implements Screen {
 
     private Kroy game;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
+    private ShapeRenderer shape;
     private GameInputHandler ih;
     private MapLayers mapLayers;
     private int[] decorationLayersIndices, backgroundLayerIndex;
@@ -39,6 +44,7 @@ public class GameScreen implements Screen {
 
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
+        shape = new ShapeRenderer();
 
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
@@ -108,6 +114,19 @@ public class GameScreen implements Screen {
         sb.end();
 
         renderer.render(decorationLayersIndices);
+
+        shape.begin(ShapeRenderer.ShapeType.Filled);
+        for (FireTruck truck : this.trucks){
+            shape.rect(truck.getPosition().x *40f, truck.getPosition().y *40f, 18,28);
+            shape.rect(truck.getPosition().x  *40f  + 10 , (truck.getPosition().y *40f )+ 3, 4,20,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            shape.rect(truck.getPosition().x  *40f + 10 , truck.getPosition().y *40f + 3, 4,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
+            shape.rect(truck.getPosition().x  *40f + 3 , truck.getPosition().y *40f + 3, 4,20,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            shape.rect(truck.getPosition().x  *40f + 3 , truck.getPosition().y *40f + 3, 4,truck.getReserve(),Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            Gdx.app.log("truck 0 x", String.valueOf(trucks[0].getPosition().x));
+        }
+
+        shape.end();
+
     }
 
     private void drawPath() {
