@@ -75,14 +75,10 @@ public class GameInputHandler implements InputProcessor {
             Vector3 position = gameScreen.camera.unproject(clickCoordinates);
             position = new Vector3(((int) position.x), ((int) position.y), 0);
 
-            if (gameScreen.activeTruck.path.size > 1) {
-                if (gameScreen.activeTruck.isValidMove(position)) {
-                    gameScreen.activeTruck.addTileToPath(position);
-                }
-            } else {
-                if (gameScreen.isRoad(((int) position.x), ((int) position.y))) {
-                    gameScreen.activeTruck.addTileToPath(position);
-                }
+            if (gameScreen.activeTruck.isValidMove(position)) {
+                gameScreen.activeTruck.addTileToPath(position);
+
+
             }
 
         }
