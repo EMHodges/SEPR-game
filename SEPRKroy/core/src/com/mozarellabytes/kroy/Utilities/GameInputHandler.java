@@ -3,6 +3,7 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -45,14 +46,14 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
-        Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-        position = new Vector3((int) position.x, (int)position.y, 0);
+        Vector2 clickCoordinates = new Vector2(screenX, screenY);
+        Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+        Vector2 position2d = new Vector2((int) position.x, (int)position.y);
 
-        if (gameScreen.isRoad((int) position.x, (int) position.y)) {
-            if (gameScreen.checkClick(position)) {
+        if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
+            if (gameScreen.checkClick(position2d)) {
                 gameScreen.activeTruck.resetTilePath();
-                gameScreen.activeTruck.addTileToPath(position);
+                gameScreen.activeTruck.addTileToPath(position2d);
             }
         }
 
@@ -71,12 +72,12 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (gameScreen.activeTruck != null) {
-            Vector3 clickCoordinates = new Vector3(screenX, screenY, 0);
-            Vector3 position = gameScreen.camera.unproject(clickCoordinates);
-            position = new Vector3(((int) position.x), ((int) position.y), 0);
+            Vector2 clickCoordinates = new Vector2(screenX, screenY);
+            Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+            Vector2 position2d = new Vector2((int) position.x, (int)position.y);
 
-            if (gameScreen.activeTruck.isValidMove(position)) {
-                gameScreen.activeTruck.addTileToPath(position);
+            if (gameScreen.activeTruck.isValidMove(position2d)) {
+                gameScreen.activeTruck.addTileToPath(position2d);
 
 
             }

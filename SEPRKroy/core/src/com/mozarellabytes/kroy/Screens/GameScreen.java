@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
@@ -97,7 +97,7 @@ public class GameScreen implements Screen {
             sb.draw(truck, truck.getX(), truck.getY(), 1, 1);
 
             if (truck.trailPath != null) {
-                for (Vector3 tile : truck.trailPath) {
+                for (Vector2 tile : truck.trailPath) {
                     sb.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
                 }
 
@@ -150,7 +150,7 @@ public class GameScreen implements Screen {
         renderer.dispose();
     }
 
-    public boolean checkClick(Vector3 position) {
+    public boolean checkClick(Vector2 position) {
         for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
             if (position.equals(this.station.getTrucks().get(i).getPosition())) {
                 this.activeTruck = this.station.getTrucks().get(i);

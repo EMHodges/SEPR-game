@@ -7,7 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -22,13 +22,13 @@ public class FireTruck extends Sprite {
     private Texture lookRight;
     private Texture lookUp;
     private Texture lookDown;
-    public Queue<Vector3> path;
-    public Queue<Vector3> trailPath;
+    public Queue<Vector2> path;
+    public Queue<Vector2> trailPath;
     private boolean moving;
 
     private Texture trailImage;
 
-    private Vector3 lastCoordinate;
+    private Vector2 lastCoordinate;
 
     public FireTruck(GameScreen gameScreen, float x, float y, double speed, String colour) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png")));
@@ -45,8 +45,8 @@ public class FireTruck extends Sprite {
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
         lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000_" + colour + ".png"));
         lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + colour + ".png"));
-        path = new Queue<Vector3>();
-        trailPath = new Queue<Vector3>();
+        path = new Queue<Vector2>();
+        trailPath = new Queue<Vector2>();
         moving = false;
 
         trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail.png"));
@@ -73,8 +73,8 @@ public class FireTruck extends Sprite {
         }
     }
 
-    public Vector3 getPosition() {
-        return new Vector3(getX(), getY(), 0);
+    public Vector2 getPosition() {
+        return new Vector2(getX(), getY());
     }
 
     public float getX() {
@@ -87,7 +87,7 @@ public class FireTruck extends Sprite {
         return this.y;
     }
 
-    public Queue<Vector3> getPath() {
+    public Queue<Vector2> getPath() {
 
         return this.trailPath;
     }
@@ -96,23 +96,23 @@ public class FireTruck extends Sprite {
         return this.trailImage;
     }
 
-    public void addTileToPath(Vector3 coordinate) {
+    public void addTileToPath(Vector2 coordinate) {
         if (this.path.size > 0) {
-            Vector3 previous = this.path.last();
+            Vector2 previous = this.path.last();
             int interpolation = (int) (5/speed);
             for (int i=0; i<interpolation; i++) {
-                this.path.addLast(new Vector3((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y, 0));
+                this.path.addLast(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
             }
         }
-        this.trailPath.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
-        this.path.addLast(new Vector3(((int) coordinate.x), ((int) coordinate.y), 0));
+        this.trailPath.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+        this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
     }
 
     public void resetTilePath() {
         this.path.clear();
     }
 
-    public boolean isValidMove(Vector3 coordinate) {
+    public boolean isValidMove(Vector2 coordinate) {
         if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
             if (!this.path.last().equals(coordinate)) {
                 if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
@@ -129,7 +129,7 @@ public class FireTruck extends Sprite {
 
     public void followPath() {
         if (this.path.size > 0) {
-            Vector3 nextTile = path.first();
+            Vector2 nextTile = path.first();
             this.x = nextTile.x;
             this.y = nextTile.y;
 
@@ -148,7 +148,7 @@ public class FireTruck extends Sprite {
             this.trailPath.clear();
         }
     }
-    private void changeSprite(Vector3 nextTile) {
+    private void changeSprite(Vector2 nextTile) {
         if (lastCoordinate != null) {
             if (nextTile.x > lastCoordinate.x) { setTexture(lookRight); }
             else if (nextTile.x < lastCoordinate.x) { setTexture(lookLeft); }

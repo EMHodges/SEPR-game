@@ -1,6 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 import java.util.ArrayList;
@@ -30,13 +30,13 @@ public class FireStation {
     }
 
     public void repair(FireTruck truck) {
-        if (truck.getPosition().equals(new Vector3(this.x, this.y, 0))) {
+        if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
             truck.repair();
         }
     }
 
     public void refill(FireTruck truck) {
-        if (truck.getPosition().equals(new Vector3(this.x, this.y, 0))) {
+        if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
             truck.refill();
         }
     }
