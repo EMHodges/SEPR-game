@@ -124,12 +124,12 @@ public class GameScreen implements Screen {
 
         shape.begin(ShapeRenderer.ShapeType.Filled);
         for (FireTruck truck : this.trucks) {
-            shape.rect(truck.getPosition().x + 0.2f  , truck.getPosition().y + 1.3f, 0.5f,0.8f);
-            shape.rect(truck.getPosition().x , truck.getPosition().y + 1.7f, 0.2f,0.3f,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+//            shape.rect(truck.getPosition().x + 0.2f  , truck.getPosition().y + 1.3f, 0.5f,0.8f);
+//            shape.rect(truck.getPosition().x , truck.getPosition().y + 1.7f, 0.2f,0.3f,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
       //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
       //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,0.1f,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
       //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getReserve(),Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
+//            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
         }
 
         shape.end();
@@ -163,19 +163,13 @@ public class GameScreen implements Screen {
     }
 
     public boolean checkClick(Vector3 position) {
-        if (position.equals(this.trucks.get(1).getPosition())) {
-            this.activeTruck = this.trucks.get(1);
-            Gdx.app.log("Active truck", this.activeTruck.getPosition().toString());
-
-            return true;
+        for (int i=this.trucks.size()-1; i>=0; i--) {
+            if (position.equals(this.trucks.get(i).getPosition())) {
+                this.activeTruck = this.trucks.get(i);
+                return true;
+            }
         }
-        if (position.equals(this.trucks.get(0).getPosition())) {
-            this.activeTruck = this.trucks.get(0);
 
-            Gdx.app.log("Active truck", this.activeTruck.getPosition().toString());
-
-            return true;
-        }
         return false;
     }
 }
