@@ -60,21 +60,13 @@ public class GameScreen implements Screen {
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
-        backgroundLayerIndex = new int[] {  mapLayers.getIndex("background"),
-                                            mapLayers.getIndex(("path"))
-                                         };
+        backgroundLayerIndex = new int[] {  mapLayers.getIndex("background")};
 
         decorationLayersIndices = new int[] {   mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
 
-        pathLayer = (TiledMapTileLayer) mapLayers.get("path");
-
-        emptyCell = new TiledMapTileLayer.Cell();
-
     }
-
-
 
     public boolean isRoad(int x, int y) {
         if (((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x,y).getTile().getProperties().get("road").equals(true)) {
@@ -100,15 +92,22 @@ public class GameScreen implements Screen {
 
         renderer.setView(camera);
 
-        drawPath();
-
         renderer.render(backgroundLayerIndex);
 
         Batch sb = renderer.getBatch();
         sb.begin();
         for (FireTruck truck : this.trucks) {
             truck.mouseMove();
+
             sb.draw(truck, truck.getCellX(), truck.getCellY(), 1, 1);
+
+            if (truck.trailPath != null) {
+                for (Vector3 tile : truck.trailPath) {
+                    sb.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
+                }
+
+            }
+
         }
 
         sb.end();
@@ -116,7 +115,7 @@ public class GameScreen implements Screen {
         renderer.render(decorationLayersIndices);
 
         shape.begin(ShapeRenderer.ShapeType.Filled);
-        for (FireTruck truck : this.trucks){
+        for (FireTruck truck : this.trucks) {
             shape.rect(truck.getPosition().x *40f, truck.getPosition().y *40f, 18,28);
             shape.rect(truck.getPosition().x  *40f  + 10 , (truck.getPosition().y *40f )+ 3, 4,20,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
             shape.rect(truck.getPosition().x  *40f + 10 , truck.getPosition().y *40f + 3, 4,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
@@ -127,22 +126,6 @@ public class GameScreen implements Screen {
 
         shape.end();
 
-    }
-
-    private void drawPath() {
-        if (trucks.length != 0) {
-            for (FireTruck truck : this.trucks) {
-                if (truck.getPath().size != 0) {
-                    for (Vector3 vector : truck.getPath()) {
-                        pathLayer.setCell((int) vector.x, (int) vector.y, truck.pathCell);
-                    }
-                }
-            }
-        }
-    }
-
-    public void clearPathCell(int x, int y) {
-        pathLayer.setCell(x, y, emptyCell);
     }
 
     @Override

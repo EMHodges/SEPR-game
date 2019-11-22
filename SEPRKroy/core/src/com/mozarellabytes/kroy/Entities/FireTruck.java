@@ -25,14 +25,10 @@ public class FireTruck extends Sprite {
     public Queue<Vector3> path;
     public Queue<Vector3> trailPath;
     private boolean moving;
-    private Sprite pathColour;
+
     private Texture trailImage;
-    private Rectangle trail;
 
     private Vector3 lastCoordinate;
-
-    public TiledMapTileLayer.Cell pathCell;
-
 
     public FireTruck(GameScreen gameScreen, float x, float y, double speed, String colour) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png")));
@@ -51,19 +47,7 @@ public class FireTruck extends Sprite {
         trailPath = new Queue<Vector3>();
         moving = false;
 
-
-        if (colour == "red") {
-            trailImage = new Texture(Gdx.files.internal("sprites/firetruck/red_trail.png"), true);
-        } else {
-            trailImage = new Texture(Gdx.files.internal("sprites/firetruck/blue_trail.png"), true);
-
-        }
-
-        trailImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-
-        pathColour = new Sprite(trailImage);
-        pathCell = new TiledMapTileLayer.Cell();
-        pathCell.setTile(new StaticTiledMapTile(pathColour));
+        trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail.png"));
     }
 
     public void arrowMove() {
@@ -107,13 +91,7 @@ public class FireTruck extends Sprite {
         return this.trailPath;
     }
 
-    public Rectangle getTrail() {
-
-        return this.trail;
-    }
-
     public Texture getTrailImage() {
-
         return this.trailImage;
     }
 
@@ -156,7 +134,6 @@ public class FireTruck extends Sprite {
 
             if (this.trailPath.size != 0) {
                 if (((int) this.x) == this.trailPath.first().x && ((int) this.y) == this.trailPath.first().y) {
-                    gameScreen.clearPathCell((int) nextTile.x, (int) nextTile.y);
                     this.trailPath.removeFirst();
                 }
             }

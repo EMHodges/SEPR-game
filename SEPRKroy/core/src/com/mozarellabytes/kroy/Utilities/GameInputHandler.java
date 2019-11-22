@@ -53,7 +53,6 @@ public class GameInputHandler implements InputProcessor {
             if (gameScreen.checkClick(position)) {
                 gameScreen.activeTruck.resetTilePath();
                 gameScreen.activeTruck.addTileToPath(position);
-
             }
         }
 
