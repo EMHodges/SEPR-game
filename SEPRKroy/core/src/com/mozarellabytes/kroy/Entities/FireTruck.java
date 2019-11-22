@@ -37,6 +37,8 @@ public class FireTruck extends Sprite {
         this.x = x;
         this.y = y;
         this.speed = speed;
+        this.HP = 80;
+        this.reserve = 60;
 
 
         lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));

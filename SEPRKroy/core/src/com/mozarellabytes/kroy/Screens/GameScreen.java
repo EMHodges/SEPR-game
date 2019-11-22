@@ -45,6 +45,7 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
         shape = new ShapeRenderer();
+        shape.setProjectionMatrix(camera.combined);
 
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
@@ -114,13 +115,14 @@ public class GameScreen implements Screen {
 
         renderer.render(decorationLayersIndices);
 
+
         shape.begin(ShapeRenderer.ShapeType.Filled);
         for (FireTruck truck : this.trucks) {
-            shape.rect(truck.getPosition().x *40f, truck.getPosition().y *40f, 18,28);
-            shape.rect(truck.getPosition().x  *40f  + 10 , (truck.getPosition().y *40f )+ 3, 4,20,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            shape.rect(truck.getPosition().x  *40f + 10 , truck.getPosition().y *40f + 3, 4,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
-            shape.rect(truck.getPosition().x  *40f + 3 , truck.getPosition().y *40f + 3, 4,20,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            shape.rect(truck.getPosition().x  *40f + 3 , truck.getPosition().y *40f + 3, 4,truck.getReserve(),Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            shape.rect(truck.getPosition().x + 0.2f  , truck.getPosition().y + 1.3f, 0.5f,0.8f);
+            shape.rect(truck.getPosition().x , truck.getPosition().y + 1.7f, 0.2f,0.3f,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
+      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,0.1f,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getReserve(),Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
             Gdx.app.log("truck 0 x", String.valueOf(trucks[0].getPosition().x));
         }
 
