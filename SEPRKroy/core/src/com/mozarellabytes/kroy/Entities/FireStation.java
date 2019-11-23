@@ -40,33 +40,25 @@ public class FireStation {
 
     // added randomly generating the firetrucks speed // on second thoughts randomly generating the colour isn't too helpful
     public void spawn(String colour) {
-
         double speed = Math.random() * (upperSpeed - lowerSpeed) + lowerSpeed;
         this.trucks.add(new FireTruck(gameScreen, this.x, this.y, speed, colour));
     }
 
     public void repair(FireTruck truck) {
-    //    if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
-        //     not sure we need as you check it's in the fire station in the checkTrucks()
-            if (truck.getHP() < truck.getMaxHP()) {
-                truck.refill();
-                Gdx.app.log("Repair", "Truck is being repaired: " + truck.getHP() + "/"+ truck.getMaxHP());
-            }
+        if (truck.getHP() < truck.getMaxHP()) {
+            truck.repair();
+        }
     }
 
     public void refill(FireTruck truck) {
-   //     if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
-        //     not sure we need as you check it's in the fire station in the checkTrucks()
-            if (truck.getReserve() < truck.getMaxReserve()) {
-                truck.refill();
-                Gdx.app.log("Refill", "Truck is being refilled: " + truck.getReserve() + "/"+ truck.getMaxReserve());
-            }
+        if (truck.getReserve() < truck.getMaxReserve()) {
+            truck.refill();
+        }
     }
 
     public void checkTrucks() {
         for (FireTruck truck : this.trucks) {
             if (truck.getPosition().equals(this.getPosition())) {
-
                 refill(truck);
                 repair(truck);
             }

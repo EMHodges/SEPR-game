@@ -37,10 +37,10 @@ public class FireTruck extends Sprite {
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.HP = 80;
-        this.reserve = 60;
-        this.maxHP = this.HP;
-        this.maxReserve = this.reserve;
+        this.HP = 0;
+        this.reserve = 30;
+        this.maxHP = 80;
+        this.maxReserve = 60;
 
         lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
@@ -154,7 +154,6 @@ public class FireTruck extends Sprite {
             path.removeFirst();
         } else {
             moving = false;
-            gameScreen.activeTruck = null;
             this.trailPath.clear();
         }
     }

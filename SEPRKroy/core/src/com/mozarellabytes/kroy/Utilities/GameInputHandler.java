@@ -5,10 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-
-import java.io.Console;
 
 public class GameInputHandler implements InputProcessor {
 
