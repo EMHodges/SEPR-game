@@ -25,11 +25,9 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.R:
-                gameScreen.station.spawn(0.2, "red");
+                gameScreen.station.spawn();
                 break;
-            case Input.Keys.B:
-                gameScreen.station.spawn(0.5, "blue");
-                break;
+
         }
         return true;
     }
@@ -38,6 +36,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean keyUp(int keycode) {
         return false;
     }
+    
 
     @Override
     public boolean keyTyped(char character) {

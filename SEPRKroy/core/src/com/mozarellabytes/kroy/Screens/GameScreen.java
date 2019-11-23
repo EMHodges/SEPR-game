@@ -59,7 +59,7 @@ public class GameScreen implements Screen {
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
 
-        station.spawn(0.2, "red");
+        station.spawn();
 
     }
 
