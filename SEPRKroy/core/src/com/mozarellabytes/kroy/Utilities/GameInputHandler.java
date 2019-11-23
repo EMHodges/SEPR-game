@@ -28,6 +28,8 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.B:
                 gameScreen.station.spawn("blue");
                 break;
+            case Input.Keys.L:
+                System.out.println("Path : " + gameScreen.activeTruck.path);
 
         }
         return true;

@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.utils.Queue;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -16,7 +17,7 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
-
+import com.mozarellabytes.kroy.Utilities.Pathfinder;
 
 // when you click on another truck while a truck is following the path then try to move the path of the stationary truck
 public class GameScreen implements Screen {
@@ -29,6 +30,8 @@ public class GameScreen implements Screen {
     private GameInputHandler ih;
     private MapLayers mapLayers;
     private int[] decorationLayersIndices, backgroundLayerIndex;
+    private Pathfinder pathfinder;
+    private Queue<Vector2> pathfound;
 
     public FireTruck activeTruck;
     public FireStation station;
@@ -48,6 +51,8 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
+        pathfinder = new Pathfinder();
+
         station = new FireStation(this,2,2);
 
         for (FireTruck truck : station.getTrucks()) {
@@ -63,6 +68,8 @@ public class GameScreen implements Screen {
                                                 mapLayers.getIndex("transparentStructures")};
 
         station.spawn("red");
+
+        pathfound = pathfinder.pathfindMe(map, "collisions", new Vector2(2, 1), new Vector2(37, 22));
 
     }
 
@@ -110,6 +117,8 @@ public class GameScreen implements Screen {
 
         }
 
+        drawPathfinder(sb);
+
         sb.end();
 
         renderer.render(decorationLayersIndices);
@@ -125,6 +134,12 @@ public class GameScreen implements Screen {
 
         shape.end();
 
+    }
+
+    private void drawPathfinder(Batch sb) {
+        for (Vector2 v : pathfound) {
+            sb.draw(pathfinder.pathImage, v.x, v.y, 1, 1);
+        }
     }
 
     @Override
