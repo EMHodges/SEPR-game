@@ -28,8 +28,6 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.B:
                 gameScreen.station.spawn("blue");
                 break;
-            case Input.Keys.L:
-                System.out.println("Path : " + gameScreen.activeTruck.path);
 
         }
         return true;
@@ -39,7 +37,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean keyUp(int keycode) {
         return false;
     }
-    
+
 
     @Override
     public boolean keyTyped(char character) {
@@ -56,9 +54,10 @@ public class GameInputHandler implements InputProcessor {
             if (gameScreen.checkClick(position2d)) {
                 gameScreen.activeTruck.resetTilePath();
                 gameScreen.activeTruck.addTileToPath(position2d);
+            } else {
+                gameScreen.checkTrailClick(position2d);
             }
         }
-
         return true;
     }
 
@@ -68,6 +67,7 @@ public class GameInputHandler implements InputProcessor {
         if (gameScreen.activeTruck != null) {
             gameScreen.activeTruck.setMoving(true);
         }
+        gameScreen.activeTruck = null;
         return true;
     }
 
