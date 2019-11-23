@@ -32,6 +32,11 @@ public class Pathfinder {
 
         ArrayList<Vector2> navGrid = createNavGrid(map, layerName);
 
+        if (!navGrid.contains(startPos) || !navGrid.contains(endPos)) {
+            System.out.println("One of the entered coordinates is not a navigable cell.");
+            return null;
+        }
+
         edge.addLast(startPos);
         Vector2 currentPos;
         cameFrom.put(startPos, null);
