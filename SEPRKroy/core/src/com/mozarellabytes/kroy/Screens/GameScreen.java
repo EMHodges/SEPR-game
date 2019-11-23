@@ -98,12 +98,14 @@ public class GameScreen implements Screen {
         sb.begin();
         for (FireTruck truck : station.getTrucks()) {
             truck.mouseMove();
-
             sb.draw(truck, truck.getX(), truck.getY(), 1, 1);
-
             if (truck.trailPath != null) {
                 for (Vector2 tile : truck.trailPath) {
+                    if (tile.equals(truck.trailPath.last())) {
+                        sb.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                    }
                     sb.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
+
                 }
 
             }
@@ -122,7 +124,6 @@ public class GameScreen implements Screen {
             shape.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
             shape.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         }
-
         shape.end();
 
     }

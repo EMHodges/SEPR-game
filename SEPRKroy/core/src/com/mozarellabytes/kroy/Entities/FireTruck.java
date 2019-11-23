@@ -28,6 +28,7 @@ public class FireTruck extends Sprite {
     private boolean seeStats;
 
     private Texture trailImage;
+    private Texture trailImageEnd;
 
     private Vector2 lastCoordinate;
 
@@ -52,6 +53,7 @@ public class FireTruck extends Sprite {
         moving = false;
 
         trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail.png"));
+        trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail_end.png"));
     }
 
     public void arrowMove() {
@@ -93,6 +95,10 @@ public class FireTruck extends Sprite {
 
     public Texture getTrailImage() {
         return this.trailImage;
+    }
+
+    public Texture getTrailImageEnd() {
+        return this.trailImageEnd;
     }
 
     public boolean seeStats() {
