@@ -13,7 +13,6 @@ public class FireStation {
     private int x,y;
     private ArrayList<FireTruck> trucks;
 
-    String[] truckColours = new String[] {"red", "blue"};
     private double upperSpeed = 0.8;
     private double lowerSpeed = 0.2;
 
@@ -39,36 +38,35 @@ public class FireStation {
         return this.trucks.get(i);
     }
 
-    // added randomly generating the firetrucks speed and colour, not sure if colour is helpful but speed might be
-    public void spawn() {
+    // added randomly generating the firetrucks speed // on second thoughts randomly generating the colour isn't too helpful
+    public void spawn(String colour) {
 
         double speed = Math.random() * (upperSpeed - lowerSpeed) + lowerSpeed;
-        int index = new Random().nextInt(truckColours.length);
-        String colour = (truckColours[index]);
         this.trucks.add(new FireTruck(gameScreen, this.x, this.y, speed, colour));
     }
 
     public void repair(FireTruck truck) {
-        if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
+    //    if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
+        //     not sure we need as you check it's in the fire station in the checkTrucks()
             if (truck.getHP() < truck.getMaxHP()) {
                 truck.refill();
                 Gdx.app.log("Repair", "Truck is being repaired: " + truck.getHP() + "/"+ truck.getMaxHP());
             }
-        }
     }
 
     public void refill(FireTruck truck) {
-        if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
+   //     if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
+        //     not sure we need as you check it's in the fire station in the checkTrucks()
             if (truck.getReserve() < truck.getMaxReserve()) {
                 truck.refill();
                 Gdx.app.log("Refill", "Truck is being refilled: " + truck.getReserve() + "/"+ truck.getMaxReserve());
             }
-        }
     }
 
     public void checkTrucks() {
         for (FireTruck truck : this.trucks) {
             if (truck.getPosition().equals(this.getPosition())) {
+
                 refill(truck);
                 repair(truck);
             }

@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -16,6 +17,8 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
+
+// when you click on another truck while a truck is following the path then try to move the path of the stationary truck
 public class GameScreen implements Screen {
 
     private Kroy game;
@@ -59,7 +62,7 @@ public class GameScreen implements Screen {
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
 
-        station.spawn();
+        station.spawn("red");
 
     }
 
@@ -111,15 +114,15 @@ public class GameScreen implements Screen {
 
         renderer.render(decorationLayersIndices);
 
-
         shape.begin(ShapeRenderer.ShapeType.Filled);
         for (FireTruck truck : station.getTrucks()) {
-//            shape.rect(truck.getPosition().x + 0.2f  , truck.getPosition().y + 1.3f, 0.5f,0.8f);
-//            shape.rect(truck.getPosition().x , truck.getPosition().y + 1.7f, 0.2f,0.3f,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
-      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,0.1f,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getReserve(),Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-//            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
+            float truckHP = (float)truck.getHP() / 166;
+            shape.rect(truck.getPosition().x + 0.2f  , truck.getPosition().y + 1.3f, 0.6f,0.8f);
+            shape.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            shape.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float)truck.getHP() / 167, Color.RED, Color.RED, Color.RED, Color.RED);
+            shape.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            shape.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f,(float) truck.getReserve() / 167,Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
         }
 
         shape.end();

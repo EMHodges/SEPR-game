@@ -25,7 +25,10 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.R:
-                gameScreen.station.spawn();
+                gameScreen.station.spawn("red");
+                break;
+            case Input.Keys.B:
+                gameScreen.station.spawn("blue");
                 break;
 
         }
