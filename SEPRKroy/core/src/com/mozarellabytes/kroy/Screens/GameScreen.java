@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
@@ -111,15 +112,27 @@ public class GameScreen implements Screen {
 
         renderer.render(decorationLayersIndices);
 
-
         shape.begin(ShapeRenderer.ShapeType.Filled);
+        int positionX = 40;
+        int positionY = 40;
+        int whiteBarH = 28;
+        int whiteBarW = 18;
+        int barH = 22;
+        int scale = 1;
+
         for (FireTruck truck : station.getTrucks()) {
-//            shape.rect(truck.getPosition().x + 0.2f  , truck.getPosition().y + 1.3f, 0.5f,0.8f);
-//            shape.rect(truck.getPosition().x , truck.getPosition().y + 1.7f, 0.2f,0.3f,Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getHP(),Color.RED, Color.RED, Color.RED, Color.RED);
-      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,0.1f,Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-      //      shape.rect(truck.getPosition().x , truck.getPosition().y , 0.5f,truck.getReserve(),Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-//            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
+            // white background
+            shape.rect(truck.getPosition().x + positionX/Constants.TILE_WxH, truck.getPosition().y + (positionY)/Constants.TILE_WxH, whiteBarW/Constants.TILE_WxH*scale,whiteBarH/Constants.TILE_WxH*scale);
+            // Max HP
+            shape.rect(truck.getPosition().x + (3+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,barH/Constants.TILE_WxH*scale, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            // HP
+            shape.rect(truck.getPosition().x + (3+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,truck.getHP()/Constants.TILE_WxH/truck.getMaxHP()*barH*scale, Color.RED, Color.RED, Color.RED, Color.RED);
+            // Max Reserve
+            shape.rect(truck.getPosition().x + (10+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,barH/Constants.TILE_WxH*scale, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            // Reserve
+            shape.rect(truck.getPosition().x + (10+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,truck.getReserve()/Constants.TILE_WxH/truck.getMaxReserve()*barH*scale, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+
+            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
         }
 
         shape.end();
