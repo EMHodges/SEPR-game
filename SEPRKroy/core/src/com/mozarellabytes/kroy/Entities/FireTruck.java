@@ -12,8 +12,10 @@ public class FireTruck extends Sprite {
 
     private GameScreen gameScreen;
 
-    private int HP, AP, range, type, reserve;
-    private int maxHP, maxReserve;
+    private int HP, AP, range, type;
+    private int reserve;
+    private int maxHP;
+    private int maxReserve;
     private double speed;
     private float x, y;
     private Texture lookLeft;
