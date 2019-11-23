@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -30,6 +31,10 @@ public class FireStation {
         return this.trucks;
     }
 
+    public Vector2 getPosition() {
+        return new Vector2(this.x, this.y);
+    }
+
     public FireTruck getTruck(int i) {
         return this.trucks.get(i);
     }
@@ -45,14 +50,28 @@ public class FireStation {
 
     public void repair(FireTruck truck) {
         if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
-            truck.repair();
+            if (truck.getHP() < truck.getMaxHP()) {
+                truck.refill();
+                Gdx.app.log("Repair", "Truck is being repaired: " + truck.getHP() + "/"+ truck.getMaxHP());
+            }
         }
     }
 
     public void refill(FireTruck truck) {
         if (truck.getPosition().equals(new Vector2(this.x, this.y))) {
-            truck.refill();
+            if (truck.getReserve() < truck.getMaxReserve()) {
+                truck.refill();
+                Gdx.app.log("Refill", "Truck is being refilled: " + truck.getReserve() + "/"+ truck.getMaxReserve());
+            }
         }
     }
 
+    public void checkTrucks() {
+        for (FireTruck truck : this.trucks) {
+            if (truck.getPosition().equals(this.getPosition())) {
+                refill(truck);
+                repair(truck);
+            }
+        }
+    }
 }

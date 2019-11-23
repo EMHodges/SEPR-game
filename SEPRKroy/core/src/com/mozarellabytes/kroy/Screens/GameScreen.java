@@ -85,6 +85,8 @@ public class GameScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        station.checkTrucks();
+
         renderer.setView(camera);
 
         renderer.render(backgroundLayerIndex);

@@ -74,16 +74,10 @@ public class GameInputHandler implements InputProcessor {
             Vector2 clickCoordinates = new Vector2(screenX, screenY);
             Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
             Vector2 position2d = new Vector2((int) position.x, (int)position.y);
-
             if (gameScreen.activeTruck.isValidMove(position2d)) {
                 gameScreen.activeTruck.addTileToPath(position2d);
-
-
             }
-
         }
-
-
         return true;
     }
 

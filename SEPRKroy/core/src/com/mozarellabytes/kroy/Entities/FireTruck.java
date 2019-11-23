@@ -4,9 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
@@ -16,6 +13,7 @@ public class FireTruck extends Sprite {
     private GameScreen gameScreen;
 
     private int HP, AP, range, type, reserve;
+    private int maxHP, maxReserve;
     private double speed;
     private float x, y;
     private Texture lookLeft;
@@ -39,7 +37,8 @@ public class FireTruck extends Sprite {
         this.speed = speed;
         this.HP = 80;
         this.reserve = 60;
-
+        this.maxHP = this.HP;
+        this.maxReserve = this.reserve;
 
         lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
@@ -78,17 +77,14 @@ public class FireTruck extends Sprite {
     }
 
     public float getX() {
-
         return this.x;
     }
 
     public float getY() {
-
         return this.y;
     }
 
     public Queue<Vector2> getPath() {
-
         return this.trailPath;
     }
 
@@ -114,9 +110,13 @@ public class FireTruck extends Sprite {
 
     public boolean isValidMove(Vector2 coordinate) {
         if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
-            if (!this.path.last().equals(coordinate)) {
-                if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
-                    return true;
+            if (this.path.isEmpty()) {
+                return true;
+            } else {
+                if (!this.path.last().equals(coordinate)) {
+                    if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
+                        return true;
+                    }
                 }
             }
         }
@@ -171,11 +171,19 @@ public class FireTruck extends Sprite {
     }
 
     public int getHP(){
-        return this.HP / 5;
+        return this.HP;
     }
 
     public int getReserve(){
-        return this.reserve / 5;
+        return this.reserve;
+    }
+
+    public int getMaxHP(){
+        return this.maxHP;
+    }
+
+    public int getMaxReserve(){
+        return this.maxReserve;
     }
 }
 
