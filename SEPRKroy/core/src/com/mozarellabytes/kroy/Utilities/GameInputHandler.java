@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 import java.io.Console;
@@ -83,7 +84,11 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return false;
+        Vector2 clickCoordinates = new Vector2(screenX, screenY);
+        Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+        Vector2 position2d = new Vector2((int) position.x, (int)position.y);
+        gameScreen.checkHover(position2d);
+        return true;
     }
 
     @Override

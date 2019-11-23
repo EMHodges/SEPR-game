@@ -24,6 +24,8 @@ public class FireTruck extends Sprite {
     public Queue<Vector2> trailPath;
     private boolean moving;
 
+    private boolean seeStats;
+
     private Texture trailImage;
 
     private Vector2 lastCoordinate;
@@ -90,6 +92,14 @@ public class FireTruck extends Sprite {
 
     public Texture getTrailImage() {
         return this.trailImage;
+    }
+
+    public boolean seeStats() {
+        return this.seeStats;
+    }
+
+    public void setSeeStats(boolean t) {
+        this.seeStats = t;
     }
 
     public void addTileToPath(Vector2 coordinate) {

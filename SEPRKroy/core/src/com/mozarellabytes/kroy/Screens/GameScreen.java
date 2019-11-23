@@ -121,18 +121,18 @@ public class GameScreen implements Screen {
         int scale = 1;
 
         for (FireTruck truck : station.getTrucks()) {
-            // white background
-            shape.rect(truck.getPosition().x + positionX/Constants.TILE_WxH, truck.getPosition().y + (positionY)/Constants.TILE_WxH, whiteBarW/Constants.TILE_WxH*scale,whiteBarH/Constants.TILE_WxH*scale);
-            // Max HP
-            shape.rect(truck.getPosition().x + (3+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,barH/Constants.TILE_WxH*scale, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            // HP
-            shape.rect(truck.getPosition().x + (3+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,truck.getHP()/Constants.TILE_WxH/truck.getMaxHP()*barH*scale, Color.RED, Color.RED, Color.RED, Color.RED);
-            // Max Reserve
-            shape.rect(truck.getPosition().x + (10+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,barH/Constants.TILE_WxH*scale, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            // Reserve
-            shape.rect(truck.getPosition().x + (10+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,truck.getReserve()/Constants.TILE_WxH/truck.getMaxReserve()*barH*scale, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-
-            Gdx.app.log("truck 0 x", String.valueOf(truck.getPosition().x));
+            if (truck.seeStats()) {
+                // white background
+                shape.rect(truck.getPosition().x + positionX/Constants.TILE_WxH, truck.getPosition().y + (positionY)/Constants.TILE_WxH, whiteBarW/Constants.TILE_WxH*scale,whiteBarH/Constants.TILE_WxH*scale);
+                // Max HP
+                shape.rect(truck.getPosition().x + (3+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,barH/Constants.TILE_WxH*scale, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+                // HP
+                shape.rect(truck.getPosition().x + (3+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,truck.getHP()/Constants.TILE_WxH/truck.getMaxHP()*barH*scale, Color.RED, Color.RED, Color.RED, Color.RED);
+                // Max Reserve
+                shape.rect(truck.getPosition().x + (10+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,barH/Constants.TILE_WxH*scale, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+                // Reserve
+                shape.rect(truck.getPosition().x + (10+positionX)/Constants.TILE_WxH, truck.getPosition().y + (3+positionY)/Constants.TILE_WxH, 4/Constants.TILE_WxH*scale,truck.getReserve()/Constants.TILE_WxH/truck.getMaxReserve()*barH*scale, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            }
         }
 
         shape.end();
@@ -172,7 +172,16 @@ public class GameScreen implements Screen {
                 return true;
             }
         }
-
         return false;
+    }
+
+    public void checkHover(Vector2 position) {
+        for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
+            if (position.equals(this.station.getTrucks().get(i).getPosition())) {
+                this.station.getTrucks().get(i).setSeeStats(true);
+            } else {
+                this.station.getTrucks().get(i).setSeeStats(false);
+            }
+        }
     }
 }
