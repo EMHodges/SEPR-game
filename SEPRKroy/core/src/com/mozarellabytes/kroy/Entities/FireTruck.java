@@ -12,10 +12,9 @@ public class FireTruck extends Sprite {
 
     private GameScreen gameScreen;
 
-    private int HP, AP, range, type;
-    private int reserve;
-    private int maxHP;
-    private int maxReserve;
+    private int AP, range, type;
+    private float HP, reserve;
+    private float maxHP, maxReserve;
     private double speed;
     private float x, y;
     private Texture lookLeft;
@@ -174,26 +173,26 @@ public class FireTruck extends Sprite {
     }
 
     public void repair() {
-        this.HP++;
+        this.HP += 0.04f;
     }
 
     public void refill() {
-        this.reserve++;
+        this.reserve += 0.06f;
     }
 
-    public int getHP(){
+    public float getHP(){
         return this.HP;
     }
 
-    public int getReserve(){
+    public float getReserve(){
         return this.reserve;
     }
 
-    public int getMaxHP(){
+    public float getMaxHP(){
         return this.maxHP;
     }
 
-    public int getMaxReserve(){
+    public float getMaxReserve(){
         return this.maxReserve;
     }
 }
