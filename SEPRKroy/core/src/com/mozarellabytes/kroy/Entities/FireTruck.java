@@ -33,7 +33,7 @@ public class FireTruck extends Sprite {
     private Vector2 lastCoordinate;
 
     public FireTruck(GameScreen gameScreen, float x, float y, double speed, String colour) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png")));
+        super(new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + colour + ".png")));
 
         this.gameScreen = gameScreen;
         this.x = x;

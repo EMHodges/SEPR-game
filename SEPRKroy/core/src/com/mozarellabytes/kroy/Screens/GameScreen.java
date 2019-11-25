@@ -48,7 +48,7 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
-        station = new FireStation(this,2,2);
+        station = new FireStation(this,4,2);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -105,12 +105,10 @@ public class GameScreen implements Screen {
                         sb.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
                     }
                     sb.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
-
                 }
-
             }
-
         }
+        sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 3, 3);
 
         sb.end();
 
