@@ -1,6 +1,7 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -16,6 +17,8 @@ public class FireStation {
     private double upperSpeed = 0.8;
     private double lowerSpeed = 0.2;
 
+    private Texture texture;
+
 
     Random r = new Random();
 
@@ -24,6 +27,7 @@ public class FireStation {
         this.x = x;
         this.y = y;
         this.trucks = new ArrayList<FireTruck>();
+        this.texture = new Texture(Gdx.files.internal("sprites/station.png"));
     }
 
     public ArrayList<FireTruck> getTrucks() {
@@ -36,6 +40,10 @@ public class FireStation {
 
     public FireTruck getTruck(int i) {
         return this.trucks.get(i);
+    }
+
+    public Texture getTexture() {
+        return this.texture;
     }
 
     // added randomly generating the firetrucks speed // on second thoughts randomly generating the colour isn't too helpful
