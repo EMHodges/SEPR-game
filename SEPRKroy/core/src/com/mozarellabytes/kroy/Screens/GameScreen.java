@@ -13,6 +13,8 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Entities.Fortress;
+import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
@@ -32,6 +34,9 @@ public class GameScreen implements Screen {
 
     public FireTruck activeTruck;
     public FireStation station;
+    public Fortress fortress;
+
+    public GameState gameState;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -48,7 +53,10 @@ public class GameScreen implements Screen {
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
 
+        gameState = new GameState();
+
         station = new FireStation(this,4,2);
+        fortress = new Fortress(this, 30, 15, 10);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -88,6 +96,12 @@ public class GameScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        if (gameState.checkWin()) {
+            this.game.setScreen(new MenuScreen(this.game));
+        } else if (gameState.checkLose()) {
+            this.game.setScreen(new MenuScreen(this.game));
+        }
+
         station.checkTrucks();
 
         renderer.setView(camera);
@@ -96,7 +110,11 @@ public class GameScreen implements Screen {
 
         Batch sb = renderer.getBatch();
         sb.begin();
-        for (FireTruck truck : station.getTrucks()) {
+        Gdx.app.log("Trucks", station.getTrucks().toString());
+//        for (FireTruck truck : station.getTrucks()) {
+        for (int i=0; i<station.getTrucks().size();i++) {
+            FireTruck truck = station.getTruck(i);
+            fortress.checkRange(truck);
             truck.mouseMove();
             sb.draw(truck, truck.getX(), truck.getY(), 1, 1);
             if (truck.trailPath != null) {
@@ -107,8 +125,12 @@ public class GameScreen implements Screen {
                     sb.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
                 }
             }
+            if (truck.getHP() <= 0) {
+                station.destroyTruck(truck);
+            }
         }
         sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 3, 3);
+        sb.draw(fortress.getTexture(), fortress.getPosition().x, fortress.getPosition().y, 5, 5);
 
         sb.end();
 

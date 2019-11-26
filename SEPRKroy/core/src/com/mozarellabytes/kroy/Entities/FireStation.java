@@ -50,6 +50,7 @@ public class FireStation {
     public void spawn(String colour) {
         double speed = Math.random() * (upperSpeed - lowerSpeed) + lowerSpeed;
         this.trucks.add(new FireTruck(gameScreen, this.x, this.y, speed, colour));
+        gameScreen.gameState.addFireTruck();
     }
 
     public void repair(FireTruck truck) {
@@ -71,5 +72,10 @@ public class FireStation {
                 repair(truck);
             }
         }
+    }
+
+    public void destroyTruck(FireTruck truck) {
+        this.trucks.remove(truck);
+        gameScreen.gameState.removeFireTruck();
     }
 }
