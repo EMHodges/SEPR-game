@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Screens.SplashScreen;
 
 public class Kroy extends Game {
 
@@ -17,8 +18,8 @@ public class Kroy extends Game {
 	public void create () {
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
 		batch = new SpriteBatch();
-//		this.setScreen(new SplashScreen(this));
-		this.setScreen(new GameScreen(this));
+		this.setScreen(new SplashScreen(this));
+//		this.setScreen(new GameScreen(this));
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magero.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
