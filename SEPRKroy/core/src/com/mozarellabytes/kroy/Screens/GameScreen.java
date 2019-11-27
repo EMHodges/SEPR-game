@@ -27,11 +27,11 @@ public class GameScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
-    private ShapeRenderer shapeRenderer;
-    private ShapeRenderer shapeRenderer2;
+    private ShapeRenderer truckStatsRenderer;
+    private ShapeRenderer bigTruckStatsRenderer;
     private GameInputHandler ih;
     private MapLayers mapLayers;
-    private int[] decorationLayersIndices, backgroundLayerIndex;
+    private int[] structureLayersIndices, backgroundLayerIndex;
 
     public FireTruck activeTruck;
     public FireTruck selectedTruck;
@@ -50,11 +50,11 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
 
-        shapeRenderer = new ShapeRenderer();
-        shapeRenderer.setProjectionMatrix(camera.combined);
+        truckStatsRenderer = new ShapeRenderer();
+        truckStatsRenderer.setProjectionMatrix(camera.combined);
 
-        shapeRenderer2 = new ShapeRenderer();
-        shapeRenderer2.setProjectionMatrix(camera.combined);
+        bigTruckStatsRenderer = new ShapeRenderer();
+        bigTruckStatsRenderer.setProjectionMatrix(camera.combined);
 
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
@@ -72,20 +72,12 @@ public class GameScreen implements Screen {
         mapLayers = map.getLayers();
         backgroundLayerIndex = new int[] {  mapLayers.getIndex("background")};
 
-        decorationLayersIndices = new int[] {   mapLayers.getIndex("structures"),
+        structureLayersIndices = new int[] {   mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
 
         station.spawn("red");
 
-    }
-
-    public boolean isRoad(int x, int y) {
-        if (((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x,y).getTile().getProperties().get("road").equals(true)) {
-            return true;
-        } else {
-            return false;
-        }
     }
 
     @Override
@@ -95,80 +87,140 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
+
+        // Initial rendering "options"
         Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
-
+        // check to see if the game has been won/lost
         if (gameState.checkWin()) {
             this.game.setScreen(new MenuScreen(this.game));
+            this.dispose();
         } else if (gameState.checkLose()) {
             this.game.setScreen(new MenuScreen(this.game));
+            this.dispose();
         }
 
+        // update camera
+        camera.update();
+
+        // check to see if trucks can be repaired/refilled
         station.checkTrucks();
 
+        // Make sure the batch abides by our tiled map
+        game.batch.setProjectionMatrix(camera.combined);
+
+        // render what our camera sees
         renderer.setView(camera);
 
+        // renders the background layer of the map
         renderer.render(backgroundLayerIndex);
 
+        // initialise batch
         Batch sb = renderer.getBatch();
+
+        // setups batch for rendering entities
         sb.begin();
-        Gdx.app.log("Trucks", station.getTrucks().toString());
-//        for (FireTruck truck : station.getTrucks()) {
+
+        // for each truck (uses standard for loop because it may delete truck when a truck is destroyed)
         for (int i=0; i<station.getTrucks().size();i++) {
+
+            // creates local truck
             FireTruck truck = station.getTruck(i);
+
+            // damages truck if within range of fortress
             fortress.checkRange(truck);
+
+            // move the position of the truck
             truck.mouseMove();
+
+            // draws the truck
             sb.draw(truck, truck.getX(), truck.getY(), 1, 1);
-            if (truck.trailPath != null) {
+
+            // if truck has a path
+            if (!truck.trailPath.isEmpty()) {
+
+                // for each tile in the path
                 for (Vector2 tile : truck.trailPath) {
+
+                    // if last tile
                     if (tile.equals(truck.trailPath.last())) {
+
+                        // overlay the border square
                         sb.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
                     }
+
+                    // draws transparent trail path
                     sb.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
                 }
             }
+
+            // if health of truck reaches 0
             if (truck.getHP() <= 0) {
                 station.destroyTruck(truck);
+                if (truck.equals(this.selectedTruck)) {
+                    this.selectedTruck = null;
+                }
             }
         }
+
+        // draw the station
         sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 3, 3);
+
+        // draw the fortress
         sb.draw(fortress.getTexture(), fortress.getPosition().x, fortress.getPosition().y, 5, 5);
 
+        // finish rendering of entities
         sb.end();
 
-        renderer.render(decorationLayersIndices);
+        // render structures
+        renderer.render(structureLayersIndices);
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        // begin rendering of the small stats over each truck
+        truckStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
+        // for each fire truck
         for (FireTruck truck : station.getTrucks()) {
-            shapeRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
-            shapeRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            shapeRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-            shapeRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            shapeRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
+            truckStatsRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
+            truckStatsRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            truckStatsRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+            truckStatsRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            truckStatsRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         }
-        shapeRenderer.end();
 
-        Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-        shapeRenderer2.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer2.setColor(0, 0, 0, 0.5f);
+        // stops rendering of small stats over each truck
+        truckStatsRenderer.end();
 
         if (selectedTruck != null) {
-            shapeRenderer2.rect(1, Constants.VIEWPORT_HEIGHT-1-8, 0.6f*10,0.8f*10);
-            shapeRenderer2.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            shapeRenderer2.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,(float) selectedTruck.getHP() / (float) selectedTruck.getMaxHP() * 0.6f*10, Color.RED, Color.RED, Color.RED, Color.RED);
-            shapeRenderer2.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            shapeRenderer2.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10, (float) selectedTruck.getReserve() / (float) selectedTruck.getMaxReserve() * 0.6f*10, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            // allows for transparency
+            Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+            // starts render of the big stats for selected truck
+            bigTruckStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+            // sets colour or render to transparent?
+            bigTruckStatsRenderer.setColor(0, 0, 0, 0.5f);
+
+            // if there is a truck selected
+            // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
+            // these are positioned in the top left corner
+            bigTruckStatsRenderer.rect(1, Constants.VIEWPORT_HEIGHT-1-8, 0.6f*10,0.8f*10);
+            bigTruckStatsRenderer.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            bigTruckStatsRenderer.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,(float) selectedTruck.getHP() / (float) selectedTruck.getMaxHP() * 0.6f*10, Color.RED, Color.RED, Color.RED, Color.RED);
+            bigTruckStatsRenderer.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            bigTruckStatsRenderer.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10, (float) selectedTruck.getReserve() / (float) selectedTruck.getMaxReserve() * 0.6f*10, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+
+            // ends render of the big stats for selected truck
+            bigTruckStatsRenderer.end();
+
+            // disabled transparent mode
+            Gdx.gl.glDisable(GL20.GL_BLEND);
         }
 
-        shapeRenderer2.end();
-        Gdx.gl.glDisable(GL20.GL_BLEND);
+
 
     }
 
@@ -196,25 +248,57 @@ public class GameScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
+        truckStatsRenderer.dispose();
+        bigTruckStatsRenderer.dispose();
     }
 
+    // this function checks whether the coordinates given are on a road
+    public boolean isRoad(int x, int y) {
+        return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
+    }
+
+    // this function is used to check whether a player clicks on
+    // a truck, then makes that truck the active truck so that
+    // operations such as adding to a trail can occur
     public boolean checkClick(Vector2 position) {
+        // for each truck, but in reverse order
+        // so that you can click on the top truck the player can see
         for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
+
+            // if there is a truck where the player clicked
             if (position.equals(this.station.getTruck(i).getPosition())) {
+
+                // sets the truck to the active truck
                 this.activeTruck = this.station.getTruck(i);
+
+                // sets the truck to the selected truck
                 this.selectedTruck = this.station.getTruck(i);
+
+                // returns true to show that a truck is selected
                 return true;
             }
         }
 
+        // truck was not selected
         return false;
     }
 
+    // this function is used to see whether the player clicks on
+    // the last tile of a path, so that they can extend it
     public void checkTrailClick(Vector2 position) {
+        // for each truck, but in reverse order
+        // so that you can click on the top trail the player can see
         for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
+
+            // if the truck has a path
             if (!this.station.getTruck(i).path.isEmpty()) {
+
+                // if player clicks on the last tile of a path
                 if (position.equals(this.station.getTruck(i).path.last())) {
+
+                    // makes that truck the active truck again
                     this.activeTruck = this.station.getTruck(i);
+                    this.selectedTruck = this.station.getTruck(i);
                 }
             }
         }
