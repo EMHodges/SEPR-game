@@ -38,11 +38,11 @@ public class GameOverScreen implements Screen {
 
         layout = new GlyphLayout();
         if (this.won) {
-            this.text = "You won. Well done!";
+            this.text = "We did it! Good job little guy.";
         } else {
-            this.text = "You lost. Better luck time.";
+            this.text = "Mission Failed. We'll get 'em next time.";
         }
-        this.text = this.text + "\n" + " Click to return to the main menu...";
+        this.text = this.text + "\n" + "   Click to return to the main menu...";
         layout.setText(game.font, this.text);
     }
 
