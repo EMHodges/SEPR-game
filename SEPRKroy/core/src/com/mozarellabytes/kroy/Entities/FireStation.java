@@ -78,4 +78,5 @@ public class FireStation {
         this.trucks.remove(truck);
         gameScreen.gameState.removeFireTruck();
     }
+
 }

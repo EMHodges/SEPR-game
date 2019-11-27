@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
@@ -29,7 +30,6 @@ public class GameScreen implements Screen {
     public OrthographicCamera camera;
     private ShapeRenderer truckStatsRenderer;
     private ShapeRenderer bigTruckStatsRenderer;
-    private GameInputHandler ih;
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
 
@@ -60,7 +60,7 @@ public class GameScreen implements Screen {
         gameState = new GameState();
 
         station = new FireStation(this,4,2);
-        fortress = new Fortress(this, 30, 15, 10);
+        fortress = new Fortress(this, 30.5f, 15.5f, 5);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -75,7 +75,6 @@ public class GameScreen implements Screen {
                                                 mapLayers.getIndex("transparentStructures")};
 
         station.spawn("red");
-
     }
 
     @Override
@@ -172,6 +171,10 @@ public class GameScreen implements Screen {
 
         // render structures
         renderer.render(structureLayersIndices);
+
+        truckStatsRenderer.begin(ShapeRenderer.ShapeType.Line);
+        truckStatsRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
+        truckStatsRenderer.end();
 
         // begin rendering of the small stats over each truck
         truckStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);

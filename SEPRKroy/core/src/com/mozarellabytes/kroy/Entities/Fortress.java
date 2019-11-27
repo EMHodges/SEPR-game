@@ -8,11 +8,12 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 public class Fortress {
 
     private GameScreen gameScreen;
-    private int type, HP, AP, range;
+    private int type, HP, AP;
+    private float range;
     private Vector2 position;
     private Texture texture;
 
-    public Fortress(GameScreen gameScreen, int x, int y, int range) {
+    public Fortress(GameScreen gameScreen, float x, float y, int range) {
         this.gameScreen = gameScreen;
         this.position = new Vector2(x, y);
         this.range = range;
@@ -20,9 +21,10 @@ public class Fortress {
     }
 
     public void checkRange(FireTruck target) {
-        if (target.getPosition().dst2(this.position) <= range) {
+        if (new Vector2(((float) (target.getPosition().x + 0.5)), (float) (target.getPosition().y + 0.5)).dst(this.position) <= range) {
             target.fortressDamage();
         }
+       Gdx.app.log("Distance", String.valueOf(target.getPosition().dst(this.position)));
     }
 
     public Texture getTexture() {
@@ -31,6 +33,10 @@ public class Fortress {
 
     public Vector2 getPosition() {
         return this.position;
+    }
+
+    public float getRange() {
+        return this.range;
     }
 
 }
