@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Utilities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mozarellabytes.kroy.Screens.MenuScreen;
@@ -22,7 +23,13 @@ public class MenuInputHandler implements InputProcessor {
      */
     @Override
     public boolean keyDown(int keycode) {
-        return false;
+        switch (keycode) {
+            case Input.Keys.ESCAPE:
+                Gdx.app.exit();
+                System.exit(1);
+                break;
+        }
+        return true;
     }
 
     /**

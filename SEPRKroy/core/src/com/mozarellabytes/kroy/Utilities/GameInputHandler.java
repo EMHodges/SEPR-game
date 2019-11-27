@@ -57,6 +57,8 @@ public class GameInputHandler implements InputProcessor {
             } else {
                 gameScreen.checkTrailClick(position2d);
             }
+        } else {
+            gameScreen.selectedTruck = null;
         }
         return true;
     }

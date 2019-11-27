@@ -27,12 +27,14 @@ public class GameScreen implements Screen {
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
-    private ShapeRenderer shape;
+    private ShapeRenderer shapeRenderer;
+    private ShapeRenderer shapeRenderer2;
     private GameInputHandler ih;
     private MapLayers mapLayers;
     private int[] decorationLayersIndices, backgroundLayerIndex;
 
     public FireTruck activeTruck;
+    public FireTruck selectedTruck;
     public FireStation station;
     public Fortress fortress;
 
@@ -47,8 +49,12 @@ public class GameScreen implements Screen {
 
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
-        shape = new ShapeRenderer();
-        shape.setProjectionMatrix(camera.combined);
+
+        shapeRenderer = new ShapeRenderer();
+        shapeRenderer.setProjectionMatrix(camera.combined);
+
+        shapeRenderer2 = new ShapeRenderer();
+        shapeRenderer2.setProjectionMatrix(camera.combined);
 
         ih = new GameInputHandler(this);
         Gdx.input.setInputProcessor(ih);
@@ -136,15 +142,33 @@ public class GameScreen implements Screen {
 
         renderer.render(decorationLayersIndices);
 
-        shape.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
         for (FireTruck truck : station.getTrucks()) {
-            shape.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
-            shape.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            shape.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-            shape.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            shape.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            shapeRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
+            shapeRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            shapeRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+            shapeRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            shapeRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         }
-        shape.end();
+        shapeRenderer.end();
+
+        Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+
+        shapeRenderer2.begin(ShapeRenderer.ShapeType.Filled);
+        shapeRenderer2.setColor(0, 0, 0, 0.5f);
+
+        if (selectedTruck != null) {
+            shapeRenderer2.rect(1, Constants.VIEWPORT_HEIGHT-1-8, 0.6f*10,0.8f*10);
+            shapeRenderer2.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            shapeRenderer2.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,(float) selectedTruck.getHP() / (float) selectedTruck.getMaxHP() * 0.6f*10, Color.RED, Color.RED, Color.RED, Color.RED);
+            shapeRenderer2.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            shapeRenderer2.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10, (float) selectedTruck.getReserve() / (float) selectedTruck.getMaxReserve() * 0.6f*10, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+        }
+
+        shapeRenderer2.end();
+        Gdx.gl.glDisable(GL20.GL_BLEND);
 
     }
 
@@ -178,6 +202,7 @@ public class GameScreen implements Screen {
         for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
             if (position.equals(this.station.getTruck(i).getPosition())) {
                 this.activeTruck = this.station.getTruck(i);
+                this.selectedTruck = this.station.getTruck(i);
                 return true;
             }
         }

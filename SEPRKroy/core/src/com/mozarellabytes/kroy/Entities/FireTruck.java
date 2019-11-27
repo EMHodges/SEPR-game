@@ -205,6 +205,7 @@ public class FireTruck extends Sprite {
     public void fortressDamage() {
         this.HP -= 0.1f;
     }
+
 }
 
 
