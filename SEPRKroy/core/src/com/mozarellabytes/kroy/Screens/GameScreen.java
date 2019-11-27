@@ -276,7 +276,7 @@ public class GameScreen implements Screen {
 
     // this function is used to see whether the player clicks on
     // the last tile of a path, so that they can extend it
-    public void checkTrailClick(Vector2 position) {
+    public boolean checkTrailClick(Vector2 position) {
         // for each truck, but in reverse order
         // so that you can click on the top trail the player can see
         for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
@@ -289,8 +289,10 @@ public class GameScreen implements Screen {
 
                     // makes that truck the selected truck again
                     this.selectedTruck = this.station.getTruck(i);
+                    return true;
                 }
             }
         }
+        return false;
     }
 }

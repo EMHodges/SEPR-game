@@ -55,7 +55,9 @@ public class GameInputHandler implements InputProcessor {
                 gameScreen.selectedTruck.resetTilePath();
                 gameScreen.selectedTruck.addTileToPath(position2d);
             } else {
-                gameScreen.checkTrailClick(position2d);
+                if (!gameScreen.checkTrailClick(position2d)) {
+                    gameScreen.selectedTruck = null;
+                }
             }
         } else {
             gameScreen.selectedTruck = null;
