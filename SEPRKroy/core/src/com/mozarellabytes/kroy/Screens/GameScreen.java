@@ -23,7 +23,7 @@ import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 // when you click on another truck while a truck is following the path then try to move the path of the stationary truck
 public class GameScreen implements Screen {
 
-    private Kroy game;
+    private final Kroy game;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
@@ -33,7 +33,6 @@ public class GameScreen implements Screen {
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
 
-    public FireTruck activeTruck;
     public FireTruck selectedTruck;
     public FireStation station;
     public Fortress fortress;
@@ -56,8 +55,7 @@ public class GameScreen implements Screen {
         bigTruckStatsRenderer = new ShapeRenderer();
         bigTruckStatsRenderer.setProjectionMatrix(camera.combined);
 
-        ih = new GameInputHandler(this);
-        Gdx.input.setInputProcessor(ih);
+        Gdx.input.setInputProcessor(new GameInputHandler(this));
 
         gameState = new GameState();
 
@@ -72,7 +70,7 @@ public class GameScreen implements Screen {
         mapLayers = map.getLayers();
         backgroundLayerIndex = new int[] {  mapLayers.getIndex("background")};
 
-        structureLayersIndices = new int[] {   mapLayers.getIndex("structures"),
+        structureLayersIndices = new int[] {    mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
 
@@ -95,11 +93,9 @@ public class GameScreen implements Screen {
 
         // check to see if the game has been won/lost
         if (gameState.checkWin()) {
-            this.game.setScreen(new MenuScreen(this.game));
-            this.dispose();
+            this.game.setScreen(new GameOverScreen(this.game, true));
         } else if (gameState.checkLose()) {
-            this.game.setScreen(new MenuScreen(this.game));
-            this.dispose();
+            this.game.setScreen(new GameOverScreen(this.game, false));
         }
 
         // update camera
@@ -220,8 +216,6 @@ public class GameScreen implements Screen {
             Gdx.gl.glDisable(GL20.GL_BLEND);
         }
 
-
-
     }
 
     @Override
@@ -268,9 +262,6 @@ public class GameScreen implements Screen {
             // if there is a truck where the player clicked
             if (position.equals(this.station.getTruck(i).getPosition())) {
 
-                // sets the truck to the active truck
-                this.activeTruck = this.station.getTruck(i);
-
                 // sets the truck to the selected truck
                 this.selectedTruck = this.station.getTruck(i);
 
@@ -296,8 +287,7 @@ public class GameScreen implements Screen {
                 // if player clicks on the last tile of a path
                 if (position.equals(this.station.getTruck(i).path.last())) {
 
-                    // makes that truck the active truck again
-                    this.activeTruck = this.station.getTruck(i);
+                    // makes that truck the selected truck again
                     this.selectedTruck = this.station.getTruck(i);
                 }
             }

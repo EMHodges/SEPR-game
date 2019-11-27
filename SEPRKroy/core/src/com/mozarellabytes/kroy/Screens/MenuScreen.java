@@ -12,7 +12,7 @@ import java.awt.*;
 public class MenuScreen implements Screen {
 
     private final Kroy game;
-    private OrthographicCamera camera;
+    public OrthographicCamera camera;
     private Texture logoImage;
     private Texture backgroundImage;
     private Rectangle playButton;
@@ -32,9 +32,9 @@ public class MenuScreen implements Screen {
         logoImage = new Texture(Gdx.files.internal("images/logo.png"), true);
         backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        playIdleTexture = new Texture(Gdx.files.internal("images/play.png"), true);
+        playIdleTexture = new Texture(Gdx.files.internal("buttons/playIdle.png"), true);
         playIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        playHoverTexture = new Texture(Gdx.files.internal("images/playHover.png"), true);
+        playHoverTexture = new Texture(Gdx.files.internal("buttons/playHover.png"), true);
         playHoverTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         ih = new MenuInputHandler(this);
@@ -52,7 +52,6 @@ public class MenuScreen implements Screen {
 
     public void toGameScreen() {
         game.setScreen(new GameScreen(game));
-        this.dispose();
     }
 
     public Rectangle getPlayButton() {
@@ -71,19 +70,11 @@ public class MenuScreen implements Screen {
         return Gdx.graphics.getHeight();
     }
 
-    /**
-     * Called when this screen becomes the current screen for a {@link Game}.
-     */
     @Override
     public void show() {
 
     }
 
-    /**
-     * Called when the screen should render itself.
-     *
-     * @param delta The time in seconds since the last render.
-     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -100,43 +91,26 @@ public class MenuScreen implements Screen {
         game.batch.end();
     }
 
-    /**
-     * @param width of window
-     * @param height of window
-     * @see ApplicationListener#resize(int, int)
-     */
     @Override
     public void resize(int width, int height) {
 
     }
 
-    /**
-     * @see ApplicationListener#pause()
-     */
     @Override
     public void pause() {
 
     }
 
-    /**
-     * @see ApplicationListener#resume()
-     */
     @Override
     public void resume() {
 
     }
 
-    /**
-     * Called when this screen is no longer the current screen for a {@link Game}.
-     */
     @Override
     public void hide() {
 
     }
 
-    /**
-     * Called when this screen should release all resources.
-     */
     @Override
     public void dispose() {
         logoImage.dispose();

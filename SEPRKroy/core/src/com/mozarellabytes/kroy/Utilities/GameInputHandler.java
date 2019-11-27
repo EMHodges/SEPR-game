@@ -52,8 +52,8 @@ public class GameInputHandler implements InputProcessor {
 
         if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
             if (gameScreen.checkClick(position2d)) {
-                gameScreen.activeTruck.resetTilePath();
-                gameScreen.activeTruck.addTileToPath(position2d);
+                gameScreen.selectedTruck.resetTilePath();
+                gameScreen.selectedTruck.addTileToPath(position2d);
             } else {
                 gameScreen.checkTrailClick(position2d);
             }
@@ -64,35 +64,30 @@ public class GameInputHandler implements InputProcessor {
     }
 
     @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // this is where the path is completed and the truck should start to follow the route
-        if (gameScreen.activeTruck != null) {
-            gameScreen.activeTruck.setMoving(true);
-        }
-        gameScreen.activeTruck = null;
-        return true;
-    }
-
-    @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (gameScreen.activeTruck != null) {
+        if (gameScreen.selectedTruck != null) {
             Vector2 clickCoordinates = new Vector2(screenX, screenY);
             Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
             Vector2 position2d = new Vector2((int) position.x, (int)position.y);
-            if (gameScreen.activeTruck.isValidMove(position2d)) {
-                gameScreen.activeTruck.addTileToPath(position2d);
+            if (gameScreen.selectedTruck.isValidMove(position2d)) {
+                gameScreen.selectedTruck.addTileToPath(position2d);
             }
         }
         return true;
     }
 
     @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        Vector2 clickCoordinates = new Vector2(screenX, screenY);
-        Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        Vector2 position2d = new Vector2((int) position.x, (int)position.y);
-      ///  gameScreen.checkHover(position2d);
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // this is where the path is completed and the truck should start to follow the route
+        if (gameScreen.selectedTruck != null) {
+            gameScreen.selectedTruck.setMoving(true);
+        }
         return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
     }
 
     @Override
