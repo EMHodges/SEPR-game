@@ -121,23 +121,41 @@ public class FireTruck extends Sprite {
         this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
     }
 
+    public void addPathfoundTiles(Vector2 coordinate) {
+        if (this.path.size > 0) {
+            Queue<Vector2> pathfound = gameScreen.pathfinder.pathfindMe(this.path.last(), coordinate);
+
+            int interpolation = (int) (5/speed);
+            for (int i=0; i<interpolation; i++) {
+                Vector2 previous = this.path.last();
+                for (Vector2 v : pathfound) {
+                    this.path.addLast(new Vector2((((previous.x - v.x) * -1) / interpolation) * i + previous.x, (((previous.y - v.y) * -1) / interpolation) * i + previous.y));
+                }
+            }
+        }
+        this.trailPath.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+        this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+    }
+
     public void resetTilePath() {
         this.path.clear();
     }
 
-    public boolean isValidMove(Vector2 coordinate) {
+    public Integer isValidMove(Vector2 coordinate) {
         if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
             if (this.path.isEmpty()) {
-                return true;
+                return 1;
             } else {
                 if (!this.path.last().equals(coordinate)) {
                     if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
-                        return true;
+                        return 1;
+                    } else {
+                        return 2;
                     }
                 }
             }
         }
-        return false;
+        return 0;
     }
 
     public void setMoving(boolean t) {

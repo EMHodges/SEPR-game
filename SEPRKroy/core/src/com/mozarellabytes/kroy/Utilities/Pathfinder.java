@@ -14,6 +14,11 @@ import java.util.HashMap;
 public class Pathfinder {
 
     public Texture pathImage =  new Texture(Gdx.files.internal("images/pathfinderimage.png"));
+    private ArrayList<Vector2> navGrid;
+
+    public void initialize(TiledMap map, String layerName) {
+        this.navGrid = createNavGrid(map, layerName);
+    }
 
     /**
      * Explores in all directions until it reaches the end location, while keeping
@@ -25,12 +30,10 @@ public class Pathfinder {
      * @param endPos    Ending coordinates
      * @return          Returns a Queue
      */
-    public  Queue<Vector2> pathfindMe(TiledMap map, String layerName, Vector2 startPos, Vector2 endPos) {
+    public Queue<Vector2> pathfindMe(Vector2 startPos, Vector2 endPos) {
         Queue<Vector2> path = new Queue<Vector2>();
         Queue<Vector2> edge = new Queue<Vector2>();
         HashMap<Vector2, Vector2> cameFrom = new HashMap<Vector2, Vector2>();
-
-        ArrayList<Vector2> navGrid = createNavGrid(map, layerName);
 
         if (!navGrid.contains(startPos) || !navGrid.contains(endPos)) {
             System.out.println("One of the entered coordinates is not a navigable cell.");

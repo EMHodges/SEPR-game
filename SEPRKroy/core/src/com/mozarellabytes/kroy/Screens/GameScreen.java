@@ -20,6 +20,7 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.CameraShake;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
+import com.mozarellabytes.kroy.Utilities.Pathfinder;
 
 
 // when you click on another truck while a truck is following the path then try to move the path of the stationary truck
@@ -34,6 +35,7 @@ public class GameScreen implements Screen {
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
     public CameraShake camShake;
+    public Pathfinder pathfinder;
 
     public FireTruck selectedTruck;
     public FireStation station;
@@ -61,8 +63,6 @@ public class GameScreen implements Screen {
 
         gameState = new GameState();
 
-        camShake = new CameraShake();
-
         station = new FireStation(this,4,2);
         fortress = new Fortress(this, 30.5f, 15.5f, 5);
 
@@ -77,6 +77,10 @@ public class GameScreen implements Screen {
         structureLayersIndices = new int[] {    mapLayers.getIndex("structures"),
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
+
+        camShake = new CameraShake();
+        pathfinder = new Pathfinder();
+        pathfinder.initialize(map, "collisions");
 
         station.spawn("red");
     }
