@@ -10,17 +10,17 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
 public class CameraShake {
-    private float[] samples;
+    private static float[] samples;
     private Random rand = new Random();
-    private float internalTimer = 0;
-    private float shakeDuration = 0;
+    private static float internalTimer = 0;
+    private static float shakeDuration = 0;
 
-    private int duration = 5;
-    private int frequency = 35;
-    private float amplitude = 20;
-    private boolean falloff = true;
+    private static int duration = 5;
+    private static int frequency = 35;
+    private static float amplitude = 2;
+    private static boolean falloff = true;
 
-    private int sampleCount;
+    private static int sampleCount;
 
     public CameraShake(){
         sampleCount = duration * frequency;
@@ -31,7 +31,7 @@ public class CameraShake {
         }
     }
 
-    public void update(float dt, Camera camera, Vector2 center){
+    public static void update(float dt, Camera camera, Vector2 center){
         internalTimer += dt;
         if (internalTimer > duration) {
             internalTimer -= duration;

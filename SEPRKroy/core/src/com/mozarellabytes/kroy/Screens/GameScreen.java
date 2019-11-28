@@ -17,6 +17,7 @@ import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
+import com.mozarellabytes.kroy.Utilities.CameraShake;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
@@ -32,6 +33,7 @@ public class GameScreen implements Screen {
     private ShapeRenderer bigTruckStatsRenderer;
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
+    public CameraShake camShake;
 
     public FireTruck selectedTruck;
     public FireStation station;
@@ -58,6 +60,8 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(new GameInputHandler(this));
 
         gameState = new GameState();
+
+        camShake = new CameraShake();
 
         station = new FireStation(this,4,2);
         fortress = new Fortress(this, 30.5f, 15.5f, 5);
@@ -108,6 +112,8 @@ public class GameScreen implements Screen {
 
         // render what our camera sees
         renderer.setView(camera);
+
+        camShake.update(delta, camera, new Vector2(camera.viewportWidth/2f, camera.viewportHeight/2f));
 
         // renders the background layer of the map
         renderer.render(backgroundLayerIndex);
