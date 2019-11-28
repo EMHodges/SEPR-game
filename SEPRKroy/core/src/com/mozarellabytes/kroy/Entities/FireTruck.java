@@ -126,15 +126,16 @@ public class FireTruck extends Sprite {
             Queue<Vector2> pathfound = gameScreen.pathfinder.pathfindMe(this.path.last(), coordinate);
 
             int interpolation = (int) (5/speed);
-            for (int i=0; i<interpolation; i++) {
+            for (Vector2 v: pathfound) {
+                this.trailPath.addLast(v);
                 Vector2 previous = this.path.last();
-                for (Vector2 v : pathfound) {
+                for (int i = 0; i < interpolation; i++) {
                     this.path.addLast(new Vector2((((previous.x - v.x) * -1) / interpolation) * i + previous.x, (((previous.y - v.y) * -1) / interpolation) * i + previous.y));
                 }
             }
         }
-        this.trailPath.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
-        this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+        //this.trailPath.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
+       // this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
     }
 
     public void resetTilePath() {
