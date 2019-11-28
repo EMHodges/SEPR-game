@@ -25,7 +25,7 @@ public class GameState {
     }
 
     public boolean checkWin() {
-        if (fortressesDestroyed == 10) {
+        if (fortressesDestroyed == 3) {
             return true;
         }
         return false;

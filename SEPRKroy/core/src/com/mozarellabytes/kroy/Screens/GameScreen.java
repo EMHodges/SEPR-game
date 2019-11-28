@@ -105,7 +105,7 @@ public class GameScreen implements Screen {
         camera.update();
 
         // check to see if trucks can be repaired/refilled
-        station.checkTrucks();
+        station.containsTrucks();
 
         // Make sure the batch abides by our tiled map
         game.batch.setProjectionMatrix(camera.combined);
@@ -167,7 +167,7 @@ public class GameScreen implements Screen {
         }
 
         // draw the station
-        sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 3, 3);
+        sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
 
         // draw the fortress
         sb.draw(fortress.getTexture(), fortress.getPosition().x, fortress.getPosition().y, 5, 5);

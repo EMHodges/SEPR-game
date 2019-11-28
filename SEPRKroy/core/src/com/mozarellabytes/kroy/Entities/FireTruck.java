@@ -39,7 +39,7 @@ public class FireTruck extends Sprite {
         this.x = x;
         this.y = y;
         this.speed = speed;
-        this.HP = 0;
+        this.HP = 40;
         this.reserve = 30;
         this.maxHP = 80;
         this.maxReserve = 60;
