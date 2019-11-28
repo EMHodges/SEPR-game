@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 public class GameInputHandler implements InputProcessor {
@@ -82,6 +83,17 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is where the path is completed and the truck should start to follow the route
         if (gameScreen.selectedTruck != null) {
+            for (FireTruck truck : gameScreen.station.getTrucks()) {
+                if (!truck.equals(gameScreen.selectedTruck)) {
+                    if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
+                            || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
+                        gameScreen.selectedTruck.trailPath.removeLast();
+                        while (!gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
+                            gameScreen.selectedTruck.path.removeLast();
+                        }
+                    }
+                }
+            }
             gameScreen.selectedTruck.setMoving(true);
         }
         return true;
