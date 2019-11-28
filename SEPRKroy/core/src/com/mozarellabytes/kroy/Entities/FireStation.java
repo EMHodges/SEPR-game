@@ -17,6 +17,10 @@ public class FireStation {
     private double upperSpeed = 0.8;
     private double lowerSpeed = 0.2;
 
+    private Vector2 spawnTile;
+    private Vector2 bayTile1;
+    private Vector2 bayTile2;
+
     private Texture texture;
 
 
@@ -26,8 +30,11 @@ public class FireStation {
         this.gameScreen = gameScreen;
         this.x = x;
         this.y = y;
+        this.bayTile1 = new Vector2(this.x, this.y);
+        this.bayTile2 = new Vector2(this.x + 1, this.y);
+        this.spawnTile = new Vector2(this.x + 2, this.y);
         this.trucks = new ArrayList<FireTruck>();
-        this.texture = new Texture(Gdx.files.internal("sprites/station.png"));
+        this.texture = new Texture(Gdx.files.internal("sprites/station_wider.png"));
     }
 
     public ArrayList<FireTruck> getTrucks() {
@@ -49,8 +56,8 @@ public class FireStation {
     // added randomly generating the firetrucks speed // on second thoughts randomly generating the colour isn't too helpful
     public void spawn(String colour) {
         double speed = Math.random() * (upperSpeed - lowerSpeed) + lowerSpeed;
-        this.trucks.add(new FireTruck(gameScreen, this.x, this.y, speed, colour));
         gameScreen.gameState.addFireTruck();
+        this.trucks.add(new FireTruck(gameScreen, this.spawnTile.x, this.spawnTile.y, speed, colour));
     }
 
     public void repair(FireTruck truck) {
@@ -65,9 +72,9 @@ public class FireStation {
         }
     }
 
-    public void checkTrucks() {
+    public void containsTrucks() {
         for (FireTruck truck : this.trucks) {
-            if (truck.getPosition().equals(this.getPosition())) {
+            if (truck.getPosition().equals(this.bayTile1) || truck.getPosition().equals(this.bayTile2)) {
                 refill(truck);
                 repair(truck);
             }
