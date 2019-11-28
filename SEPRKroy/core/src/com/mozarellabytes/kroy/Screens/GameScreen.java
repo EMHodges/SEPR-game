@@ -64,7 +64,7 @@ public class GameScreen implements Screen {
         camShake = new CameraShake();
 
         station = new FireStation(this,4,2);
-        fortress = new Fortress(this, 30.5f, 15.5f, 5);
+        fortress = new Fortress(this, 12, 19, 5);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -170,7 +170,7 @@ public class GameScreen implements Screen {
         sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
 
         // draw the fortress
-        sb.draw(fortress.getTexture(), fortress.getPosition().x, fortress.getPosition().y, 5, 5);
+        sb.draw(fortress.getTexture(), fortress.getPosition().x-2, fortress.getPosition().y-2, 4, 6);
 
         // finish rendering of entities
         sb.end();

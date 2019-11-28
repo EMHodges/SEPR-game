@@ -17,14 +17,13 @@ public class Fortress {
         this.gameScreen = gameScreen;
         this.position = new Vector2(x, y);
         this.range = range;
-        this.texture = new Texture(Gdx.files.internal("sprites/station.png"));
+        this.texture = new Texture(Gdx.files.internal("sprites/fortress.png"));
     }
 
     public void checkRange(FireTruck target) {
         if (new Vector2(((float) (target.getPosition().x + 0.5)), (float) (target.getPosition().y + 0.5)).dst(this.position) <= range) {
             target.fortressDamage();
         }
-       Gdx.app.log("Distance", String.valueOf(target.getPosition().dst(this.position)));
     }
 
     public Texture getTexture() {
