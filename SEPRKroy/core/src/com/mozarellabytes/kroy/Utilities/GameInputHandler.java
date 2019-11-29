@@ -23,12 +23,12 @@ public class GameInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
-            case Input.Keys.R:
-                gameScreen.station.spawn("red");
-                break;
-            case Input.Keys.B:
-                gameScreen.station.spawn("blue");
-                break;
+//            case Input.Keys.R:
+//                gameScreen.station.spawn("red");
+//                break;
+//            case Input.Keys.B:
+//                gameScreen.station.spawn("blue");
+//                break;
             case Input.Keys.P:
                 gameScreen.camShake.shakeIt(.2f);
         }

@@ -32,28 +32,51 @@ public class FireTruck extends Sprite {
 
     private Vector2 lastCoordinate;
 
-    public FireTruck(GameScreen gameScreen, float x, float y, double speed, String colour) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + colour + ".png")));
+    public FireTruck(GameScreen gameScreen, float x, float y, TruckType type) {
+        super(new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + type.name() + ".png")));
 
         this.gameScreen = gameScreen;
+
+        switch(type) {
+            case Ocean:
+                this.maxReserve = 250;
+                this.maxHP = 100;
+                this.speed = 1;
+                break;
+            case Speed:
+                this.maxReserve = 100;
+                this.maxHP = 100;
+                this.speed = 2;
+                break;
+            case Tank:
+                this.maxReserve = 100;
+                this.maxHP = 250;
+                this.speed = 1;
+                break;
+        }
+
+        this.reserve = this.maxReserve;
+        this.HP = this.maxHP;
+
         this.x = x;
         this.y = y;
-        this.speed = speed;
-        this.HP = 40;
-        this.reserve = 30;
-        this.maxHP = 80;
-        this.maxReserve = 60;
 
-        lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));
-        lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
-        lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000_" + colour + ".png"));
-        lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + colour + ".png"));
+        lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + type.name() + ".png"));
+        lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + type.name() + ".png"));
+        lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000_" + type.name() + ".png"));
+        lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + type.name() + ".png"));
         path = new Queue<Vector2>();
         trailPath = new Queue<Vector2>();
         moving = false;
 
-        trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail.png"));
-        trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail_end.png"));
+        trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + type.name() + "_trail.png"));
+        trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/" + type.name() + "_trail_end.png"));
+    }
+
+    public enum TruckType {
+        Speed,
+        Tank,
+        Ocean
     }
 
     public void arrowMove() {
@@ -101,18 +124,10 @@ public class FireTruck extends Sprite {
         return this.trailImageEnd;
     }
 
-    public boolean seeStats() {
-        return this.seeStats;
-    }
-
-    public void setSeeStats(boolean t) {
-        this.seeStats = t;
-    }
-
     public void addTileToPath(Vector2 coordinate) {
         if (this.path.size > 0) {
             Vector2 previous = this.path.last();
-            int interpolation = (int) (5/speed);
+            int interpolation = (int) (20/speed);
             for (int i=0; i<interpolation; i++) {
                 this.path.addLast(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
             }
