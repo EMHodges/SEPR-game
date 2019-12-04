@@ -217,8 +217,8 @@ public class FireTruck extends Sprite {
         return this.maxReserve;
     }
 
-    public void fortressDamage() {
-        this.HP -= 0.1f;
+    public void fortressDamage(float HP) {
+        this.HP -= HP;
     }
 
 }
