@@ -189,8 +189,13 @@ public class FireTruck extends Sprite {
         }
     }
 
-    protected void attack() {
-
+    public void attack() {
+        if (this.reserve > 1f) {
+            gameScreen.fortress.damage(5f);
+            this.reserve -= 5f;
+        } else {
+            this.reserve = 0;
+        }
     }
 
     public void repair() {
@@ -220,6 +225,14 @@ public class FireTruck extends Sprite {
     public void fortressDamage(float HP) {
         this.HP -= HP;
     }
+
+    public boolean inFortresssRange(){
+        if (new Vector2((float) (this.getPosition().x + 0.5), (float) (this.getPosition().y)).dst(gameScreen.fortress.getPosition()) <= gameScreen.fortress.getRange()) {
+            return true;
+        }
+        return false;
+    }
+
 
 }
 

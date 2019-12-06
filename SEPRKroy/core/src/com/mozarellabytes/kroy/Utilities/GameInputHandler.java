@@ -23,12 +23,15 @@ public class GameInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
-//            case Input.Keys.R:
-//                gameScreen.station.spawn("red");
-//                break;
-//            case Input.Keys.B:
-//                gameScreen.station.spawn("blue");
-//                break;
+            case Input.Keys.A:
+                Gdx.app.log("pressed A", "A pressed");
+                for (FireTruck truck: gameScreen.station.getTrucks()){
+                    if (truck.inFortresssRange()){
+                        truck.attack();
+                        Gdx.app.log("attacking fortress", String.valueOf(gameScreen.fortress.getHP()));
+                    }
+                }
+                break;
             case Input.Keys.P:
                 gameScreen.camShake.shakeIt(.2f);
         }

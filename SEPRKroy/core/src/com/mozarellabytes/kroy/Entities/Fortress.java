@@ -11,17 +11,21 @@ import java.util.Random;
 public class Fortress {
 
     private GameScreen gameScreen;
-    private int type, HP, AP;
+    private float type, HP, AP, maxHP;
     private float range;
     private Vector2 position;
     private Texture texture;
+    private ArrayList<Fortress> fortresses;
     Random rand = new Random();
 
-    public Fortress(GameScreen gameScreen, float x, float y, int range) {
+    public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP) {
         this.gameScreen = gameScreen;
         this.position = new Vector2(x, y);
         this.range = range;
+        this.maxHP = maxHP;
+        this.HP = maxHP;
         this.texture = new Texture(Gdx.files.internal("sprites/fortress.png"));
+     //   fortresses.add(this);
     }
 
     public void checkRange(FireTruck target) {
@@ -56,5 +60,20 @@ public class Fortress {
         return this.range;
     }
 
+    public float getHP() {
+        return this.HP;
+    }
+
+    public float getMaxHP() {
+        return this.maxHP;
+    }
+
+    public ArrayList<Fortress> getFortresses(){
+        return this.fortresses;
+    }
+
+    public void damage(float HP){
+        this.HP -= HP;
+    }
 }
 

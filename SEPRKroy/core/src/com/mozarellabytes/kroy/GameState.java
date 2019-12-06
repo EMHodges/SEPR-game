@@ -25,7 +25,7 @@ public class GameState {
     }
 
     public boolean checkWin() {
-        if (fortressesDestroyed == 3) {
+        if (fortressesDestroyed == 1) {
             return true;
         }
         return false;
@@ -37,4 +37,8 @@ public class GameState {
         return false;
     }
 
+    public void removeFortress() {
+        fortressesDestroyed ++;
+
+    }
 }

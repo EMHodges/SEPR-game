@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Screens;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
@@ -21,6 +22,8 @@ import com.mozarellabytes.kroy.Utilities.CameraShake;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 
+import java.util.ArrayList;
+
 
 // when you click on another truck while a truck is following the path then try to move the path of the stationary truck
 public class GameScreen implements Screen {
@@ -35,6 +38,7 @@ public class GameScreen implements Screen {
     private int[] structureLayersIndices, backgroundLayerIndex;
     public CameraShake camShake;
 
+    public ArrayList<Fortress> fortresses;
     public FireTruck selectedTruck;
     public FireStation station;
     public Fortress fortress;
@@ -64,7 +68,10 @@ public class GameScreen implements Screen {
         camShake = new CameraShake();
 
         station = new FireStation(this,4,2);
-        fortress = new Fortress(this, 12, 19, 5);
+        fortress = new Fortress(this, 12, 19, 5, 100);
+
+        fortresses = new ArrayList<Fortress>();
+        fortresses.add(fortress);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -80,6 +87,10 @@ public class GameScreen implements Screen {
 
         station.spawn(FireTruck.TruckType.Ocean);
         station.spawn(FireTruck.TruckType.Speed);
+    }
+
+    public void addFortress(Fortress fortress){
+        fortresses.add(fortress);
     }
 
     @Override
@@ -167,6 +178,12 @@ public class GameScreen implements Screen {
             }
         }
 
+        for (Fortress fortress: fortresses){
+            if(fortress.getHP() <= 0) {
+                gameState.removeFortress();
+            }
+        }
+
         // draw the station
         sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
 
@@ -185,7 +202,6 @@ public class GameScreen implements Screen {
 
         // begin rendering of the small stats over each truck
         truckStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
         // for each fire truck
         for (FireTruck truck : station.getTrucks()) {
             // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
@@ -195,6 +211,8 @@ public class GameScreen implements Screen {
             truckStatsRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
             truckStatsRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         }
+
+
 
         // stops rendering of small stats over each truck
         truckStatsRenderer.end();
@@ -305,4 +323,6 @@ public class GameScreen implements Screen {
         }
         return false;
     }
+
+
 }
