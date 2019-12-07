@@ -86,15 +86,17 @@ public class GameInputHandler implements InputProcessor {
     // truck reaches that tile it crashes and gives you a queue is empty error
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // this is where the path is completed and the truck should start to follow the route
+        // this is to prevent trucks being on the same tiles
         if (gameScreen.selectedTruck != null) {
             for (FireTruck truck : gameScreen.station.getTrucks()) {
                 if (!truck.equals(gameScreen.selectedTruck)) {
-                    if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
-                            || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
-                        gameScreen.selectedTruck.trailPath.removeLast();
-                        while (!gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
-                            gameScreen.selectedTruck.path.removeLast();
+                    if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
+                        if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
+                                || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
+                            gameScreen.selectedTruck.trailPath.removeLast();
+                            while (!gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
+                                gameScreen.selectedTruck.path.removeLast();
+                            }
                         }
                     }
                 }
