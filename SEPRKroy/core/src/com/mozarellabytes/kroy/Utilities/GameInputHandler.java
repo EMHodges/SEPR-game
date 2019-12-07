@@ -82,7 +82,8 @@ public class GameInputHandler implements InputProcessor {
         }
         return true;
     }
-
+    // there's a bug somewhere here, if you draw a trucks path and then keep clicking on the end of it's trail path when the
+    // truck reaches that tile it crashes and gives you a queue is empty error
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is where the path is completed and the truck should start to follow the route

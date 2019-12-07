@@ -15,7 +15,6 @@ public class Fortress {
     private float range;
     private Vector2 position;
     private Texture texture;
-    private ArrayList<Fortress> fortresses;
     Random rand = new Random();
 
     public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP) {
@@ -25,7 +24,6 @@ public class Fortress {
         this.maxHP = maxHP;
         this.HP = maxHP;
         this.texture = new Texture(Gdx.files.internal("sprites/fortress.png"));
-     //   fortresses.add(this);
     }
 
     public void checkRange(FireTruck target) {
@@ -66,10 +64,6 @@ public class Fortress {
 
     public float getMaxHP() {
         return this.maxHP;
-    }
-
-    public ArrayList<Fortress> getFortresses(){
-        return this.fortresses;
     }
 
     public void damage(float HP){

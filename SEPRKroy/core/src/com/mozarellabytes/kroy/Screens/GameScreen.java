@@ -34,6 +34,7 @@ public class GameScreen implements Screen {
     public OrthographicCamera camera;
     private ShapeRenderer truckStatsRenderer;
     private ShapeRenderer bigTruckStatsRenderer;
+    private ShapeRenderer fortressStatsRenderer;
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
     public CameraShake camShake;
@@ -61,6 +62,9 @@ public class GameScreen implements Screen {
         bigTruckStatsRenderer = new ShapeRenderer();
         bigTruckStatsRenderer.setProjectionMatrix(camera.combined);
 
+        fortressStatsRenderer = new ShapeRenderer();
+        fortressStatsRenderer.setProjectionMatrix(camera.combined);
+
         Gdx.input.setInputProcessor(new GameInputHandler(this));
 
         gameState = new GameState();
@@ -87,10 +91,6 @@ public class GameScreen implements Screen {
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
         }
-    }
-
-    public void addFortress(Fortress fortress){
-        fortresses.add(fortress);
     }
 
     @Override
@@ -214,8 +214,22 @@ public class GameScreen implements Screen {
 
 
 
+
         // stops rendering of small stats over each truck
         truckStatsRenderer.end();
+
+        fortressStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
+        for (Fortress fortress: fortresses){
+            fortressStatsRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
+            fortressStatsRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            fortressStatsRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+        }
+        Gdx.app.log("max HP", String.valueOf(fortress.getMaxHP()));
+        Gdx.app.log("HP", String.valueOf(fortress.getMaxHP()));
+
+        fortressStatsRenderer.end();
+
 
         if (selectedTruck != null) {
             // allows for transparency
