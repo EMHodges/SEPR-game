@@ -51,6 +51,8 @@ public class GameScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
+
+        // if this is commented out, it still works fine? so what does this actually do
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
         map = new TmxMapLoader().load("maps/YorkMap.tmx");

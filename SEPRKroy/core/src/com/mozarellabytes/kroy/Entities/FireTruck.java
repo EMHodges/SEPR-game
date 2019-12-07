@@ -141,13 +141,15 @@ public class FireTruck extends Sprite {
     }
 
     public boolean isValidMove(Vector2 coordinate) {
-        if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
-            if (this.path.isEmpty()) {
-                return true;
-            } else {
-                if (!this.path.last().equals(coordinate)) {
-                    if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
-                        return true;
+        if (coordinate.y < 24) {
+            if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
+                if (this.path.isEmpty()) {
+                    return true;
+                } else {
+                    if (!this.path.last().equals(coordinate)) {
+                        if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
+                            return true;
+                        }
                     }
                 }
             }
