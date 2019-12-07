@@ -89,6 +89,7 @@ public class MenuScreen implements Screen {
         game.batch.draw(logoImage, camera.viewportWidth/2 - logoImage.getWidth()/2, camera.viewportHeight/2 - logoImage.getHeight()/2, logoImage.getWidth(), logoImage.getHeight());
         game.batch.draw(currentPlayTexture, playButton.x, playButton.y, playButton.width, playButton.height);
         game.batch.end();
+
     }
 
     @Override

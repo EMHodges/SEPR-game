@@ -73,10 +73,6 @@ public class GameScreen implements Screen {
         fortresses = new ArrayList<Fortress>();
         fortresses.add(fortress);
 
-        for (FireTruck truck : station.getTrucks()) {
-            truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
-        }
-
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
         backgroundLayerIndex = new int[] {  mapLayers.getIndex("background")};
@@ -87,6 +83,10 @@ public class GameScreen implements Screen {
 
         station.spawn(FireTruck.TruckType.Ocean);
         station.spawn(FireTruck.TruckType.Speed);
+
+        for (FireTruck truck : station.getTrucks()) {
+            truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
+        }
     }
 
     public void addFortress(Fortress fortress){
