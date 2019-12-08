@@ -22,6 +22,7 @@ import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.CameraShake;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
+import com.mozarellabytes.kroy.Entities.FireTruckType;
 
 import java.util.ArrayList;
 
@@ -85,8 +86,8 @@ public class GameScreen implements Screen {
         backgroundLayerIndex = new int[] {  mapLayers.getIndex("background")};
 
         structureLayersIndices = new int[] {    mapLayers.getIndex("structures"),
-                                                mapLayers.getIndex("structures2"),
-                                                mapLayers.getIndex("transparentStructures")};
+                mapLayers.getIndex("structures2"),
+                mapLayers.getIndex("transparentStructures")};
 
         station.spawn(FireTruckType.Ocean);
         station.spawn(FireTruckType.Speed);
@@ -341,3 +342,9 @@ public class GameScreen implements Screen {
 
 
 }
+
+
+
+
+
+
