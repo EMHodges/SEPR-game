@@ -62,10 +62,12 @@ public class GameInputHandler implements InputProcessor {
             } else {
                 if (!gameScreen.checkTrailClick(position2d)) {
                     gameScreen.selectedTruck = null;
+                    gameScreen.selectedEntity = null;
                 }
             }
         } else {
             gameScreen.selectedTruck = null;
+            gameScreen.selectedEntity = null;
         }
         return true;
     }

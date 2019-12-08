@@ -8,11 +8,16 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
@@ -31,9 +36,11 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     private final Kroy game;
+    private Stage ui;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
+    private OrthographicCamera guiCamera;
     private ShapeRenderer truckStatsRenderer;
     private ShapeRenderer bigTruckStatsRenderer;
     private ShapeRenderer fortressStatsRenderer;
@@ -45,11 +52,25 @@ public class GameScreen implements Screen {
     public FireTruck selectedTruck;
     public FireStation station;
     public Fortress fortress;
+    public Sprite selectedEntity;
+
+    private Label hpText;
 
     public GameState gameState;
 
     public GameScreen(Kroy game) {
         this.game = game;
+
+        float aspectRatio = (float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
+        float cameraViewPortWidth = 1024;
+        float cameraViewPortHeight = cameraViewPortWidth * aspectRatio;
+
+        ui = new Stage();
+
+        Gdx.app.log("Label", game.labelStyle.toString());
+
+        hpText = new Label("", game.labelStyle);
+        hpText.setPosition(100,Gdx.graphics.getHeight() - 20);
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
@@ -64,7 +85,6 @@ public class GameScreen implements Screen {
         truckStatsRenderer.setProjectionMatrix(camera.combined);
 
         bigTruckStatsRenderer = new ShapeRenderer();
-        bigTruckStatsRenderer.setProjectionMatrix(camera.combined);
 
         fortressStatsRenderer = new ShapeRenderer();
         fortressStatsRenderer.setProjectionMatrix(camera.combined);
@@ -92,9 +112,12 @@ public class GameScreen implements Screen {
         station.spawn(FireTruckType.Ocean);
         station.spawn(FireTruckType.Speed);
 
+        selectedEntity = new Sprite();
+
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
         }
+
     }
 
     @Override
@@ -122,9 +145,6 @@ public class GameScreen implements Screen {
 
         // check to see if trucks can be repaired/refilled
         station.containsTrucks();
-
-        // Make sure the batch abides by our tiled map
-        game.batch.setProjectionMatrix(camera.combined);
 
         // render what our camera sees
         renderer.setView(camera);
@@ -219,17 +239,20 @@ public class GameScreen implements Screen {
         // stops rendering of small stats over each truck
         truckStatsRenderer.end();
 
-        fortressStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        for (Fortress fortress: fortresses){
+        for (Fortress fortress: fortresses) {
+            game.batch.begin();
+            this.hpText.setText((int) fortress.getHP() + " / " + fortress.getMaxHP());
+            this.hpText.draw(game.batch, 1f);
+            game.batch.end();
+            fortressStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
             fortressStatsRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
             fortressStatsRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
             fortressStatsRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+            fortressStatsRenderer.end();
         }
         Gdx.app.log("max HP", String.valueOf(fortress.getMaxHP()));
         Gdx.app.log("HP", String.valueOf(fortress.getMaxHP()));
 
-        fortressStatsRenderer.end();
 
 
         if (selectedTruck != null) {
@@ -246,17 +269,19 @@ public class GameScreen implements Screen {
             // if there is a truck selected
             // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
             // these are positioned in the top left corner
-            bigTruckStatsRenderer.rect(1, Constants.VIEWPORT_HEIGHT-1-8, 0.6f*10,0.8f*10);
-            bigTruckStatsRenderer.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            bigTruckStatsRenderer.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,(float) selectedTruck.getHP() / (float) selectedTruck.type.getMaxHP() * 0.6f*10, Color.RED, Color.RED, Color.RED, Color.RED);
-            bigTruckStatsRenderer.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            bigTruckStatsRenderer.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10, (float) selectedTruck.getReserve() / (float) selectedTruck.type.getMaxReserve() * 0.6f*10, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+
+            bigTruckStatsRenderer.rect(10, Gdx.graphics.getHeight()-10-100, 0.6f*100,0.8f*100);
+            bigTruckStatsRenderer.rect(17.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,0.6f*100, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            bigTruckStatsRenderer.rect(17.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,(float) selectedTruck.getHP() / (float) selectedTruck.type.getMaxHP() * 0.6f*100, Color.RED, Color.RED, Color.RED, Color.RED);
+            bigTruckStatsRenderer.rect(42.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,0.6f*100, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            bigTruckStatsRenderer.rect(42.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100, (float) selectedTruck.getReserve() / (float) selectedTruck.type.getMaxReserve() * 0.6f*100, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
 
             // ends render of the big stats for selected truck
             bigTruckStatsRenderer.end();
 
             // disabled transparent mode
             Gdx.gl.glDisable(GL20.GL_BLEND);
+
         }
 
     }
@@ -308,6 +333,7 @@ public class GameScreen implements Screen {
 
                 // sets the truck to the selected truck
                 this.selectedTruck = this.station.getTruck(i);
+                this.selectedEntity = this.station.getTruck(i);
 
                 // returns true to show that a truck is selected
                 return true;
@@ -333,6 +359,7 @@ public class GameScreen implements Screen {
 
                     // makes that truck the selected truck again
                     this.selectedTruck = this.station.getTruck(i);
+                    this.selectedEntity = this.station.getTruck(i);
                     return true;
                 }
             }
