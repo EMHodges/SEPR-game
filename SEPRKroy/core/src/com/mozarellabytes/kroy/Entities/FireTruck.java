@@ -12,9 +12,9 @@ public class FireTruck extends Sprite {
 
     private GameScreen gameScreen;
 
-    private int AP, range, type;
+    private int AP, range;
+    public FireTruckType type;
     private float HP, reserve;
-    private float maxHP, maxReserve;
     private double speed;
     private float x, y;
     private Texture lookLeft;
@@ -32,31 +32,15 @@ public class FireTruck extends Sprite {
 
     private Vector2 lastCoordinate;
 
-    public FireTruck(GameScreen gameScreen, float x, float y, TruckType type) {
+    public FireTruck(GameScreen gameScreen, float x, float y, FireTruckType type) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + type.name() + ".png")));
 
         this.gameScreen = gameScreen;
 
-        switch(type) {
-            case Ocean:
-                this.maxReserve = 250;
-                this.maxHP = 100;
-                this.speed = 1;
-                break;
-            case Speed:
-                this.maxReserve = 100;
-                this.maxHP = 100;
-                this.speed = 2;
-                break;
-            case Tank:
-                this.maxReserve = 100;
-                this.maxHP = 250;
-                this.speed = 1;
-                break;
-        }
-
-        this.reserve = this.maxReserve;
-        this.HP = this.maxHP;
+        this.type = type;
+        this.speed = type.getSpeed();
+        this.reserve = type.getMaxReserve();
+        this.HP = type.getMaxHP();
 
         this.x = x;
         this.y = y;
@@ -71,12 +55,6 @@ public class FireTruck extends Sprite {
 
         trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + type.name() + "_trail.png"));
         trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/" + type.name() + "_trail_end.png"));
-    }
-
-    public enum TruckType {
-        Speed,
-        Tank,
-        Ocean
     }
 
     public void arrowMove() {
@@ -127,7 +105,7 @@ public class FireTruck extends Sprite {
     public void addTileToPath(Vector2 coordinate) {
         if (this.path.size > 0) {
             Vector2 previous = this.path.last();
-            int interpolation = (int) (20/speed);
+            int interpolation = (int) (20/type.getSpeed());
             for (int i=0; i<interpolation; i++) {
                 this.path.addLast(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
             }
@@ -216,13 +194,13 @@ public class FireTruck extends Sprite {
         return this.reserve;
     }
 
-    public float getMaxHP(){
-        return this.maxHP;
-    }
+//    public float getMaxHP(){
+  //      return this.maxHP;
+   // }
 
-    public float getMaxReserve(){
-        return this.maxReserve;
-    }
+ //   public float getMaxReserve(){
+   //     return this.maxReserve;
+   // }
 
     public void fortressDamage(float HP) {
         this.HP -= HP;

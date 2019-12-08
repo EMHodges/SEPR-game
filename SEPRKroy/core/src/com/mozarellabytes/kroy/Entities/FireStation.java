@@ -44,19 +44,19 @@ public class FireStation {
         return this.texture;
     }
 
-    public void spawn(FireTruck.TruckType type) {
-        this.trucks.add(new FireTruck(gameScreen, this.spawnTile.x, this.spawnTile.y, type));
+    public void spawn(FireTruckType type) {
+        this.trucks.add(new FireTruck(gameScreen, this.spawnTile.x, this.spawnTile.y, type ));
         gameScreen.gameState.addFireTruck();
     }
 
     public void repair(FireTruck truck) {
-        if (truck.getHP() < truck.getMaxHP()) {
+        if (truck.getHP() < truck.type.getMaxHP()) {
             truck.repair();
         }
     }
 
     public void refill(FireTruck truck) {
-        if (truck.getReserve() < truck.getMaxReserve()) {
+        if (truck.getReserve() < truck.type.getMaxReserve()) {
             truck.refill();
         }
     }

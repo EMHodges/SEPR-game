@@ -15,6 +15,7 @@ import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.FireStation;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
@@ -87,8 +88,8 @@ public class GameScreen implements Screen {
                                                 mapLayers.getIndex("structures2"),
                                                 mapLayers.getIndex("transparentStructures")};
 
-        station.spawn(FireTruck.TruckType.Ocean);
-        station.spawn(FireTruck.TruckType.Speed);
+        station.spawn(FireTruckType.Ocean);
+        station.spawn(FireTruckType.Speed);
 
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
@@ -209,13 +210,10 @@ public class GameScreen implements Screen {
             // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
             truckStatsRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
             truckStatsRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            truckStatsRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+            truckStatsRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
             truckStatsRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            truckStatsRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            truckStatsRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         }
-
-
-
 
         // stops rendering of small stats over each truck
         truckStatsRenderer.end();
@@ -249,9 +247,9 @@ public class GameScreen implements Screen {
             // these are positioned in the top left corner
             bigTruckStatsRenderer.rect(1, Constants.VIEWPORT_HEIGHT-1-8, 0.6f*10,0.8f*10);
             bigTruckStatsRenderer.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            bigTruckStatsRenderer.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,(float) selectedTruck.getHP() / (float) selectedTruck.getMaxHP() * 0.6f*10, Color.RED, Color.RED, Color.RED, Color.RED);
+            bigTruckStatsRenderer.rect(1.75f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,(float) selectedTruck.getHP() / (float) selectedTruck.type.getMaxHP() * 0.6f*10, Color.RED, Color.RED, Color.RED, Color.RED);
             bigTruckStatsRenderer.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10,0.6f*10, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            bigTruckStatsRenderer.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10, (float) selectedTruck.getReserve() / (float) selectedTruck.getMaxReserve() * 0.6f*10, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            bigTruckStatsRenderer.rect(4.25f, Constants.VIEWPORT_HEIGHT-1-7, 0.2f*10, (float) selectedTruck.getReserve() / (float) selectedTruck.type.getMaxReserve() * 0.6f*10, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
 
             // ends render of the big stats for selected truck
             bigTruckStatsRenderer.end();
@@ -288,6 +286,7 @@ public class GameScreen implements Screen {
         renderer.dispose();
         truckStatsRenderer.dispose();
         bigTruckStatsRenderer.dispose();
+        fortressStatsRenderer.dispose();
     }
 
     // this function checks whether the coordinates given are on a road

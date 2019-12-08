@@ -9,7 +9,7 @@ public class GameState {
 
     public GameState() {
         this.activeFireTrucks = 0;
-
+        // do we need this.fortressesDestroyed to also = 0
     }
 
     public void addFireTruck() {
