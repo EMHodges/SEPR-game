@@ -47,7 +47,7 @@ public class FireTruck extends Sprite {
         this.x = x;
         this.y = y;
 
-        lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
+        lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
         lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000_" + colour + ".png"));
         lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + colour + ".png"));

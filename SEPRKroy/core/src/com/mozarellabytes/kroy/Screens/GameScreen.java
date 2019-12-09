@@ -28,6 +28,7 @@ import com.mozarellabytes.kroy.Utilities.CameraShake;
 import com.mozarellabytes.kroy.Utilities.Constants;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
+import com.mozarellabytes.kroy.Utilities.GUI;
 
 import java.util.ArrayList;
 
@@ -41,20 +42,22 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
     private OrthographicCamera guiCamera;
-    private ShapeRenderer truckStatsRenderer;
-    private ShapeRenderer bigTruckStatsRenderer;
-    private ShapeRenderer fortressStatsRenderer;
+    private ShapeRenderer shapeMapRenderer;
+    private ShapeRenderer shapeGUIRenderer;
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
     public CameraShake camShake;
+
+    private Batch batch;
 
     public ArrayList<Fortress> fortresses;
     public FireTruck selectedTruck;
     public FireStation station;
     public Fortress fortress;
-    public Sprite selectedEntity;
+    public Object selectedEntity;
 
     private Label hpText;
+    private GUI gui;
 
     public GameState gameState;
 
@@ -64,8 +67,6 @@ public class GameScreen implements Screen {
         float aspectRatio = (float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
         float cameraViewPortWidth = 1024;
         float cameraViewPortHeight = cameraViewPortWidth * aspectRatio;
-
-        ui = new Stage();
 
         Gdx.app.log("Label", game.labelStyle.toString());
 
@@ -81,13 +82,12 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
 
-        truckStatsRenderer = new ShapeRenderer();
-        truckStatsRenderer.setProjectionMatrix(camera.combined);
+        shapeMapRenderer = new ShapeRenderer();
+        shapeMapRenderer.setProjectionMatrix(camera.combined);
 
-        bigTruckStatsRenderer = new ShapeRenderer();
+        shapeGUIRenderer = new ShapeRenderer();
 
-        fortressStatsRenderer = new ShapeRenderer();
-        fortressStatsRenderer.setProjectionMatrix(camera.combined);
+        gui = new GUI(shapeGUIRenderer, 250, 250);
 
         Gdx.input.setInputProcessor(new GameInputHandler(this));
 
@@ -112,12 +112,11 @@ public class GameScreen implements Screen {
         station.spawn(FireTruckType.Ocean);
         station.spawn(FireTruckType.Speed);
 
-        selectedEntity = new Sprite();
-
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
         }
 
+        batch = renderer.getBatch();
     }
 
     @Override
@@ -154,11 +153,8 @@ public class GameScreen implements Screen {
         // renders the background layer of the map
         renderer.render(backgroundLayerIndex);
 
-        // initialise batch
-        Batch sb = renderer.getBatch();
-
         // setups batch for rendering entities
-        sb.begin();
+        batch.begin();
 
         // for each truck (uses standard for loop because it may delete truck when a truck is destroyed)
         for (int i=0; i<station.getTrucks().size();i++) {
@@ -173,7 +169,7 @@ public class GameScreen implements Screen {
             truck.mouseMove();
 
             // draws the truck
-            sb.draw(truck, truck.getX(), truck.getY(), 1, 1);
+            batch.draw(truck, truck.getX(), truck.getY(), 1, 1);
 
             // if truck has a path
             if (!truck.trailPath.isEmpty()) {
@@ -185,11 +181,11 @@ public class GameScreen implements Screen {
                     if (tile.equals(truck.trailPath.last())) {
 
                         // overlay the border square
-                        sb.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                        batch.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
                     }
 
                     // draws transparent trail path
-                    sb.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
+                    batch.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
                 }
             }
 
@@ -202,88 +198,48 @@ public class GameScreen implements Screen {
             }
         }
 
-        for (Fortress fortress: fortresses){
+        for (Fortress fortress: fortresses) {
             if(fortress.getHP() <= 0) {
                 gameState.removeFortress();
             }
         }
 
         // draw the station
-        sb.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
+        batch.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
 
         // draw the fortress
-        sb.draw(fortress.getTexture(), fortress.getPosition().x-2, fortress.getPosition().y-2, 4, 6);
+        batch.draw(fortress.getTexture(), fortress.getPosition().x-2, fortress.getPosition().y-2, 4, 6);
 
         // finish rendering of entities
-        sb.end();
+        batch.end();
 
         // render structures
         renderer.render(structureLayersIndices);
 
-        truckStatsRenderer.begin(ShapeRenderer.ShapeType.Line);
-        truckStatsRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
-        truckStatsRenderer.end();
+        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
+        shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
+        shapeMapRenderer.end();
 
-        // begin rendering of the small stats over each truck
-        truckStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
         // for each fire truck
         for (FireTruck truck : station.getTrucks()) {
             // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
-            truckStatsRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
-            truckStatsRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            truckStatsRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-            truckStatsRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            truckStatsRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         }
-
-        // stops rendering of small stats over each truck
-        truckStatsRenderer.end();
 
         for (Fortress fortress: fortresses) {
-            game.batch.begin();
-            this.hpText.setText((int) fortress.getHP() + " / " + fortress.getMaxHP());
-            this.hpText.draw(game.batch, 1f);
-            game.batch.end();
-            fortressStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            fortressStatsRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
-            fortressStatsRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            fortressStatsRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
-            fortressStatsRenderer.end();
-        }
-        Gdx.app.log("max HP", String.valueOf(fortress.getMaxHP()));
-        Gdx.app.log("HP", String.valueOf(fortress.getMaxHP()));
-
-
-
-        if (selectedTruck != null) {
-            // allows for transparency
-            Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-            Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-
-            // starts render of the big stats for selected truck
-            bigTruckStatsRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-            // sets colour or render to transparent?
-            bigTruckStatsRenderer.setColor(0, 0, 0, 0.5f);
-
-            // if there is a truck selected
-            // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
-            // these are positioned in the top left corner
-
-            bigTruckStatsRenderer.rect(10, Gdx.graphics.getHeight()-10-100, 0.6f*100,0.8f*100);
-            bigTruckStatsRenderer.rect(17.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,0.6f*100, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            bigTruckStatsRenderer.rect(17.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,(float) selectedTruck.getHP() / (float) selectedTruck.type.getMaxHP() * 0.6f*100, Color.RED, Color.RED, Color.RED, Color.RED);
-            bigTruckStatsRenderer.rect(42.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,0.6f*100, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            bigTruckStatsRenderer.rect(42.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100, (float) selectedTruck.getReserve() / (float) selectedTruck.type.getMaxReserve() * 0.6f*100, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-
-            // ends render of the big stats for selected truck
-            bigTruckStatsRenderer.end();
-
-            // disabled transparent mode
-            Gdx.gl.glDisable(GL20.GL_BLEND);
-
+            shapeMapRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
+            shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
         }
 
+        shapeMapRenderer.end();
+
+        gui.render(selectedEntity);
     }
 
     @Override
@@ -310,9 +266,8 @@ public class GameScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
-        truckStatsRenderer.dispose();
-        bigTruckStatsRenderer.dispose();
-        fortressStatsRenderer.dispose();
+        shapeGUIRenderer.dispose();
+        shapeMapRenderer.dispose();
     }
 
     // this function checks whether the coordinates given are on a road
@@ -342,6 +297,10 @@ public class GameScreen implements Screen {
 
         // truck was not selected
         return false;
+    }
+
+    public ArrayList<Fortress> getFortresses() {
+        return this.fortresses;
     }
 
     // this function is used to see whether the player clicks on

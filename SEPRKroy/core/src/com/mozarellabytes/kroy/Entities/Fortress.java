@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -68,6 +69,15 @@ public class Fortress {
 
     public void damage(float HP){
         this.HP -= HP;
+    }
+
+    public Rectangle getArea() {
+        Rectangle area = new Rectangle();
+        area.x = this.position.x-2;
+        area.y = this.position.y-2;
+        area.width = 4;
+        area.height = 6;
+        return area;
     }
 }
 

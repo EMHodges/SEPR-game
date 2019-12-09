@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
 public class GameInputHandler implements InputProcessor {
@@ -66,8 +67,17 @@ public class GameInputHandler implements InputProcessor {
                 }
             }
         } else {
-            gameScreen.selectedTruck = null;
-            gameScreen.selectedEntity = null;
+            boolean selected = false;
+            for (Fortress fortress : gameScreen.getFortresses()) {
+                if (fortress.getArea().contains(position2d)) {
+                    gameScreen.selectedEntity = fortress;
+                    selected = true;
+                }
+            }
+            if (!selected) {
+                gameScreen.selectedTruck = null;
+                gameScreen.selectedEntity = null;
+            }
         }
         return true;
     }
