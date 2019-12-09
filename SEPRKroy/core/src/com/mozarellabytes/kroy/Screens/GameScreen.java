@@ -37,11 +37,9 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     private final Kroy game;
-    private Stage ui;
     private TiledMap map;
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
-    private OrthographicCamera guiCamera;
     private ShapeRenderer shapeMapRenderer;
     private ShapeRenderer shapeGUIRenderer;
     private MapLayers mapLayers;
@@ -56,7 +54,6 @@ public class GameScreen implements Screen {
     public Fortress fortress;
     public Object selectedEntity;
 
-    private Label hpText;
     private GUI gui;
 
     public GameState gameState;
@@ -87,7 +84,7 @@ public class GameScreen implements Screen {
         camShake = new CameraShake();
 
         station = new FireStation(this,4,2);
-        fortress = new Fortress(this, 12, 19, 5, 100);
+        fortress = new Fortress(this, 12, 19, 5, 100, 0.6f);
 
         fortresses = new ArrayList<Fortress>();
         fortresses.add(fortress);
@@ -219,10 +216,10 @@ public class GameScreen implements Screen {
         for (FireTruck truck : station.getTrucks()) {
             // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
             shapeMapRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+            shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
         }
 
         for (Fortress fortress: fortresses) {

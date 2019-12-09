@@ -12,19 +12,19 @@ import java.util.Random;
 public class Fortress {
 
     private GameScreen gameScreen;
-    private float type, HP, AP, maxHP;
-    private float range;
-    private Vector2 position;
+    private float type, HP, AP, maxHP, range;
+    private Vector2  position;
     private Texture texture;
     private String name;
     private Random rand;
 
-    public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP) {
+    public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP, float AP) {
         this.gameScreen = gameScreen;
         this.position = new Vector2(x, y);
         this.range = range;
         this.maxHP = maxHP;
         this.HP = maxHP;
+        this.AP = AP;
         this.texture = new Texture(Gdx.files.internal("sprites/fortress.png"));
         this.rand = new Random();
         this.name = "Fortress";
@@ -47,7 +47,7 @@ public class Fortress {
     }
 
     private void attack(FireTruck target){
-        target.fortressDamage(0.6f);
+        target.fortressDamage(this.AP);
     }
 
     public Texture getTexture() {
@@ -85,6 +85,10 @@ public class Fortress {
 
     public String getName() {
         return this.name;
+    }
+
+    public float getAP() {
+        return this.AP;
     }
 }
 

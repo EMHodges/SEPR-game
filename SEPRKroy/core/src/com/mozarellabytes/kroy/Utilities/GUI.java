@@ -3,7 +3,6 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
@@ -83,9 +82,13 @@ public class GUI {
     private void renderText(Fortress fortress) {
         int newLine = 20;
         game.batch.begin();
+        game.bigFont.draw(game.batch, fortress.getName(), this.x + 10, this.y + this.h - 10);
         game.smallFont.draw(game.batch, "HP: ", this.x + 15, this.y + this.h - 50);
         game.smallFont.draw(game.batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortress.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
-        game.bigFont.draw(game.batch, fortress.getName(), this.x + 10, this.y + this.h - 10);
+        game.smallFont.draw(game.batch, "Range: ", this.x + 15, this.y + this.h - 50 - newLine*2);
+        game.smallFont.draw(game.batch, String.format("%.1f", fortress.getRange()), this.x + 20, this.y + this.h - 50 - newLine*3);
+        game.smallFont.draw(game.batch, "AP: ", this.x + 15, this.y + this.h - 50 - newLine*4);
+        game.smallFont.draw(game.batch, String.format("%.2f", fortress.getAP()), this.x + 20, this.y + this.h - 50 - newLine*5);
         game.batch.end();
     }
 
