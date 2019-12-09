@@ -25,7 +25,7 @@ public class Kroy extends Game {
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magero.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-		parameter.size = 20;
+		parameter.size = 30;
 		font = generator.generateFont(parameter);
 		labelStyle = new Label.LabelStyle();
 		labelStyle.font = font;

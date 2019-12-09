@@ -7,13 +7,16 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
+import com.mozarellabytes.kroy.Kroy;
 
 public class GUI {
 
+    private Kroy game;
     private ShapeRenderer renderer;
     private int x, y, w, h;
 
-    public GUI(ShapeRenderer shapeRenderer, int w, int h) {
+    public GUI(Kroy game, ShapeRenderer shapeRenderer, int w, int h) {
+        this.game = game;
         this.renderer = shapeRenderer;
         this.x = 10;
         this.y = Gdx.graphics.getHeight() - 10 - h;
@@ -23,7 +26,6 @@ public class GUI {
 
     public void render(Object entity) {
         if (entity != null) {
-            Gdx.app.log("Entity", entity.toString());
             Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
             renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -44,25 +46,39 @@ public class GUI {
         }
     }
 
-    private void renderTruck(FireTruck truck) {
-        renderBar(truck.getHP(), truck.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
-        renderBar(truck.getReserve(), truck.getMaxReserve(), Color.CYAN, Color.BLUE, 2);
-    }
-
     private void renderBackground() {
         renderer.setColor(0, 0, 0, 0.5f);
         renderer.rect(x, y, w, h);
     }
 
+    private void renderTruck(FireTruck truck) {
+        renderBar(truck.getHP(), truck.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderBar(truck.getReserve(), truck.getMaxReserve(), Color.CYAN, Color.BLUE, 2);
+        renderText(truck);
+    }
+
     private void renderFortress(Fortress fortress) {
         renderBar(fortress.getHP(), fortress.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderText(fortress);
+    }
+
+    private void renderText(FireTruck truck) {
+        game.batch.begin();
+        game.font.draw(game.batch, truck.getName(), this.x + 10, this.y + this.h - 10);
+        game.batch.end();
+    }
+
+    private void renderText(Fortress fortress) {
+        game.batch.begin();
+        game.font.draw(game.batch, fortress.getName(), this.x + 10, this.y + this.h - 10);
+        game.batch.end();
     }
 
     private void renderBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position) {
         int whiteW = 50;
         int outerSpacing = 10;
         int innerSpacing = 5;
-        int spaceForText = 50;
+        int spaceForText = 35;
         int barHeight = this.h - outerSpacing*2 - innerSpacing*2 - spaceForText;
         int positionSpacer = position * whiteW;
         int barSpacer = 0;

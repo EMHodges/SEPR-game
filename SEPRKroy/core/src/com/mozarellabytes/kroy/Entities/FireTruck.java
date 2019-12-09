@@ -27,7 +27,7 @@ public class FireTruck extends Sprite {
     private boolean moving;
     private boolean attacking;
 
-    private boolean seeStats;
+    private String name;
 
     private Texture trailImage;
     private Texture trailImageEnd;
@@ -46,6 +46,7 @@ public class FireTruck extends Sprite {
         this.HP = type.getMaxHP();
         this.maxHP = type.getMaxHP();
         this.colour = type.getColour();
+        this.name = type.getName();
 
         this.x = x;
         this.y = y;
@@ -221,6 +222,10 @@ public class FireTruck extends Sprite {
 
     public void setAttacking(boolean b) {
         this.attacking = b;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
 

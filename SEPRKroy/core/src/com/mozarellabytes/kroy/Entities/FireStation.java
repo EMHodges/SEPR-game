@@ -15,6 +15,8 @@ public class FireStation {
     private Vector2 bayTile1;
     private Vector2 bayTile2;
 
+    private String name;
+
     private Texture texture;
 
     public FireStation(GameScreen gameScreen, int x, int y) {
@@ -26,6 +28,7 @@ public class FireStation {
         this.spawnTile = new Vector2(this.x + 2, this.y);
         this.trucks = new ArrayList<FireTruck>();
         this.texture = new Texture(Gdx.files.internal("sprites/station_wider.png"));
+        this.name = "Fire Station";
     }
 
     public ArrayList<FireTruck> getTrucks() {

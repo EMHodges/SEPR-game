@@ -16,7 +16,8 @@ public class Fortress {
     private float range;
     private Vector2 position;
     private Texture texture;
-    Random rand = new Random();
+    private String name;
+    private Random rand;
 
     public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP) {
         this.gameScreen = gameScreen;
@@ -25,6 +26,8 @@ public class Fortress {
         this.maxHP = maxHP;
         this.HP = maxHP;
         this.texture = new Texture(Gdx.files.internal("sprites/fortress.png"));
+        this.rand = new Random();
+        this.name = "Fortress";
     }
 
     public void checkRange(FireTruck target) {
@@ -78,6 +81,10 @@ public class Fortress {
         area.width = 4;
         area.height = 6;
         return area;
+    }
+
+    public String getName() {
+        return this.name;
     }
 }
 

@@ -87,7 +87,7 @@ public class GameScreen implements Screen {
 
         shapeGUIRenderer = new ShapeRenderer();
 
-        gui = new GUI(shapeGUIRenderer, 250, 250);
+        gui = new GUI(game, shapeGUIRenderer, 250, 250);
 
         Gdx.input.setInputProcessor(new GameInputHandler(this));
 
@@ -211,7 +211,7 @@ public class GameScreen implements Screen {
         batch.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
 
         // draw the fortress
-        batch.draw(fortress.getTexture(), fortress.getPosition().x-2, fortress.getPosition().y-2, 4, 6);
+        batch.draw(fortress.getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
 
         // finish rendering of entities
         batch.end();
