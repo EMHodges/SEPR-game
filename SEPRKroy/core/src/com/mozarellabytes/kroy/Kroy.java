@@ -27,7 +27,7 @@ public class Kroy extends Game {
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 30;
 		bigFont = generator.generateFont(parameter);
-		parameter.size = 17;
+		parameter.size = 19;
 		smallFont = generator.generateFont(parameter);
 
 //		this.setScreen(new SplashScreen(this));
