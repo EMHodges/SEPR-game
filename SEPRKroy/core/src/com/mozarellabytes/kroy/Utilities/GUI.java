@@ -45,11 +45,8 @@ public class GUI {
     }
 
     private void renderTruck(FireTruck truck) {
-        renderer.rect(10, Gdx.graphics.getHeight()-10-100, 0.6f*100,0.8f*100);
-        renderer.rect(17.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,0.6f*100, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        renderer.rect(17.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,(float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f*100, Color.RED, Color.RED, Color.RED, Color.RED);
-        renderer.rect(42.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100,0.6f*100, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-        renderer.rect(42.5f, Gdx.graphics.getHeight()-10-100, 0.2f*100, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f*100, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+        renderBar(truck.getHP(), truck.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderBar(truck.getReserve(), truck.getMaxReserve(), Color.CYAN, Color.BLUE, 2);
     }
 
     private void renderBackground() {
@@ -58,16 +55,20 @@ public class GUI {
     }
 
     private void renderFortress(Fortress fortress) {
-        renderBar(fortress.getHP(), fortress.getMaxHP(), Color.RED, Color.FIREBRICK);
+        renderBar(fortress.getHP(), fortress.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
     }
 
-    private void renderBar(float value, float maxValue, Color progressColour, Color backgroundColour) {
+    private void renderBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position) {
         int whiteW = 50;
-        int spacing = 10;
-        int smallerSpacing = 5;
-        int barHeight = this.h - spacing*2 - smallerSpacing*2 - 50;
-        renderer.rect(this.x + this.w - whiteW - spacing, this.y + spacing, whiteW, this.h - spacing*2 - 50, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        renderer.rect(this.x + this.w - whiteW - spacing + smallerSpacing, this.y + spacing + smallerSpacing, whiteW - smallerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
-        renderer.rect(this.x + this.w - whiteW - spacing + smallerSpacing, this.y + spacing + smallerSpacing, whiteW - smallerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
+        int outerSpacing = 10;
+        int innerSpacing = 5;
+        int spaceForText = 50;
+        int barHeight = this.h - outerSpacing*2 - innerSpacing*2 - spaceForText;
+        int positionSpacer = position * whiteW;
+        int barSpacer = 0;
+        if (position > 1) barSpacer = 5;
+        renderer.rect(this.x + this.w - positionSpacer - outerSpacing - barSpacer, this.y + outerSpacing, whiteW, this.h - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        renderer.rect(this.x + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.y + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
+        renderer.rect(this.x + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.y + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
 }

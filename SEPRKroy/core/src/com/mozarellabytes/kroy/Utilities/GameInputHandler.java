@@ -12,6 +12,7 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
+    private boolean attacking;
 
     public GameInputHandler(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
@@ -25,12 +26,8 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.A:
-                Gdx.app.log("pressed A", "A pressed");
                 for (FireTruck truck: gameScreen.station.getTrucks()){
-                    if (truck.inFortresssRange()){
-                        truck.attack();
-                        Gdx.app.log("attacking fortress", String.valueOf(gameScreen.fortress.getHP()));
-                    }
+                    truck.setAttacking(true);
                 }
                 break;
             case Input.Keys.P:
@@ -41,7 +38,14 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        switch (keycode) {
+            case Input.Keys.A:
+                for (FireTruck truck : gameScreen.station.getTrucks()) {
+                    truck.setAttacking(false);
+                }
+                break;
+        }
+        return true;
     }
 
 
@@ -94,8 +98,7 @@ public class GameInputHandler implements InputProcessor {
         }
         return true;
     }
-    // there's a bug somewhere here, if you draw a trucks path and then keep clicking on the end of it's trail path when the
-    // truck reaches that tile it crashes and gives you a queue is empty error
+    // this has a bug where if you dont move from the spawning tile, game crashes as there is a truck behind it!
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is to prevent trucks being on the same tiles
@@ -106,7 +109,7 @@ public class GameInputHandler implements InputProcessor {
                         if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
                                 || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
                             gameScreen.selectedTruck.trailPath.removeLast();
-                            while (!gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
+                            while (!gameScreen.selectedTruck.trailPath.isEmpty() && !gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
                                 gameScreen.selectedTruck.path.removeLast();
                             }
                         }

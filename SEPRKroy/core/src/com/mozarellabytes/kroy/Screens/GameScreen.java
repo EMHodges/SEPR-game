@@ -165,6 +165,8 @@ public class GameScreen implements Screen {
             // damages truck if within range of fortress
             fortress.checkRange(truck);
 
+            truck.attack();
+
             // move the position of the truck
             truck.mouseMove();
 
@@ -200,6 +202,7 @@ public class GameScreen implements Screen {
 
         for (Fortress fortress: fortresses) {
             if(fortress.getHP() <= 0) {
+
                 gameState.removeFortress();
             }
         }
@@ -325,7 +328,6 @@ public class GameScreen implements Screen {
         }
         return false;
     }
-
 
 }
 

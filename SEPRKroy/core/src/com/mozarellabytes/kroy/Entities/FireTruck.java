@@ -15,7 +15,7 @@ public class FireTruck extends Sprite {
     private int AP, range;
     public FireTruckType type;
     private String colour;
-    private float HP, reserve;
+    private float HP, reserve, maxHP, maxReserve;
     private double speed;
     private float x, y;
     private Texture lookLeft;
@@ -25,6 +25,7 @@ public class FireTruck extends Sprite {
     public Queue<Vector2> path;
     public Queue<Vector2> trailPath;
     private boolean moving;
+    private boolean attacking;
 
     private boolean seeStats;
 
@@ -41,11 +42,15 @@ public class FireTruck extends Sprite {
         this.type = type;
         this.speed = type.getSpeed();
         this.reserve = type.getMaxReserve();
+        this.maxReserve = type.getMaxReserve();
         this.HP = type.getMaxHP();
+        this.maxHP = type.getMaxHP();
         this.colour = type.getColour();
 
         this.x = x;
         this.y = y;
+
+        this.attacking = false;
 
         lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
@@ -172,11 +177,15 @@ public class FireTruck extends Sprite {
     }
 
     public void attack() {
-        if (this.reserve > 1f) {
-            gameScreen.fortress.damage(5f);
-            this.reserve -= 5f;
-        } else {
-            this.reserve = 0;
+        if (this.attacking) {
+            if (this.inFortressRange()) {
+                if (this.reserve > 1f) {
+                    gameScreen.fortress.damage(0.05f);
+                    this.reserve -= 0.05f;
+                } else {
+                    this.reserve = 0;
+                }
+            }
         }
     }
 
@@ -192,21 +201,26 @@ public class FireTruck extends Sprite {
         return this.HP;
     }
 
-    public float getReserve(){
-        return this.reserve;
-    }
+    public float getReserve() { return this.reserve; }
 
     public void fortressDamage(float HP) {
         this.HP -= HP;
     }
 
-    public boolean inFortresssRange(){
-        if (new Vector2((float) (this.getPosition().x + 0.5), (float) (this.getPosition().y)).dst(gameScreen.fortress.getPosition()) <= gameScreen.fortress.getRange()) {
-            return true;
-        }
-        return false;
+    public boolean inFortressRange() {
+        return (new Vector2((float) (this.getPosition().x + 0.5), (float) (this.getPosition().y)).dst(gameScreen.fortress.getPosition()) <= gameScreen.fortress.getRange());
     }
 
+    public float getMaxHP() {
+        return this.maxHP;
+    }
 
+    public float getMaxReserve() {
+        return this.maxReserve;
+    }
+
+    public void setAttacking(boolean b) {
+        this.attacking = b;
+    }
 }
 
