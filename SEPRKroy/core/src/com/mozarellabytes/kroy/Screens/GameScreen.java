@@ -64,15 +64,6 @@ public class GameScreen implements Screen {
     public GameScreen(Kroy game) {
         this.game = game;
 
-        float aspectRatio = (float)Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth();
-        float cameraViewPortWidth = 1024;
-        float cameraViewPortHeight = cameraViewPortWidth * aspectRatio;
-
-        Gdx.app.log("Label", game.labelStyle.toString());
-
-        hpText = new Label("", game.labelStyle);
-        hpText.setPosition(100,Gdx.graphics.getHeight() - 20);
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
 
@@ -87,7 +78,7 @@ public class GameScreen implements Screen {
 
         shapeGUIRenderer = new ShapeRenderer();
 
-        gui = new GUI(game, shapeGUIRenderer, 250, 250);
+        gui = new GUI(game, shapeGUIRenderer, 275, 275);
 
         Gdx.input.setInputProcessor(new GameInputHandler(this));
 

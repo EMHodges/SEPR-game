@@ -52,6 +52,7 @@ public class GUI {
     }
 
     private void renderTruck(FireTruck truck) {
+        // also render text stats along left side
         renderBar(truck.getHP(), truck.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderBar(truck.getReserve(), truck.getMaxReserve(), Color.CYAN, Color.BLUE, 2);
         renderText(truck);
@@ -63,14 +64,21 @@ public class GUI {
     }
 
     private void renderText(FireTruck truck) {
+        int newLine = 20;
         game.batch.begin();
-        game.font.draw(game.batch, truck.getName(), this.x + 10, this.y + this.h - 10);
+        game.bigFont.draw(game.batch, truck.getName(), this.x + 10, this.y + this.h - 10);
+        game.smallFont.draw(game.batch, "HP: ", this.x + 15, this.y + this.h - 50);
+        game.smallFont.draw(game.batch, String.format("%.1f", truck.getHP()) + " / " + String.format("%.1f", truck.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
+        game.smallFont.draw(game.batch, "Reserve: ", this.x + 15, this.y + this.h - 50 - newLine*2);
+        game.smallFont.draw(game.batch, String.format("%.1f", truck.getReserve()) + " / " + String.format("%.1f", truck.getMaxReserve()), this.x + 20, this.y + this.h - 50 - newLine*3);
+        game.smallFont.draw(game.batch, "Speed: ", this.x + 15, this.y + this.h - 50 - newLine*4);
+        game.smallFont.draw(game.batch, String.format("%.1f", truck.getSpeed()), this.x + 20, this.y + this.h - 50 - newLine*5);
         game.batch.end();
     }
 
     private void renderText(Fortress fortress) {
         game.batch.begin();
-        game.font.draw(game.batch, fortress.getName(), this.x + 10, this.y + this.h - 10);
+        game.bigFont.draw(game.batch, fortress.getName(), this.x + 10, this.y + this.h - 10);
         game.batch.end();
     }
 

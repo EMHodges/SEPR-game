@@ -43,7 +43,7 @@ public class GameOverScreen implements Screen {
             this.text = "Mission Failed. We'll get 'em next time.";
         }
         this.text = this.text + "\n" + "   Click to return to the main menu...";
-        layout.setText(game.font, this.text);
+        layout.setText(game.bigFont, this.text);
     }
 
     @Override
@@ -60,7 +60,7 @@ public class GameOverScreen implements Screen {
         game.batch.setProjectionMatrix(camera.combined);
 
         game.batch.begin();
-        game.font.draw(game.batch, this.text, camera.viewportWidth/2 - layout.width/2, camera.viewportHeight/2 - layout.height/2);
+        game.bigFont.draw(game.batch, this.text, camera.viewportWidth/2 - layout.width/2, camera.viewportHeight/2 - layout.height/2);
         game.batch.end();
     }
 

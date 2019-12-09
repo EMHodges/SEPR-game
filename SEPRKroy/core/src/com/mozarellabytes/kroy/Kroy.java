@@ -14,8 +14,8 @@ import com.mozarellabytes.kroy.Screens.SplashScreen;
 public class Kroy extends Game {
 
 	public SpriteBatch batch;
-	public BitmapFont font;
-	public Label.LabelStyle labelStyle;
+	public BitmapFont bigFont;
+	public BitmapFont smallFont;
 
 	// Method called once when the application is created.
 	@Override
@@ -26,10 +26,9 @@ public class Kroy extends Game {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magero.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
 		parameter.size = 30;
-		font = generator.generateFont(parameter);
-		labelStyle = new Label.LabelStyle();
-		labelStyle.font = font;
-		labelStyle.fontColor = Color.RED;
+		bigFont = generator.generateFont(parameter);
+		parameter.size = 17;
+		smallFont = generator.generateFont(parameter);
 
 //		this.setScreen(new SplashScreen(this));
 		this.setScreen(new GameScreen(this));
@@ -45,6 +44,6 @@ public class Kroy extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
-		font.dispose();
+		bigFont.dispose();
 	}
 }

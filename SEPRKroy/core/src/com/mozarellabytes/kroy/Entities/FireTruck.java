@@ -227,5 +227,9 @@ public class FireTruck extends Sprite {
     public String getName() {
         return this.name;
     }
+
+    public double getSpeed() {
+        return this.speed;
+    }
 }
 
