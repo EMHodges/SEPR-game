@@ -48,7 +48,6 @@ public class GameScreen implements Screen {
     public ArrayList<Fortress> fortresses;
     public FireTruck selectedTruck;
     public FireStation station;
-    public Fortress fortress;
     public Object selectedEntity;
 
     private GUI gui;
@@ -81,10 +80,9 @@ public class GameScreen implements Screen {
         camShake = new CameraShake();
 
         station = new FireStation(this,4,2);
-        fortress = new Fortress(this, 12, 19, 5, 100, 0.6f);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(fortress);
+        fortresses.add(new Fortress(this, 12, 19, 5, 100, 20));
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
@@ -148,7 +146,9 @@ public class GameScreen implements Screen {
             FireTruck truck = station.getTruck(i);
 
             // damages truck if within range of fortress
-            fortress.checkRange(truck);
+            for (Fortress fortress : this.fortresses) {
+                fortress.checkRange(truck);
+            }
 
             truck.attack();
 
@@ -183,11 +183,13 @@ public class GameScreen implements Screen {
                     this.selectedTruck = null;
                 }
             }
+
+            truck.updateSpray(delta);
+
         }
 
         for (Fortress fortress: fortresses) {
             if(fortress.getHP() <= 0) {
-
                 gameState.removeFortress();
             }
         }
@@ -196,7 +198,9 @@ public class GameScreen implements Screen {
         batch.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
 
         // draw the fortress
-        batch.draw(fortress.getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
+        for (Fortress fortress : this.fortresses) {
+            batch.draw(fortress.getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
+        }
 
         // finish rendering of entities
         batch.end();
@@ -205,7 +209,9 @@ public class GameScreen implements Screen {
         renderer.render(structureLayersIndices);
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
-        shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
+        for (Fortress fortress: fortresses) {
+            shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
+        }
         shapeMapRenderer.end();
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -217,6 +223,17 @@ public class GameScreen implements Screen {
             shapeMapRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
             shapeMapRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
             shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+            if (truck.getSpray() != null) {
+                for (int i=0; i<truck.getSpray().getParticles().size(); i++) {
+                    Particle particle = truck.getSpray().getParticles().get(i);
+                    if (particle.isHit()) {
+                        truck.damage(particle);
+                        truck.getSpray().removeParticle(particle);
+                    } else {
+                        shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y , 0.1f, 0.1f, particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
+                    }
+                }
+            }
         }
 
         for (Fortress fortress: fortresses) {
@@ -225,20 +242,20 @@ public class GameScreen implements Screen {
             shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
         }
 
-        for (int i=0; i<this.fortress.getBombs().size();i++) {
-            Bomb bomb = this.fortress.getBombs().get(i);
-            bomb.update(delta);
-            shapeMapRenderer.rect(bomb.getPosition().x, bomb.getPosition().y,0.2f,0.2f, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
-            if (bomb.getTimeCreated() + bomb.getLifespan() < System.currentTimeMillis()) {
-                this.fortress.removeBomb(bomb);
-                Gdx.app.log("Bomb timed out", "");
-            } else if (bomb.checkHit()) {
-                bomb.getTarget().fortressDamage(10);
-                this.fortress.removeBomb(bomb);
-                Gdx.app.log("Target hit", "");
+        for (Fortress fortress: fortresses) {
+            for (int i = 0; i < fortress.getBombs().size(); i++) {
+                Bomb bomb = fortress.getBombs().get(i);
+                bomb.update(delta);
+                shapeMapRenderer.rect(bomb.getPosition().x, bomb.getPosition().y, 0.2f, 0.2f, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+                if (bomb.getTimeCreated() + bomb.getLifespan() < System.currentTimeMillis()) {
+                    fortress.removeBomb(bomb);
+                } else if (bomb.checkHit()) {
+                    bomb.boom();
+                    fortress.removeBomb(bomb);
+                }
             }
-            Gdx.app.log("Bomb", bomb.getPosition().toString());
         }
+
 
         shapeMapRenderer.end();
 

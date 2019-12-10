@@ -19,6 +19,7 @@ public class Fortress {
     private Random rand;
     private ArrayList<Bomb> bombs;
     private long lastFire;
+    private int delay;
 
     public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP, float AP) {
         this.gameScreen = gameScreen;
@@ -32,6 +33,7 @@ public class Fortress {
         this.name = "Fortress";
         this.bombs = new ArrayList<Bomb>();
         this.lastFire = System.currentTimeMillis();
+        this.delay = 3000;
     }
 
     public void checkRange(FireTruck target) {
@@ -51,9 +53,9 @@ public class Fortress {
     }
 
     private void attack(FireTruck target){
-        if (this.lastFire + 3000 < System.currentTimeMillis()) {
+        if (this.lastFire + this.delay < System.currentTimeMillis()) {
             this.lastFire = System.currentTimeMillis();
-            this.bombs.add(new Bomb(this.position.x, this.position.y, target));
+            this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.AP, 5000, 2f));
         }
     }
 

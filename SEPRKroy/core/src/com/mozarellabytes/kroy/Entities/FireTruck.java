@@ -28,6 +28,8 @@ public class FireTruck extends Sprite {
 
     private String name;
 
+    private WaterSpray spray;
+
     private Texture trailImage;
     private Texture trailImageEnd;
 
@@ -180,21 +182,36 @@ public class FireTruck extends Sprite {
     }
 
     public void attack() {
+        if (findFortressWithinRange() != null) {
+            if (this.spray == null) {
+                spray = new WaterSpray(this.getPosition(), findFortressWithinRange(), this);
+            } else {
+                spray.createParticle();
+            }
+        }
+    }
+
+    public void updateSpray(float delta) {
+        if (this.spray != null) {
+            for (Particle particle : this.spray.getParticles()) {
+                particle.updatePosition(delta);
+            }
+        }
+    }
+
+    public void damage(Particle particle) {
+        particle.getTarget().damage(this.AP);
+    }
+
+    public Fortress findFortressWithinRange() {
         if (this.attacking) {
-            if (this.inFortressRange()) {
-                if (this.reserve > 0) {
-                    if (this.reserve < this.AP) {
-                        gameScreen.fortress.damage(this.reserve);
-                        this.reserve -= this.reserve;
-                    } else {
-                        gameScreen.fortress.damage(this.AP);
-                        this.reserve -= this.AP;
-                    }
-                } else {
-                    this.reserve = 0;
+            for (Fortress fortress : gameScreen.fortresses) {
+                if (new Vector2((float) (this.getPosition().x + 0.5), (float) (this.getPosition().y)).dst(fortress.getPosition()) <= this.range) {
+                    return fortress;
                 }
             }
         }
+        return null;
     }
 
     public void repair() {
@@ -213,10 +230,6 @@ public class FireTruck extends Sprite {
 
     public void fortressDamage(float HP) {
         this.HP -= HP;
-    }
-
-    public boolean inFortressRange() {
-        return (new Vector2((float) (this.getPosition().x + 0.5), (float) (this.getPosition().y)).dst(gameScreen.fortress.getPosition()) <= this.range);
     }
 
     public float getMaxHP() {
@@ -245,6 +258,10 @@ public class FireTruck extends Sprite {
 
     public float getRange() {
         return this.range;
+    }
+
+    public WaterSpray getSpray() {
+        return this.spray;
     }
 }
 

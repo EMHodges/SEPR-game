@@ -14,15 +14,17 @@ public class Bomb extends Sprite {
     private FireTruck truck;
     private int lifespan;
     private long timeCreated;
+    private float damage;
 
-    public Bomb(float x, float y, FireTruck truck) {
+    public Bomb(float x, float y, FireTruck truck, float damage, int lifespan, float velocity) {
         this.rect = new Rectangle();
         this.position = new Vector2(x,y);
-        this.velocity = 1f;
+        this.velocity = velocity;
         this.targetPosition = truck.getPosition();
         this.truck = truck;
-        this.lifespan = 5000;
+        this.lifespan = lifespan;
         this.timeCreated = System.currentTimeMillis();
+        this.damage = damage;
     }
 
     public Vector2 getPosition() {
@@ -46,12 +48,12 @@ public class Bomb extends Sprite {
         }
     }
 
-    public int getLifespan() {
-        return this.lifespan;
+    public void boom() {
+        this.truck.fortressDamage(this.damage);
     }
 
-    public FireTruck getTarget() {
-        return this.truck;
+    public int getLifespan() {
+        return this.lifespan;
     }
 
     public long getTimeCreated() {
