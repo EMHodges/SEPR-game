@@ -1,7 +1,11 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Vector2;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 public class Particle {
 
@@ -11,13 +15,18 @@ public class Particle {
     private float velocity = 5f;
     private FireTruck truck;
     private Fortress target;
+    private Random rand;
 
     public Particle(Vector2 end, FireTruck truck, Fortress target) {
-        this.colour = new Color(Color.BLUE);
-        this.position = truck.getPosition();
-        this.targetPosition = end;
+        Color[] colors = new Color[] { Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
+        Color randomColor = colors[(int)( Math.random() * 4)];
+        this.colour = randomColor;
+        this.position = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
+        this.targetPosition = target.getPosition();
         this.truck = truck;
         this.target = target;
+        this.rand = new Random();
+        createTargetPosition(target);
     }
 
     public Vector2 getPosition() {
@@ -48,7 +57,14 @@ public class Particle {
         return (((int) this.targetPosition.x == (int) this.position.x) && ((int) this.targetPosition.x == (int) this.position.x));
     }
 
+    public void createTargetPosition(Fortress fortress) {
+        float xCoord = (float)(Math.random() * ((fortress.getArea().x + fortress.getArea().width) - fortress.getArea().x) + fortress.getArea().x);
+        float yCoord = (float)(Math.random() * ((fortress.getArea().y + fortress.getArea().height) - fortress.getArea().y) + fortress.getArea().y);
+        this.targetPosition = new Vector2(xCoord, yCoord);
+    }
+
     public Fortress getTarget() {
         return this.target;
     }
+
 }

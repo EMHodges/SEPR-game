@@ -243,11 +243,15 @@ public class GameScreen implements Screen {
         }
 
         for (Fortress fortress: fortresses) {
+
             for (int i = 0; i < fortress.getBombs().size(); i++) {
                 Bomb bomb = fortress.getBombs().get(i);
                 bomb.update(delta);
-                shapeMapRenderer.rect(bomb.getPosition().x, bomb.getPosition().y, 0.2f, 0.2f, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
-                if (bomb.getTimeCreated() + bomb.getLifespan() < System.currentTimeMillis()) {
+                shapeMapRenderer.setColor(Color.RED);
+                shapeMapRenderer.circle(bomb.getPosition().x, bomb.getPosition().y, 0.2f,40);
+                if((int)bomb.getPosition().x == bomb.getTargetPos().x && (int)bomb.getPosition().y == bomb.getTargetPos().y) {
+                    fortress.removeBomb(bomb);
+                } else if (bomb.getTimeCreated() + bomb.getLifespan() < System.currentTimeMillis()) {
                     fortress.removeBomb(bomb);
                 } else if (bomb.checkHit()) {
                     bomb.boom();
@@ -255,7 +259,6 @@ public class GameScreen implements Screen {
                 }
             }
         }
-
 
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);
