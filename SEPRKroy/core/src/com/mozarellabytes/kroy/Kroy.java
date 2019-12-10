@@ -8,6 +8,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.mozarellabytes.kroy.Screens.ControlsScreen;
+import com.mozarellabytes.kroy.Screens.GameOverScreen;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Screens.SplashScreen;
 
@@ -30,8 +32,9 @@ public class Kroy extends Game {
 		parameter.size = 19;
 		smallFont = generator.generateFont(parameter);
 
-//		this.setScreen(new SplashScreen(this));
-		this.setScreen(new GameScreen(this));
+		this.setScreen(new ControlsScreen(this));
+		//this.setScreen(new SplashScreen(this));
+	//	this.setScreen(new GameScreen(this));
 	}
 
 	// Method called by the game loop from the application every time rendering should be performed. Game logic updates are usually also performed in this method.
