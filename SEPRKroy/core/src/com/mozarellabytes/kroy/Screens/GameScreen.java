@@ -18,10 +18,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.mozarellabytes.kroy.Entities.FireStation;
-import com.mozarellabytes.kroy.Entities.FireTruck;
-import com.mozarellabytes.kroy.Entities.FireTruckType;
-import com.mozarellabytes.kroy.Entities.Fortress;
+import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.CameraShake;
@@ -93,7 +90,7 @@ public class GameScreen implements Screen {
         mapLayers = map.getLayers();
         backgroundLayerIndex = new int[] {  mapLayers.getIndex("background")};
 
-        structureLayersIndices = new int[] {    mapLayers.getIndex("structures"),
+        structureLayersIndices = new int[] { mapLayers.getIndex("structures"),
                 mapLayers.getIndex("structures2"),
                 mapLayers.getIndex("transparentStructures")};
 
@@ -226,6 +223,18 @@ public class GameScreen implements Screen {
             shapeMapRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
             shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
             shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+        }
+
+        for (int i=0; i<this.fortress.getBombs().size();i++) {
+            Bomb bomb = this.fortress.getBombs().get(i);
+            bomb.update(delta);
+            shapeMapRenderer.rect(bomb.getPosition().x, bomb.getPosition().y,0.2f,0.2f, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
+            if (bomb.checkHit()) {
+                bomb.getTarget().fortressDamage(10);
+                this.fortress.removeBomb(bomb);
+                Gdx.app.log("Target hit", "");
+            }
+            Gdx.app.log("Bomb", bomb.getPosition().toString());
         }
 
         shapeMapRenderer.end();

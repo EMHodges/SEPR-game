@@ -17,6 +17,8 @@ public class Fortress {
     private Texture texture;
     private String name;
     private Random rand;
+    private ArrayList<Bomb> bombs;
+    private long lastFire;
 
     public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP, float AP) {
         this.gameScreen = gameScreen;
@@ -28,6 +30,8 @@ public class Fortress {
         this.texture = new Texture(Gdx.files.internal("sprites/fortress.png"));
         this.rand = new Random();
         this.name = "Fortress";
+        this.bombs = new ArrayList<Bomb>();
+        this.lastFire = System.currentTimeMillis();
     }
 
     public void checkRange(FireTruck target) {
@@ -47,7 +51,10 @@ public class Fortress {
     }
 
     private void attack(FireTruck target){
-        target.fortressDamage(this.AP);
+        if (this.lastFire + 3000 < System.currentTimeMillis()) {
+            this.lastFire = System.currentTimeMillis();
+            this.bombs.add(new Bomb(this.position.x, this.position.y, target));
+        }
     }
 
     public Texture getTexture() {
@@ -89,6 +96,14 @@ public class Fortress {
 
     public float getAP() {
         return this.AP;
+    }
+
+    public ArrayList<Bomb> getBombs() {
+        return this.bombs;
+    }
+
+    public void removeBomb(Bomb bomb) {
+        this.bombs.remove(bomb);
     }
 }
 
