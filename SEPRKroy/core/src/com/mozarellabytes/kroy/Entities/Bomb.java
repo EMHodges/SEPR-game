@@ -32,11 +32,11 @@ public class Bomb extends Sprite {
     }
 
     public boolean checkHit() {
-        return (((int) position.x == (int) targetPosition.x) && ((int) position.y == (int) targetPosition.y));
+        return (((int) position.x == (int) truck.getX()) && ((int) position.y == (int) truck.getY()));
     }
 
     public void update(float delta) {
-        this.targetPosition = this.truck.getPosition();
+       // this.targetPosition = this.truck.getPosition();
         if (this.targetPosition.x > this.position.x){
             position.x += this.velocity*delta;
         } else if (this.targetPosition.x < this.position.x){
@@ -58,6 +58,10 @@ public class Bomb extends Sprite {
 
     public long getTimeCreated() {
         return this.timeCreated;
+    }
+
+    public Vector2 getTargetPos(){
+        return targetPosition;
     }
 
 }

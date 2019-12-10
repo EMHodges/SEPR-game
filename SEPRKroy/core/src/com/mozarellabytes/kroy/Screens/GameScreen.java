@@ -258,6 +258,7 @@ public class GameScreen implements Screen {
 
 
         shapeMapRenderer.end();
+        shapeMapRenderer.setColor(Color.WHITE);
 
         gui.render(selectedEntity);
     }
