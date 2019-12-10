@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -11,6 +12,7 @@ public class Bomb extends Sprite {
     private float velocity;
     private FireTruck truck;
     private float damage;
+    private Vector2 originalPosition;
 
     public Bomb(float x, float y, FireTruck truck, float damage, float velocity) {
         this.position = new Vector2(x,y);
@@ -18,6 +20,7 @@ public class Bomb extends Sprite {
         this.targetPosition = getMiddleOfTile(truck.getPosition());
         this.truck = truck;
         this.damage = damage;
+        this.originalPosition = this.position;
     }
 
     public Vector2 getPosition() {
@@ -28,16 +31,8 @@ public class Bomb extends Sprite {
         return (getMiddleOfTile(position).equals(getMiddleOfTile(truck.getPosition())));
     }
 
-    public void update(float delta) {
-        if (this.targetPosition.x > this.position.x){
-            position.x += this.velocity*delta;
-        } else if (this.targetPosition.x < this.position.x){
-            position.x -= this.velocity*delta;
-        } if(this.targetPosition.y > this.position.y){
-            position.y += this.velocity*delta;
-        } else if (this.targetPosition.y < this.position.y){
-            position.y -= this.velocity*delta;
-        }
+    public void newUpdatePosition(float delta) {
+        this.position = this.originalPosition.interpolate(this.targetPosition, 0.03f, Interpolation.pow5Out);
     }
 
     private Vector2 getMiddleOfTile(Vector2 pos) {

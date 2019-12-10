@@ -74,7 +74,7 @@ public class GameScreen implements Screen {
         station = new FireStation(this,4,2);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(this, 12, 19, 8, 10000, 10));
+        fortresses.add(new Fortress(this, 12, 19, 8, 100, 10));
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
@@ -238,12 +238,12 @@ public class GameScreen implements Screen {
 
             for (int i = 0; i < fortress.getBombs().size(); i++) {
                 Bomb bomb = fortress.getBombs().get(i);
-                bomb.update(delta);
+                bomb.newUpdatePosition(delta);
                 shapeMapRenderer.setColor(Color.RED);
                 shapeMapRenderer.circle(bomb.getPosition().x, bomb.getPosition().y, 0.2f,40);
 
                 if (bomb.checkHit()) {
-//                    bomb.boom();
+                    bomb.boom();
                     fortress.removeBomb(bomb);
                 } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
                     fortress.removeBomb(bomb);

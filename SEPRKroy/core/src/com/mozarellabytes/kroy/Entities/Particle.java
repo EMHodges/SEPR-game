@@ -36,10 +36,6 @@ public class Particle {
         return this.position;
     }
 
-    private Vector2 getMiddleOfTile(Vector2 pos) {
-        return new Vector2((int) pos.x + 0.5f, (int) pos.y + 0.5f);
-    }
-
     public void newUpdatePosition(float delta) {
         this.position = this.originalPosition.interpolate(this.targetPosition, 0.2f, Interpolation.circle);
     }
