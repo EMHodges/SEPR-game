@@ -32,8 +32,8 @@ public class Kroy extends Game {
 		parameter.size = 19;
 		smallFont = generator.generateFont(parameter);
 
-		this.setScreen(new ControlsScreen(this));
-		//this.setScreen(new SplashScreen(this));
+//		this.setScreen(new ControlsScreen(this));
+		this.setScreen(new SplashScreen(this));
 	//	this.setScreen(new GameScreen(this));
 	}
 

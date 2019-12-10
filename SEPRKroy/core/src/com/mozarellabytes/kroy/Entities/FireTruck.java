@@ -187,6 +187,7 @@ public class FireTruck extends Sprite {
                 spray = new WaterSpray(findFortressWithinRange(), this);
             } else {
                 spray.createParticle();
+                this.reserve -= this.AP;
             }
         }
     }

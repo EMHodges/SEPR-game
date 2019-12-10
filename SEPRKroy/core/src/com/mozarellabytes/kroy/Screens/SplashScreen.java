@@ -35,7 +35,7 @@ public class SplashScreen implements Screen {
         game.batch.end();
 
         if(TimeUtils.timeSinceMillis(startTime) > 3000){
-            game.setScreen(new MenuScreen(game));
+            game.setScreen(new ControlsScreen(game));
         }
     }
 
