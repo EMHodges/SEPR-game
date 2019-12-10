@@ -184,7 +184,7 @@ public class FireTruck extends Sprite {
     public void attack() {
         if (findFortressWithinRange() != null) {
             if (this.spray == null) {
-                spray = new WaterSpray(this.getPosition(), findFortressWithinRange(), this);
+                spray = new WaterSpray(findFortressWithinRange(), this);
             } else {
                 spray.createParticle();
             }
@@ -194,7 +194,7 @@ public class FireTruck extends Sprite {
     public void updateSpray(float delta) {
         if (this.spray != null) {
             for (Particle particle : this.spray.getParticles()) {
-                particle.updatePosition(delta);
+                particle.newUpdatePosition(delta);
             }
         }
     }

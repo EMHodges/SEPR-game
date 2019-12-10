@@ -2,7 +2,10 @@ package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
+import com.sun.scenario.animation.shared.InterpolationInterval;
+import javafx.scene.shape.Line;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -12,20 +15,20 @@ public class Particle {
     private Color colour;
     private Vector2 position;
     private Vector2 targetPosition;
+    private Vector2 originalPosition;
     private float velocity = 5f;
-    private FireTruck truck;
     private Fortress target;
-    private Random rand;
+    private float size;
 
-    public Particle(Vector2 end, FireTruck truck, Fortress target) {
+    public Particle(FireTruck truck, Fortress target) {
         Color[] colors = new Color[] { Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
         Color randomColor = colors[(int)( Math.random() * 4)];
         this.colour = randomColor;
         this.position = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
+        this.originalPosition = this.position;
         this.targetPosition = target.getPosition();
-        this.truck = truck;
         this.target = target;
-        this.rand = new Random();
+        this.size = (float) (Math.random()/5 + 0.1);
         createTargetPosition(target);
     }
 
@@ -33,14 +36,23 @@ public class Particle {
         return this.position;
     }
 
+    private Vector2 getMiddleOfTile(Vector2 pos) {
+        return new Vector2((int) pos.x + 0.5f, (int) pos.y + 0.5f);
+    }
+
+    public void newUpdatePosition(float delta) {
+        this.position = this.originalPosition.interpolate(this.targetPosition, 0.2f, Interpolation.circle);
+    }
+
     public void updatePosition(float delta) {
-        if (this.targetPosition.x > this.position.x) {
+        if (this.position.x < this.targetPosition.x) {
             position.x += this.velocity*delta;
-        } else if (this.targetPosition.x < this.position.x){
+        } else if (this.position.x > this.targetPosition.x){
             position.x -= this.velocity*delta;
-        } if(this.targetPosition.y > this.position.y){
+        }
+        if (this.position.y < this.targetPosition.y){
             position.y += this.velocity*delta;
-        } else if (this.targetPosition.y < this.position.y){
+        } else if (this.position.y > this.targetPosition.y){
             position.y -= this.velocity*delta;
         }
     }
@@ -49,22 +61,22 @@ public class Particle {
         return this.colour;
     }
 
-    public Vector2 getTargetPosition() {
-        return this.targetPosition;
-    }
-
     public boolean isHit() {
         return (((int) this.targetPosition.x == (int) this.position.x) && ((int) this.targetPosition.x == (int) this.position.x));
     }
 
     public void createTargetPosition(Fortress fortress) {
-        float xCoord = (float)(Math.random() * ((fortress.getArea().x + fortress.getArea().width) - fortress.getArea().x) + fortress.getArea().x);
-        float yCoord = (float)(Math.random() * ((fortress.getArea().y + fortress.getArea().height) - fortress.getArea().y) + fortress.getArea().y);
+        float xCoord = (float)(Math.random() - 0.5 + fortress.getPosition().x);
+        float yCoord = (float)(Math.random() - 0.5 + fortress.getPosition().y);
         this.targetPosition = new Vector2(xCoord, yCoord);
     }
 
     public Fortress getTarget() {
         return this.target;
+    }
+
+    public float getSize() {
+        return this.size;
     }
 
 }

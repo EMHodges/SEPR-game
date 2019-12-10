@@ -6,24 +6,17 @@ import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
 public class Bomb extends Sprite {
-    private Texture texture;
-    private Rectangle rect;
     private Vector2 position;
     private Vector2 targetPosition;
     private float velocity;
     private FireTruck truck;
-    private int lifespan;
-    private long timeCreated;
     private float damage;
 
-    public Bomb(float x, float y, FireTruck truck, float damage, int lifespan, float velocity) {
-        this.rect = new Rectangle();
+    public Bomb(float x, float y, FireTruck truck, float damage, float velocity) {
         this.position = new Vector2(x,y);
         this.velocity = velocity;
-        this.targetPosition = truck.getPosition();
+        this.targetPosition = getMiddleOfTile(truck.getPosition());
         this.truck = truck;
-        this.lifespan = lifespan;
-        this.timeCreated = System.currentTimeMillis();
         this.damage = damage;
     }
 
@@ -32,11 +25,10 @@ public class Bomb extends Sprite {
     }
 
     public boolean checkHit() {
-        return (((int) position.x == (int) truck.getX()) && ((int) position.y == (int) truck.getY()));
+        return (getMiddleOfTile(position).equals(getMiddleOfTile(truck.getPosition())));
     }
 
     public void update(float delta) {
-       // this.targetPosition = this.truck.getPosition();
         if (this.targetPosition.x > this.position.x){
             position.x += this.velocity*delta;
         } else if (this.targetPosition.x < this.position.x){
@@ -48,20 +40,16 @@ public class Bomb extends Sprite {
         }
     }
 
+    private Vector2 getMiddleOfTile(Vector2 pos) {
+        return new Vector2((int) pos.x + 0.5f, (int) pos.y + 0.5f);
+    }
+
     public void boom() {
         this.truck.fortressDamage(this.damage);
     }
 
-    public int getLifespan() {
-        return this.lifespan;
-    }
-
-    public long getTimeCreated() {
-        return this.timeCreated;
-    }
-
     public Vector2 getTargetPos(){
-        return targetPosition;
+        return this.targetPosition;
     }
 
 }

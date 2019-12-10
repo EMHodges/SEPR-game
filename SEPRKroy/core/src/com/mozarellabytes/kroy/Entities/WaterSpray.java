@@ -8,29 +8,17 @@ import java.util.ArrayList;
 public class WaterSpray {
 
     private ArrayList<Particle> spray;
-    private Vector2 start;
-    private Vector2 end;
     private FireTruck truck;
     private Fortress target;
 
-    public WaterSpray(Vector2 start, Fortress target, FireTruck truck) {
+    public WaterSpray(Fortress target, FireTruck truck) {
         this.spray = new ArrayList<Particle>();
-        this.start = start;
-        this.end = target.getPosition();
         this.truck = truck;
         this.target = target;
     }
 
     public void createParticle() {
-        this.spray.add(new Particle(this.end, this.truck, this.target));
-    }
-
-    public Vector2 getStart() {
-        return this.start;
-    }
-
-    public Vector2 getEnd() {
-        return this.end;
+        this.spray.add(new Particle(this.truck, this.target));
     }
 
     public ArrayList<Particle> getParticles() {

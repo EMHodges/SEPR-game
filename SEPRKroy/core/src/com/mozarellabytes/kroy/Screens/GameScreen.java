@@ -1,23 +1,16 @@
 package com.mozarellabytes.kroy.Screens;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.GlyphLayout;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
@@ -28,7 +21,6 @@ import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Utilities.GUI;
 
 import java.util.ArrayList;
-
 
 // when you click on another truck while a truck is following the path then try to move the path of the stationary truck
 public class GameScreen implements Screen {
@@ -82,7 +74,7 @@ public class GameScreen implements Screen {
         station = new FireStation(this,4,2);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(this, 12, 19, 5, 100, 20));
+        fortresses.add(new Fortress(this, 12, 19, 8, 10000, 10));
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
@@ -230,7 +222,7 @@ public class GameScreen implements Screen {
                         truck.damage(particle);
                         truck.getSpray().removeParticle(particle);
                     } else {
-                        shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y , 0.1f, 0.1f, particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
+                        shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y , particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
                     }
                 }
             }
@@ -249,12 +241,11 @@ public class GameScreen implements Screen {
                 bomb.update(delta);
                 shapeMapRenderer.setColor(Color.RED);
                 shapeMapRenderer.circle(bomb.getPosition().x, bomb.getPosition().y, 0.2f,40);
-                if((int)bomb.getPosition().x == bomb.getTargetPos().x && (int)bomb.getPosition().y == bomb.getTargetPos().y) {
+
+                if (bomb.checkHit()) {
+//                    bomb.boom();
                     fortress.removeBomb(bomb);
-                } else if (bomb.getTimeCreated() + bomb.getLifespan() < System.currentTimeMillis()) {
-                    fortress.removeBomb(bomb);
-                } else if (bomb.checkHit()) {
-                    bomb.boom();
+                } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
                     fortress.removeBomb(bomb);
                 }
             }
@@ -292,6 +283,7 @@ public class GameScreen implements Screen {
         renderer.dispose();
         shapeGUIRenderer.dispose();
         shapeMapRenderer.dispose();
+        batch.dispose();
     }
 
     // this function checks whether the coordinates given are on a road

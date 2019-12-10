@@ -33,7 +33,7 @@ public class Fortress {
         this.name = "Fortress";
         this.bombs = new ArrayList<Bomb>();
         this.lastFire = System.currentTimeMillis();
-        this.delay = 3000;
+        this.delay = 1500;
     }
 
     public void checkRange(FireTruck target) {
@@ -55,7 +55,7 @@ public class Fortress {
     private void attack(FireTruck target){
         if (this.lastFire + this.delay < System.currentTimeMillis()) {
             this.lastFire = System.currentTimeMillis();
-            this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.AP, 5000, 2f));
+            this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.AP, 3f));
         }
     }
 

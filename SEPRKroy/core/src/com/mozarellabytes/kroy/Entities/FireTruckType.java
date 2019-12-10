@@ -4,7 +4,7 @@ public enum FireTruckType {
 
     Speed (100, 100, 2, "Red", "Speed Truck", 5, 0.08f),
     Tank (100,250,1, "Green", "Tank Truck", 5, 0.08f),
-    Ocean(250,100,1, "Blue", "Ocean Truck", 5, 0.08f);
+    Ocean(250,100,1, "Blue", "Ocean Truck", 8, 0.08f);
 
     private int maxReserve;
     private int maxHP;

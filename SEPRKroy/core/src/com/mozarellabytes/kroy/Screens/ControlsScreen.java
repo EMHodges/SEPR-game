@@ -223,7 +223,14 @@ public class ControlsScreen implements Screen {
     public void dispose() {
         batch.dispose();
         renderer.dispose();
-
+        font.dispose();
+        font2.dispose();
+        font3.dispose();
+        font4.dispose();
+        fortress.dispose();
+        redTruck.dispose();
+        redEndTileImage.dispose();
+        redTileImage.dispose();
     }
 
     public int damageHP() {

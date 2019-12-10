@@ -22,7 +22,6 @@ public class GameOverScreen implements Screen {
 
     private GlyphLayout layout;
     private String text;
-    private String clicktext;
 
     public GameOverScreen(Kroy game, boolean won) {
         this.game = game;
