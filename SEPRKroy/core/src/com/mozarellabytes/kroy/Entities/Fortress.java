@@ -105,5 +105,9 @@ public class Fortress {
     public void removeBomb(Bomb bomb) {
         this.bombs.remove(bomb);
     }
+
+    public long lastFired() {
+        return this.lastFire;
+    }
 }
 

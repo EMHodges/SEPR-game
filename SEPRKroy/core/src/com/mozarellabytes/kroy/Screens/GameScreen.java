@@ -229,7 +229,10 @@ public class GameScreen implements Screen {
             Bomb bomb = this.fortress.getBombs().get(i);
             bomb.update(delta);
             shapeMapRenderer.rect(bomb.getPosition().x, bomb.getPosition().y,0.2f,0.2f, Color.GREEN, Color.GREEN, Color.GREEN, Color.GREEN);
-            if (bomb.checkHit()) {
+            if (bomb.getTimeCreated() + bomb.getLifespan() < System.currentTimeMillis()) {
+                this.fortress.removeBomb(bomb);
+                Gdx.app.log("Bomb timed out", "");
+            } else if (bomb.checkHit()) {
                 bomb.getTarget().fortressDamage(10);
                 this.fortress.removeBomb(bomb);
                 Gdx.app.log("Target hit", "");
