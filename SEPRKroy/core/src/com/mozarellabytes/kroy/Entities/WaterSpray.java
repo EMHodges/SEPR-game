@@ -29,4 +29,8 @@ public class WaterSpray {
         this.spray.remove(particle);
     }
 
+    public Fortress getTarget() {
+        return this.target;
+    }
+
 }

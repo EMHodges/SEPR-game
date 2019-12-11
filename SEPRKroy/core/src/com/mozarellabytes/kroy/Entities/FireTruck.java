@@ -133,7 +133,10 @@ public class FireTruck extends Sprite {
         if (coordinate.y < 24) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
                 if (this.path.isEmpty()) {
-                    return true;
+                    // HERE IS THE ISSUE
+                    if ((this.getPosition().equals(coordinate))) {
+                        return true;
+                    }
                 } else {
                     if (!this.path.last().equals(coordinate)) {
                         if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
@@ -167,7 +170,6 @@ public class FireTruck extends Sprite {
             path.removeFirst();
         } else {
             moving = false;
-            this.trailPath.clear();
         }
     }
 
@@ -182,10 +184,12 @@ public class FireTruck extends Sprite {
     }
 
     public void attack() {
-        if (findFortressWithinRange() != null) {
+        if (findFortressWithinRange() == null) {
+            this.spray = null;
+        } else {
             if (this.spray == null) {
                 spray = new WaterSpray(findFortressWithinRange(), this);
-            } else {
+            } else if (this.spray.getTarget().equals(findFortressWithinRange())) {
                 spray.createParticle();
                 this.reserve -= this.AP;
             }
