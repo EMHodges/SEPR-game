@@ -244,6 +244,7 @@ public class GameScreen implements Screen {
 
                 if (bomb.checkHit()) {
                     bomb.boom();
+                    camShake.shakeIt(.2f);
                     fortress.removeBomb(bomb);
                 } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
                     fortress.removeBomb(bomb);
