@@ -1,6 +1,7 @@
 package com.mozarellabytes.kroy;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.Gdx;
 
 public class GameState {
 
@@ -9,6 +10,7 @@ public class GameState {
 
     public GameState() {
         this.activeFireTrucks = 0;
+        this.fortressesDestroyed = 0;
         // do we need this.fortressesDestroyed to also = 0
     }
 
@@ -25,7 +27,8 @@ public class GameState {
     }
 
     public boolean checkWin() {
-        if (fortressesDestroyed == 1) {
+        Gdx.app.log("fortressesDestroyed", String.valueOf(fortressesDestroyed));
+        if (fortressesDestroyed == 3) {
             return true;
         }
         return false;

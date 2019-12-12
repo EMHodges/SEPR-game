@@ -105,7 +105,6 @@ public class GameInputHandler implements InputProcessor {
         if (gameScreen.selectedTruck != null) {
             for (FireTruck truck : gameScreen.station.getTrucks()) {
                 if (!truck.equals(gameScreen.selectedTruck)) {
-                    Gdx.app.log("Trail path", gameScreen.selectedTruck.trailPath.toString());
                     if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
                         if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
                                 || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {

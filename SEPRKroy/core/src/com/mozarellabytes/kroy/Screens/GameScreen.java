@@ -182,9 +182,10 @@ public class GameScreen implements Screen {
 
         }
 
-        for (Fortress fortress: fortresses) {
-            if(fortress.getHP() <= 0) {
-                gameState.removeFortress();
+        for (int i=0; i<fortresses.size();i++) {
+            if(fortresses.get(i).getHP() <= 0) {
+                gameState.addFortress();
+                fortresses.remove(fortresses.get(i));
             }
         }
 
