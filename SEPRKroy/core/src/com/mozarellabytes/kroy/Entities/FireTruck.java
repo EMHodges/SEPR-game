@@ -8,6 +8,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
+import java.util.ArrayList;
+
 public class FireTruck extends Sprite {
 
     private GameScreen gameScreen;
@@ -28,7 +30,8 @@ public class FireTruck extends Sprite {
 
     private String name;
 
-    private WaterSpray spray;
+    private ArrayList<Particle> spray;
+    private Fortress target;
 
     private Texture trailImage;
     private Texture trailImageEnd;
@@ -55,6 +58,8 @@ public class FireTruck extends Sprite {
         this.y = y;
 
         this.attacking = false;
+
+        this.spray = new ArrayList<Particle>();
 
         lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));
         lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
@@ -133,7 +138,6 @@ public class FireTruck extends Sprite {
         if (coordinate.y < 24) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
                 if (this.path.isEmpty()) {
-                    // HERE IS THE ISSUE
                     if ((this.getPosition().equals(coordinate))) {
                         return true;
                     }
@@ -184,22 +188,16 @@ public class FireTruck extends Sprite {
     }
 
     public void attack() {
-        if (findFortressWithinRange() == null) {
-            this.spray = null;
-        } else {
-            if (this.spray == null) {
-                spray = new WaterSpray(findFortressWithinRange(), this);
-            } else if (this.spray.getTarget().equals(findFortressWithinRange())) {
-                spray.createParticle();
-                this.reserve -= this.AP;
-            }
+        if (findFortressWithinRange() != null && this.reserve > 0) {
+            this.spray.add(new Particle(this, findFortressWithinRange()));
+            this.reserve -= Math.min(this.reserve, this.AP);
         }
     }
 
     public void updateSpray(float delta) {
         if (this.spray != null) {
-            for (Particle particle : this.spray.getParticles()) {
-                particle.newUpdatePosition(delta);
+            for (Particle particle : this.spray) {
+                particle.updatePosition(delta);
             }
         }
     }
@@ -265,8 +263,12 @@ public class FireTruck extends Sprite {
         return this.range;
     }
 
-    public WaterSpray getSpray() {
+    public ArrayList<Particle> getSpray() {
         return this.spray;
+    }
+
+    public void removeParticle(Particle particle) {
+        this.spray.remove(particle);
     }
 }
 

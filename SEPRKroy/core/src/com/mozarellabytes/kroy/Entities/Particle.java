@@ -1,14 +1,8 @@
 package com.mozarellabytes.kroy.Entities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
-import com.sun.scenario.animation.shared.InterpolationInterval;
-import javafx.scene.shape.Line;
-
-import java.util.ArrayList;
-import java.util.Random;
 
 public class Particle {
 
@@ -16,7 +10,6 @@ public class Particle {
     private Vector2 position;
     private Vector2 targetPosition;
     private Vector2 originalPosition;
-    private float velocity = 5f;
     private Fortress target;
     private float size;
 
@@ -36,21 +29,8 @@ public class Particle {
         return this.position;
     }
 
-    public void newUpdatePosition(float delta) {
-        this.position = this.originalPosition.interpolate(this.targetPosition, 0.2f, Interpolation.circle);
-    }
-
     public void updatePosition(float delta) {
-        if (this.position.x < this.targetPosition.x) {
-            position.x += this.velocity*delta;
-        } else if (this.position.x > this.targetPosition.x){
-            position.x -= this.velocity*delta;
-        }
-        if (this.position.y < this.targetPosition.y){
-            position.y += this.velocity*delta;
-        } else if (this.position.y > this.targetPosition.y){
-            position.y -= this.velocity*delta;
-        }
+        this.position = this.originalPosition.interpolate(this.targetPosition, 0.2f, Interpolation.circle);
     }
 
     public Color getColour() {

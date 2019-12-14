@@ -218,15 +218,13 @@ public class GameScreen implements Screen {
             shapeMapRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
             shapeMapRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
             shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-            if (truck.getSpray() != null) {
-                for (int i=0; i<truck.getSpray().getParticles().size(); i++) {
-                    Particle particle = truck.getSpray().getParticles().get(i);
-                    if (particle.isHit()) {
-                        truck.damage(particle);
-                        truck.getSpray().removeParticle(particle);
-                    } else {
-                        shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y , particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
-                    }
+            for (int i=0; i<truck.getSpray().size(); i++) {
+                Particle particle = truck.getSpray().get(i);
+                if (particle.isHit()) {
+                    truck.damage(particle);
+                    truck.removeParticle(particle);
+                } else {
+                    shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y , particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
                 }
             }
         }

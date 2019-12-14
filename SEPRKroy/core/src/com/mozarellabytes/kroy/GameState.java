@@ -27,7 +27,6 @@ public class GameState {
     }
 
     public boolean checkWin() {
-        Gdx.app.log("fortressesDestroyed", String.valueOf(fortressesDestroyed));
         if (fortressesDestroyed == 3) {
             return true;
         }
