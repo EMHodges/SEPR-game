@@ -22,6 +22,8 @@ public class MenuInputHandler implements InputProcessor {
                 Gdx.app.exit();
                 System.exit(1);
                 break;
+            case Input.Keys.C:
+                menu.toControlScreen();
         }
         return true;
     }

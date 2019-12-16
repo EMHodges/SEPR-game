@@ -24,7 +24,10 @@ public class ControlScreenInputHandler implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                controlsScreen.toMenuScreen();
+                controlsScreen.changeScreen();
+                break;
+            case Input.Keys.C:
+                controlsScreen.changeScreen();
                 break;
         }
         return true;
@@ -46,7 +49,7 @@ public class ControlScreenInputHandler implements InputProcessor {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = controlsScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
         if(controlsScreen.getExitButton().contains(position.x, position.y)){
-            controlsScreen.toMenuScreen();
+            controlsScreen.changeScreen();
         }
         return false;
     }

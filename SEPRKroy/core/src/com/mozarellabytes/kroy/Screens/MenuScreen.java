@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
+import com.mozarellabytes.kroy.Utilities.ScreenHandler;
 
 import java.awt.*;
 
@@ -120,4 +121,6 @@ public class MenuScreen implements Screen {
         playHoverTexture.dispose();
         playIdleTexture.dispose();
     }
+
+    public void toControlScreen(){ ScreenHandler.ToControls(game, this, "menu"); }
 }

@@ -14,11 +14,8 @@ import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
-import com.mozarellabytes.kroy.Utilities.CameraShake;
-import com.mozarellabytes.kroy.Utilities.Constants;
-import com.mozarellabytes.kroy.Utilities.GameInputHandler;
+import com.mozarellabytes.kroy.Utilities.*;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
-import com.mozarellabytes.kroy.Utilities.GUI;
 
 import java.util.ArrayList;
 
@@ -343,6 +340,11 @@ public class GameScreen implements Screen {
         }
         return false;
     }
+
+    public void toControlScreen() {
+        ScreenHandler.ToControls(game, this, "game");
+    }
+
 
 }
 

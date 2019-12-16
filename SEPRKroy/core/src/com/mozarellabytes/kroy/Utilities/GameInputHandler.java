@@ -30,6 +30,9 @@ public class GameInputHandler implements InputProcessor {
                     truck.setAttacking(true);
                 }
                 break;
+            case Input.Keys.C:
+                gameScreen.toControlScreen();
+                break;
             case Input.Keys.P:
                 gameScreen.camShake.shakeIt(.2f);
         }

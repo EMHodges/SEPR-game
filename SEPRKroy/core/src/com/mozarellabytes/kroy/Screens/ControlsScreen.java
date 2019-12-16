@@ -13,6 +13,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.ControlScreenInputHandler;
+import com.mozarellabytes.kroy.Utilities.GameInputHandler;
+import com.mozarellabytes.kroy.Utilities.ScreenHandler;
 
 import java.awt.*;
 
@@ -40,9 +42,14 @@ public class ControlsScreen implements Screen {
     private ShapeRenderer renderer;
     private int HP;
     private int count;
+    private String screen;
 
-    public ControlsScreen(Kroy game) {
+    private final Screen parent;
+
+    public ControlsScreen(Kroy game, Screen parent, String screen) {
         this.game = game;
+        this.parent = parent;
+        this.screen = screen;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
@@ -102,7 +109,7 @@ public class ControlsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0.3f, 0.7f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-    //    Color purple = new Color(65f/255f,30f/255f,80f/255f,1);
+        //    Color purple = new Color(65f/255f,30f/255f,80f/255f,1);
 
         camera.update();
         batch.setProjectionMatrix(camera.combined);
@@ -242,9 +249,23 @@ public class ControlsScreen implements Screen {
         }
     }
 
-    public void toMenuScreen() { this.game.setScreen(new MenuScreen(this.game)); }
+    // public void toMenuScreen() { this.game.setScreen(new MenuScreen(this.game)); }
+
+    public void changeScreen() {
+        if (this.screen == "game") {
+            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent));
+            this.game.setScreen(parent);
+            // ScreenHandler.ToGame(parent);
+        } else if (this.screen == "menu"){
+            ScreenHandler.ToMenu(game);
+        }
+
+    }
 
     public Rectangle getExitButton(){
+
         return this.exitButton;
     }
+
+
 }
