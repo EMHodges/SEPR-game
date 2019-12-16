@@ -62,7 +62,7 @@ public class GameScreen implements Screen {
         shapeMapRenderer.setProjectionMatrix(camera.combined);
 
         shapeGUIRenderer = new ShapeRenderer();
-
+        // test
         gui = new GUI(game, shapeGUIRenderer, 275, 275);
 
         Gdx.input.setInputProcessor(new GameInputHandler(this));
