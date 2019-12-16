@@ -27,6 +27,7 @@ public class FireTruck extends Sprite {
     public Queue<Vector2> trailPath;
     private boolean moving;
     private boolean attacking;
+    private boolean inCollision;
 
     private String name;
 
@@ -53,6 +54,7 @@ public class FireTruck extends Sprite {
         this.name = type.getName();
         this.AP = type.getAP();
         this.range = type.getRange();
+        this.inCollision = false;
 
         this.x = x;
         this.y = y;
@@ -168,12 +170,16 @@ public class FireTruck extends Sprite {
                     this.trailPath.removeFirst();
                 }
             }
-            changeSprite(nextTile);
-
+            if (!this.inCollision) {
+                changeSprite(nextTile);
+            }
             lastCoordinate = nextTile;
             path.removeFirst();
         } else {
             moving = false;
+        }
+        if (this.path.isEmpty() && inCollision){
+            inCollision = false;
         }
     }
 
@@ -215,6 +221,10 @@ public class FireTruck extends Sprite {
             }
         }
         return null;
+    }
+
+    public void setCollision(){
+        this.inCollision = true;
     }
 
     public void repair() {

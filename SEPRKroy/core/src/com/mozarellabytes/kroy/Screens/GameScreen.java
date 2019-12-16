@@ -143,6 +143,8 @@ public class GameScreen implements Screen {
 
             truck.attack();
 
+            station.checkCollision();
+
             // move the position of the truck
             truck.mouseMove();
 

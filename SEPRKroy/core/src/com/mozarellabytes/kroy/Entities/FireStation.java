@@ -78,4 +78,49 @@ public class FireStation {
         gameScreen.gameState.removeFireTruck();
     }
 
+    public void checkCollision() {
+        for (FireTruck truck : trucks) {
+            boolean isCollision = false;
+            for (int i = 0; i < trucks.size(); i++) {
+                FireTruck truck2 = trucks.get(i);
+                if (!(truck.equals(truck2))) {
+                    if (!truck.trailPath.isEmpty() && !truck.getPosition().equals(spawnTile)) {
+                        if (!truck2.trailPath.isEmpty() && truck.trailPath.first().equals(truck2.trailPath.first())) {
+                            truck.setCollision();
+                            truck2.setCollision();
+                            resetTrucks(truck, truck2, true);
+                        }
+                        else if (truck.trailPath.first().equals(truck2.getPosition())) {
+                            resetTrucks(truck, truck2, false);
+                        }
+                        else if (truck.trailPath.first().equals(new Vector2(Math.round(truck2.getPosition().x),Math.round(truck2.getPosition().y)))){
+                            resetTrucks(truck, truck2, false);
+                        }
+                        else if (truck.trailPath.first().equals(new Vector2((float)Math.floor(truck2.getPosition().x),(float)Math.floor(truck2.getPosition().y)))){
+                            resetTrucks(truck, truck2, false);
+                        }
+                    }
+                }
+            }
+
+        }
+    }
+
+    private void resetTrucks(FireTruck truck, FireTruck truck2, boolean bothMoving) {
+        if (bothMoving){
+            Vector2 hold = truck.trailPath.first();
+            truck2.path.clear();
+            truck2.trailPath.clear();
+            truck.path.clear();
+            truck.trailPath.clear();
+            truck2.addTileToPath(truck2.getPosition());
+            truck2.addTileToPath(hold);
+            truck.addTileToPath(truck.getPosition());
+            truck.addTileToPath(new Vector2 ((float)Math.floor(truck.getX()),(float)Math.floor(truck.getY())));
+        } else {
+            truck.path.clear();
+            truck.trailPath.clear();
+        }
+    }
+
 }
