@@ -132,8 +132,9 @@ public class FireTruck extends Sprite {
         this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
     }
 
-    public void resetTilePath() {
+    public void resetPath() {
         this.path.clear();
+        this.trailPath.clear();
     }
 
     public boolean isValidMove(Vector2 coordinate) {

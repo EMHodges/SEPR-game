@@ -1,6 +1,7 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
@@ -14,6 +15,8 @@ public class FireStation {
     private Vector2 spawnTile;
     private Vector2 bayTile1;
     private Vector2 bayTile2;
+
+    private Sound horn;
 
     private String name;
 
@@ -29,6 +32,7 @@ public class FireStation {
         this.trucks = new ArrayList<FireTruck>();
         this.texture = new Texture(Gdx.files.internal("sprites/station_wider.png"));
         this.name = "Fire Station";
+        this.horn = Gdx.audio.newSound(Gdx.files.internal("sounds/horn.mp3"));
     }
 
     public ArrayList<FireTruck> getTrucks() {
@@ -107,19 +111,19 @@ public class FireStation {
     }
 
     private void resetTrucks(FireTruck truck, FireTruck truck2, boolean bothMoving) {
-        if (bothMoving){
+        this.horn.play();
+        if (bothMoving) {
             Vector2 hold = truck.trailPath.first();
-            truck2.path.clear();
-            truck2.trailPath.clear();
-            truck.path.clear();
-            truck.trailPath.clear();
-            truck2.addTileToPath(truck2.getPosition());
-            truck2.addTileToPath(hold);
+
+            truck.resetPath();
             truck.addTileToPath(truck.getPosition());
             truck.addTileToPath(new Vector2 ((float)Math.floor(truck.getX()),(float)Math.floor(truck.getY())));
+
+            truck2.resetPath();
+            truck2.addTileToPath(truck2.getPosition());
+            truck2.addTileToPath(hold);
         } else {
-            truck.path.clear();
-            truck.trailPath.clear();
+            truck.resetPath();
         }
     }
 
