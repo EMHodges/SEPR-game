@@ -292,29 +292,20 @@ public class GameScreen implements Screen {
         return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
     }
 
-    // this function is used to check whether a player clicks on
-    // a truck, then makes that truck the active truck so that
-    // operations such as adding to a trail can occur
     public boolean checkClick(Vector2 position) {
-        // for each truck, but in reverse order
-        // so that you can click on the top truck the player can see
-        for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
-
-            // if there is a truck where the player clicked
-            if (position.equals(this.station.getTruck(i).getPosition())) {
-
-                // sets the truck to the selected truck
+        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
+        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
+            FireTruck selectedTruck = this.station.getTruck(i);
+            Vector2 truckTile = new Vector2((float) Math.round((selectedTruck.getX())), (float) Math.round(selectedTruck.getY()));
+            if (squareClicked.equals(truckTile)) {
                 this.selectedTruck = this.station.getTruck(i);
                 this.selectedEntity = this.station.getTruck(i);
-
-                // returns true to show that a truck is selected
                 return true;
             }
         }
-
-        // truck was not selected
         return false;
     }
+
 
     public ArrayList<Fortress> getFortresses() {
         return this.fortresses;
