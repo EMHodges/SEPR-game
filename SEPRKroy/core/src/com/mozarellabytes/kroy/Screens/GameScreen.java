@@ -187,11 +187,11 @@ public class GameScreen implements Screen {
 
         }
 
-        for (int i=0; i<fortresses.size();i++) {
+        for (int i=0; i<fortresses.size(); i++) {
             if(fortresses.get(i).getHP() <= 0) {
                 gameState.addFortress();
                 fortresses.remove(fortresses.get(i));
-                SoundFX.sfx_fortress_destroyed.play(1);
+                SoundFX.sfx_fortress_destroyed.play();
             }
         }
 
