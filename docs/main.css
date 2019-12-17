@@ -2,16 +2,23 @@ html {
     scroll-behavior: smooth;
 }
 
-.jumbo-background {
-    background-color: #D5FFE7;
+.bg {
+    background-image: url("assets/menuscreen_blank.png");
+    background-position: top;
+    background-repeat: no-repeat;
+    background-size: cover;
+    padding-top: 25em;
+    padding-bottom: 15em;
+}
+
+.buttons {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
 }
 
 .jumbo-background1 {
     background-color: #F4DAFE;
-}
-
-.jumbotron {
-    margin-bottom: 0;
 }
 
 .card-title {
