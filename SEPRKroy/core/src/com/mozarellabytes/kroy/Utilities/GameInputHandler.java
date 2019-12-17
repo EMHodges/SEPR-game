@@ -27,8 +27,10 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.A:
-                SoundFX.sfx_truck_attack.loop();
-                SoundFX.sfx_truck_attack.play();
+                if (SoundFX.music_enabled) {
+                    SoundFX.sfx_truck_attack.loop();
+                    SoundFX.sfx_truck_attack.play();
+                }
                 for (FireTruck truck: gameScreen.station.getTrucks()){
                     truck.setAttacking(true);
                 }
@@ -38,6 +40,15 @@ public class GameInputHandler implements InputProcessor {
                 break;
             case Input.Keys.P:
                 gameScreen.camShake.shakeIt(.2f);
+                break;
+            case Input.Keys.F:
+                SoundFX.music_enabled = false;
+                SoundFX.StopMusic();
+                break;
+            case Input.Keys.G:
+                SoundFX.music_enabled = true;
+                SoundFX.PlayMusic();
+
         }
         return true;
     }

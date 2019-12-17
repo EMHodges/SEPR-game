@@ -66,7 +66,9 @@ public class Fortress {
         if (this.lastFire + this.delay < System.currentTimeMillis()) {
             this.lastFire = System.currentTimeMillis();
             this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.AP, 3f));
-            SoundFX.sfx_fortress_attack.play();
+            if (SoundFX.music_enabled) {
+                SoundFX.sfx_fortress_attack.play();
+            }
         }
     }
 

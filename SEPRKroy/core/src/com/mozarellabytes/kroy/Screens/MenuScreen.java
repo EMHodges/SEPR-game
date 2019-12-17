@@ -34,7 +34,7 @@ public class MenuScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
-        backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank.png"), true);
+        backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         playIdleTexture = new Texture(Gdx.files.internal("ui/start_idle.png"), true);
@@ -49,9 +49,10 @@ public class MenuScreen implements Screen {
 
         ih = new MenuInputHandler(this);
 
-        SoundFX.sfx_menu.setLooping(true);
-        SoundFX.sfx_menu.setVolume(.5f);
-        SoundFX.sfx_menu.play();
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_menu.setLooping(true);
+            SoundFX.sfx_menu.play();
+        }
 
         currentPlayTexture = playIdleTexture;
         currentControlsTexture = controlsIdleTexture;
