@@ -16,7 +16,6 @@ public class DesktopLauncher {
 		config.vSyncEnabled = true;
 		config.forceExit = true;
 		config.useHDPI = true;
-
 		new LwjglApplication(new Kroy(), config);
 	}
 }

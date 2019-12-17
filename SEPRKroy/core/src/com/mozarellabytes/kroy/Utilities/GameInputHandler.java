@@ -72,25 +72,33 @@ public class GameInputHandler implements InputProcessor {
                 gameScreen.selectedTruck.resetPath();
                 gameScreen.selectedTruck.addTileToPath(position2d);
             } else {
-                if (!gameScreen.checkTrailClick(position2d)) {
+                if (!gameScreen.checkTrailClick(position2d) && !checkFortressClick(position2d)) {
                     gameScreen.selectedTruck = null;
                     gameScreen.selectedEntity = null;
                 }
             }
         } else {
-            boolean selected = false;
-            for (Fortress fortress : gameScreen.getFortresses()) {
-                if (fortress.getArea().contains(position2d)) {
-                    gameScreen.selectedEntity = fortress;
-                    selected = true;
-                }
-            }
-            if (!selected) {
-                gameScreen.selectedTruck = null;
-                gameScreen.selectedEntity = null;
-            }
+            checkFortressClick(position2d);
         }
         return true;
+    }
+
+    private Boolean checkFortressClick(Vector2 position2d) {
+        boolean selected = false;
+        for (Fortress fortress : gameScreen.getFortresses()) {
+            if (fortress.getArea().contains(position2d)) {
+                Gdx.app.log(fortress.getName(), fortress.getArea().toString());
+                gameScreen.selectedEntity = fortress;
+                selected = true;
+            }
+        }
+        if (selected) {
+            return true;
+        } else {
+            gameScreen.selectedTruck = null;
+            gameScreen.selectedEntity = null;
+            return false;
+        }
     }
 
     @Override
