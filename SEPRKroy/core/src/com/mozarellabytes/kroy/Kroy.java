@@ -8,10 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.mozarellabytes.kroy.Screens.ControlsScreen;
-import com.mozarellabytes.kroy.Screens.GameOverScreen;
-import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Screens.SplashScreen;
+import com.mozarellabytes.kroy.Screens.*;
 
 public class Kroy extends Game {
 
@@ -32,8 +29,10 @@ public class Kroy extends Game {
 		parameter.size = 19;
 		smallFont = generator.generateFont(parameter);
 
+		this.setScreen(new MenuScreen(this));
+
 //		this.setScreen(new ControlsScreen(this));
-		this.setScreen(new SplashScreen(this));
+		//this.setScreen(new SplashScreen(this));
 	//	this.setScreen(new GameScreen(this));
 	}
 

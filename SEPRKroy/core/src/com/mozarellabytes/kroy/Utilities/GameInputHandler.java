@@ -3,6 +3,7 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
@@ -26,6 +27,8 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.A:
+                SoundFX.sfx_truck_attack.loop();
+                SoundFX.sfx_truck_attack.play();
                 for (FireTruck truck: gameScreen.station.getTrucks()){
                     truck.setAttacking(true);
                 }
@@ -43,6 +46,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean keyUp(int keycode) {
         switch (keycode) {
             case Input.Keys.A:
+                SoundFX.sfx_truck_attack.stop();
                 for (FireTruck truck : gameScreen.station.getTrucks()) {
                     truck.setAttacking(false);
                 }

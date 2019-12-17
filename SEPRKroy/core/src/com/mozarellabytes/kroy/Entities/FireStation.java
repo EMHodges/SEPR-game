@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import java.util.ArrayList;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 public class FireStation {
     private final GameScreen gameScreen;
@@ -15,8 +16,6 @@ public class FireStation {
     private Vector2 spawnTile;
     private Vector2 bayTile1;
     private Vector2 bayTile2;
-
-    private Sound horn;
 
     private String name;
 
@@ -32,7 +31,6 @@ public class FireStation {
         this.trucks = new ArrayList<FireTruck>();
         this.texture = new Texture(Gdx.files.internal("sprites/station_wider.png"));
         this.name = "Fire Station";
-        this.horn = Gdx.audio.newSound(Gdx.files.internal("sounds/horn.mp3"));
     }
 
     public ArrayList<FireTruck> getTrucks() {
@@ -52,6 +50,7 @@ public class FireStation {
     }
 
     public void spawn(FireTruckType type) {
+        SoundFX.sfx_truck_spawn.play();
         this.trucks.add(new FireTruck(gameScreen, this.spawnTile.x, this.spawnTile.y, type ));
         gameScreen.gameState.addFireTruck();
     }
@@ -111,7 +110,7 @@ public class FireStation {
     }
 
     private void resetTrucks(FireTruck truck, FireTruck truck2, boolean bothMoving) {
-        this.horn.play();
+        SoundFX.sfx_horn.play();
         if (bothMoving) {
             Vector2 hold = truck.trailPath.first();
 

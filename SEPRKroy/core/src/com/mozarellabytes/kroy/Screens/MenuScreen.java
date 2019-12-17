@@ -1,12 +1,14 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
 import com.mozarellabytes.kroy.Utilities.ScreenHandler;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.awt.*;
 
@@ -40,6 +42,10 @@ public class MenuScreen implements Screen {
 
         ih = new MenuInputHandler(this);
 
+        SoundFX.sfx_menu.setLooping(true);
+        SoundFX.sfx_menu.setVolume(.5f);
+        SoundFX.sfx_menu.play();
+
         currentPlayTexture = playIdleTexture;
 
         playButton = new Rectangle();
@@ -53,6 +59,7 @@ public class MenuScreen implements Screen {
 
     public void toGameScreen() {
         game.setScreen(new GameScreen(game));
+        this.dispose();
     }
 
     public Rectangle getPlayButton() {
@@ -120,6 +127,7 @@ public class MenuScreen implements Screen {
         currentPlayTexture.dispose();
         playHoverTexture.dispose();
         playIdleTexture.dispose();
+        SoundFX.sfx_menu.stop();
     }
 
     public void toControlScreen(){ ScreenHandler.ToControls(game, this, "menu"); }

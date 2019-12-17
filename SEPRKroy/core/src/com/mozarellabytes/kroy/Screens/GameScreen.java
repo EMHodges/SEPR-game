@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -68,6 +69,9 @@ public class GameScreen implements Screen {
 
         camShake = new CameraShake();
 
+        SoundFX.sfx_soundtrack.setVolume(.5f);
+        SoundFX.sfx_soundtrack.play();
+
         station = new FireStation(this,4,2);
 
         fortresses = new ArrayList<Fortress>();
@@ -109,8 +113,10 @@ public class GameScreen implements Screen {
         // check to see if the game has been won/lost
         if (gameState.checkWin()) {
             this.game.setScreen(new GameOverScreen(this.game, true));
+            this.dispose();
         } else if (gameState.checkLose()) {
             this.game.setScreen(new GameOverScreen(this.game, false));
+            this.dispose();
         }
 
         // update camera
@@ -185,6 +191,7 @@ public class GameScreen implements Screen {
             if(fortresses.get(i).getHP() <= 0) {
                 gameState.addFortress();
                 fortresses.remove(fortresses.get(i));
+                SoundFX.sfx_fortress_destroyed.play(1);
             }
         }
 
@@ -285,6 +292,7 @@ public class GameScreen implements Screen {
         shapeGUIRenderer.dispose();
         shapeMapRenderer.dispose();
         batch.dispose();
+        SoundFX.sfx_soundtrack.stop();
     }
 
     // this function checks whether the coordinates given are on a road

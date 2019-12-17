@@ -1,10 +1,12 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -56,6 +58,7 @@ public class Fortress {
         if (this.lastFire + this.delay < System.currentTimeMillis()) {
             this.lastFire = System.currentTimeMillis();
             this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.AP, 3f));
+            SoundFX.sfx_fortress_attack.play();
         }
     }
 

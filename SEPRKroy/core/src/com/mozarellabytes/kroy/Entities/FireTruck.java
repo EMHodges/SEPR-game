@@ -2,11 +2,13 @@ package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
 
@@ -243,6 +245,7 @@ public class FireTruck extends Sprite {
     public float getReserve() { return this.reserve; }
 
     public void fortressDamage(float HP) {
+        SoundFX.sfx_truck_damage.play();
         this.HP -= HP;
     }
 
