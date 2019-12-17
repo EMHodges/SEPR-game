@@ -75,9 +75,9 @@ public class GameScreen implements Screen {
         station = new FireStation(this,4,2);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(this, 12, 19, FortressType.Default));
-        fortresses.add(new Fortress(this, 22, 17, FortressType.Walmgate));
-        fortresses.add(new Fortress(this, 19, 3, FortressType.Clifford));
+        fortresses.add(new Fortress(this, 12, 20, FortressType.Default));
+        fortresses.add(new Fortress(this, 30, 17, FortressType.Walmgate));
+        fortresses.add(new Fortress(this, 16, 3, FortressType.Clifford));
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
@@ -113,10 +113,8 @@ public class GameScreen implements Screen {
         // check to see if the game has been won/lost
         if (gameState.checkWin()) {
             this.game.setScreen(new GameOverScreen(this.game, true));
-            this.dispose();
         } else if (gameState.checkLose()) {
             this.game.setScreen(new GameOverScreen(this.game, false));
-            this.dispose();
         }
 
         // update camera

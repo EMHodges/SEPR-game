@@ -85,10 +85,12 @@ public class MenuScreen implements Screen {
     }
 
     public void clickedPlayButton() {
+        SoundFX.sfx_button_clicked.play();
         currentPlayTexture = playClickedTexture;
     }
 
     public void clickedControlsButton() {
+        SoundFX.sfx_button_clicked.play();
         currentControlsTexture = controlsClickedTexture;
     }
 

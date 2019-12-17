@@ -43,7 +43,7 @@ public class Fortress {
         this.rand = new Random();
         this.bombs = new ArrayList<Bomb>();
         this.lastFire = System.currentTimeMillis();
-        this.area = new Rectangle(this.position.x, this.position.y, this.w, this.h);
+        this.area = new Rectangle(this.position.x-this.w/2, this.position.y-this.h/2, this.w, this.h);
     }
 
     public void checkRange(FireTruck target) {
