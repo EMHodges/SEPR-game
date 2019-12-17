@@ -79,6 +79,7 @@ public class MenuInputHandler implements InputProcessor {
         return false;
     }
 
+
     @Override
     public boolean scrolled(int amount) {
         return false;
