@@ -29,7 +29,7 @@ public class FireStation {
         this.bayTile2 = new Vector2(this.x + 1, this.y);
         this.spawnTile = new Vector2(this.x + 2, this.y);
         this.trucks = new ArrayList<FireTruck>();
-        this.texture = new Texture(Gdx.files.internal("sprites/station_wider.png"));
+        this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.name = "Fire Station";
     }
 

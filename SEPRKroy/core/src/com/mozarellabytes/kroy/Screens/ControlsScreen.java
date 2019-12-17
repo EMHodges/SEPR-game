@@ -56,7 +56,7 @@ public class ControlsScreen implements Screen {
 
         Gdx.input.setInputProcessor(new ControlScreenInputHandler(this));
 
-        backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+        backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         blueTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Blue_trail.png"), true);
@@ -65,11 +65,11 @@ public class ControlsScreen implements Screen {
         redTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Red_trail.png"), true);
         redEndTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Red_trail_end.png"), true);
 
-        blueTruck = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_Blue.png"), true);
+        blueTruck = new Texture(Gdx.files.internal("sprites/firetruck/right.png"), true);
 
-        redTruck = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_Red.png"), true);
+        redTruck = new Texture(Gdx.files.internal("sprites/firetruck/left.png"), true);
 
-        fortress = new Texture(Gdx.files.internal("sprites/fortress.png"), true);
+        fortress = new Texture(Gdx.files.internal("sprites/fortress/fortress.png"), true);
 
         batch = new SpriteBatch();
         renderer = new ShapeRenderer();

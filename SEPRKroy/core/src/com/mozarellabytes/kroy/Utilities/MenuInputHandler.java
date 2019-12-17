@@ -23,14 +23,18 @@ public class MenuInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.C:
-                menu.toControlScreen();
+                menu.clickedControlsButton();
         }
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        return false;
+        switch (keycode) {
+            case Input.Keys.C:
+                menu.toControlScreen();
+        }
+        return true;
     }
 
     @Override
@@ -43,16 +47,26 @@ public class MenuInputHandler implements InputProcessor {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = menu.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
         if (menu.getPlayButton().contains(position.x, position.y)) {
-            menu.toGameScreen();
-            return true;
-        } else {
-            return false;
+            menu.clickedPlayButton();
+        } else if (menu.getControlsButton().contains(position.x, position.y)) {
+            menu.clickedControlsButton();
         }
+        return true;
     }
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        return false;
+        Vector2 clickCoordinates = new Vector2(screenX, screenY);
+        Vector3 position = menu.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+        if (menu.getPlayButton().contains(position.x, position.y)) {
+            menu.toGameScreen();
+        } else if (menu.getControlsButton().contains(position.x, position.y)) {
+            menu.toControlScreen();
+        } else {
+            menu.idlePlayButton();
+            menu.idleControlsButton();
+        }
+        return true;
     }
 
     @Override
@@ -62,15 +76,7 @@ public class MenuInputHandler implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        Vector2 clickCoordinates = new Vector2(screenX, screenY);
-        Vector3 position = menu.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (menu.getPlayButton().contains(position.x, position.y)) {
-            menu.hoverPlayButton();
-            return true;
-        } else {
-            menu.idlePlayButton();
-            return false;
-        }
+        return false;
     }
 
     @Override

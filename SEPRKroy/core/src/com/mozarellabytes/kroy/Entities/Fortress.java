@@ -14,28 +14,36 @@ import java.util.Random;
 public class Fortress {
 
     private GameScreen gameScreen;
-    private float type, HP, AP, maxHP, range;
+    private FortressType type;
+    private float HP, AP, maxHP, range;
     private Vector2  position;
     private Texture texture;
     private String name;
+    private Rectangle area;
     private Random rand;
     private ArrayList<Bomb> bombs;
     private long lastFire;
-    private int delay;
+    private int delay, h, w;
 
-    public Fortress(GameScreen gameScreen, float x, float y, float range, float maxHP, float AP) {
+    public Fortress(GameScreen gameScreen, float x, float y, FortressType type) {
         this.gameScreen = gameScreen;
         this.position = new Vector2(x, y);
-        this.range = range;
-        this.maxHP = maxHP;
+
+        this.type = type;
+        this.name = type.getName();
+        this.range = type.getRange();
+        this.maxHP = type.getMaxHP();
         this.HP = maxHP;
-        this.AP = AP;
-        this.texture = new Texture(Gdx.files.internal("sprites/fortress.png"));
+        this.AP = type.getAP();
+        this.delay = type.getDelay();
+        this.texture = type.getTexture();
+        this.w = type.getW();
+        this.h = type.getH();
+
         this.rand = new Random();
-        this.name = "Fortress";
         this.bombs = new ArrayList<Bomb>();
         this.lastFire = System.currentTimeMillis();
-        this.delay = 1500;
+        this.area = new Rectangle(this.position.x, this.position.y, this.w, this.h);
     }
 
     public void checkRange(FireTruck target) {
@@ -87,12 +95,7 @@ public class Fortress {
     }
 
     public Rectangle getArea() {
-        Rectangle area = new Rectangle();
-        area.x = this.position.x-2;
-        area.y = this.position.y-2;
-        area.width = 4;
-        area.height = 6;
-        return area;
+        return this.area;
     }
 
     public String getName() {
@@ -111,8 +114,5 @@ public class Fortress {
         this.bombs.remove(bomb);
     }
 
-    public long lastFired() {
-        return this.lastFire;
-    }
 }
 

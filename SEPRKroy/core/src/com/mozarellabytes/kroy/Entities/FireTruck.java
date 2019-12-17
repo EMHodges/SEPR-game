@@ -34,7 +34,6 @@ public class FireTruck extends Sprite {
     private String name;
 
     private ArrayList<Particle> spray;
-    private Fortress target;
 
     private Texture trailImage;
     private Texture trailImageEnd;
@@ -42,7 +41,7 @@ public class FireTruck extends Sprite {
     private Vector2 lastCoordinate;
 
     public FireTruck(GameScreen gameScreen, float x, float y, FireTruckType type) {
-        super(new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + type.getColour() + ".png")));
+        super(new Texture(Gdx.files.internal("sprites/firetruck/down.png")));
 
         this.gameScreen = gameScreen;
 
@@ -65,10 +64,10 @@ public class FireTruck extends Sprite {
 
         this.spray = new ArrayList<Particle>();
 
-        lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left/frame0000_" + colour + ".png"));
-        lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right/frame0000_" + colour + ".png"));
-        lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up/frame0000_" + colour + ".png"));
-        lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down/frame0000_" + colour + ".png"));
+        lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"));
+        lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"));
+        lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
+        lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down.png"));
         path = new Queue<Vector2>();
         trailPath = new Queue<Vector2>();
         moving = false;

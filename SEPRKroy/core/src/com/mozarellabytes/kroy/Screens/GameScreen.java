@@ -75,9 +75,9 @@ public class GameScreen implements Screen {
         station = new FireStation(this,4,2);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(this, 12, 19, 3, 100, 5));
-        fortresses.add(new Fortress(this, 35, 20, 7, 250, 10));
-        fortresses.add(new Fortress(this, 30, 5, 8, 500, 15));
+        fortresses.add(new Fortress(this, 12, 19, FortressType.Default));
+        fortresses.add(new Fortress(this, 22, 17, FortressType.Walmgate));
+        fortresses.add(new Fortress(this, 19, 3, FortressType.Clifford));
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
