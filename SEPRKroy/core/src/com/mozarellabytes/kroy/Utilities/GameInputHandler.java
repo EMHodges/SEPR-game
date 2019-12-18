@@ -91,6 +91,9 @@ public class GameInputHandler implements InputProcessor {
         } else {
             checkFortressClick(position2d);
         }
+        if (gameScreen.getHomeButton().contains(position2d)){
+            gameScreen.clickedHomeButton();
+        }
         return true;
     }
 
@@ -143,6 +146,11 @@ public class GameInputHandler implements InputProcessor {
                 }
             }
             gameScreen.selectedTruck.setMoving(true);
+        }
+        Vector2 clickCoordinates = new Vector2(screenX, screenY);
+        Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+        if (gameScreen.getHomeButton().contains(position.x, position.y)) {
+            gameScreen.toHomeScreen();
         }
         return true;
     }

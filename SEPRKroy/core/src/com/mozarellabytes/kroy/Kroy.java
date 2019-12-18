@@ -32,8 +32,9 @@ public class Kroy extends Game {
 //		this.setScreen(new MenuScreen(this));
 
 //		this.setScreen(new ControlsScreen(this));
-		this.setScreen(new SplashScreen(this));
-	//	this.setScreen(new GameScreen(this));
+		//this.setScreen(new SplashScreen(this));
+	//
+		this.setScreen(new GameScreen(this));
 	}
 
 	// Method called by the game loop from the application every time rendering should be performed. Game logic updates are usually also performed in this method.

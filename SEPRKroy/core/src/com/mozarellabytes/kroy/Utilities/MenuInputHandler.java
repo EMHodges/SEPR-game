@@ -24,16 +24,13 @@ public class MenuInputHandler implements InputProcessor {
                 break;
             case Input.Keys.C:
                 menu.clickedControlsButton();
+                menu.toControlScreen();
         }
         return true;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case Input.Keys.C:
-                menu.toControlScreen();
-        }
         return true;
     }
 

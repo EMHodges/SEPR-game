@@ -28,7 +28,6 @@ public class ControlScreenInputHandler implements InputProcessor {
                 break;
             case Input.Keys.C:
                 controlsScreen.changeScreen();
-                break;
         }
         return true;
     }

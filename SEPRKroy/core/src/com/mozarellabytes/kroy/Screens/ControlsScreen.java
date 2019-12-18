@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.ControlScreenInputHandler;
 import com.mozarellabytes.kroy.Utilities.GameInputHandler;
+import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
 import com.mozarellabytes.kroy.Utilities.ScreenHandler;
 
 import java.awt.*;
@@ -55,8 +56,12 @@ public class ControlsScreen implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
         Gdx.input.setInputProcessor(new ControlScreenInputHandler(this));
+        if (screen == "menu"){
+            backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
+        } else if (screen == "game"){
+            backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+        }
 
-        backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         blueTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Blue_trail.png"), true);
@@ -257,7 +262,11 @@ public class ControlsScreen implements Screen {
             this.game.setScreen(parent);
             // ScreenHandler.ToGame(parent);
         } else if (this.screen == "menu"){
+          //  Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
+
             ScreenHandler.ToMenu(game);
+
+         //   this.game.setScreen(parent);
         }
 
     }

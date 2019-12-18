@@ -70,6 +70,7 @@ public class MenuScreen implements Screen {
         controlsButton.y = (int) ((camera.viewportHeight/2 - controlsButton.height/2)*0.4);
 
         Gdx.input.setInputProcessor(ih);
+
     }
 
     public void toGameScreen() {

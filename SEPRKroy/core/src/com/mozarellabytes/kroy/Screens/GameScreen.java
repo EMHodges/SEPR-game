@@ -4,20 +4,20 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
+import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 
@@ -40,6 +40,11 @@ public class GameScreen implements Screen {
     public FireTruck selectedTruck;
     public FireStation station;
     public Object selectedEntity;
+
+    private Texture homeButtonIdle;
+    private Texture homeButtonClicked;
+    private Rectangle homeButton;
+    private Texture currentHomeTexture;
 
     private GUI gui;
 
@@ -98,6 +103,18 @@ public class GameScreen implements Screen {
         }
 
         batch = renderer.getBatch();
+
+        homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
+        homeButtonClicked = new Texture(Gdx.files.internal("ui/home_clicked.png"), true);
+
+        currentHomeTexture = homeButtonIdle;
+
+        homeButton = new Rectangle();
+        homeButton.x = 39;
+        homeButton.y = 23;
+        homeButton.width = 1;
+        homeButton.height = 1;
+
     }
 
     @Override
@@ -267,7 +284,13 @@ public class GameScreen implements Screen {
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);
 
+        batch.begin();
+        batch.draw(currentHomeTexture, homeButton.x, homeButton.y,  homeButton.width, homeButton.height);
+        batch.end();
+
         gui.render(selectedEntity);
+
+
     }
 
     @Override
@@ -351,8 +374,23 @@ public class GameScreen implements Screen {
         ScreenHandler.ToControls(game, this, "game");
     }
 
-    // tets
+    public void clickedHomeButton() {
+        SoundFX.sfx_button_clicked.play();
+        currentHomeTexture = homeButtonClicked;
+    }
 
+    public void idleHomeButton() {
+        currentHomeTexture = homeButtonIdle;
+    }
+
+    public Rectangle getHomeButton(){
+        return this.homeButton;
+    }
+
+    public void toHomeScreen() {
+        ScreenHandler.ToMenu(game);
+        SoundFX.sfx_soundtrack.dispose();
+    }
 }
 
 
