@@ -117,17 +117,20 @@ public class MenuScreen implements Screen {
     public Rectangle getSoundButton() {return soundButton; }
 
     public void clickedPlayButton() {
-        SoundFX.sfx_button_clicked.play();
+        if (SoundFX.music_enabled){
+            SoundFX.sfx_button_clicked.play();
+        }
         currentPlayTexture = playClickedTexture;
     }
 
     public void clickedControlsButton() {
-        SoundFX.sfx_button_clicked.play();
+        if (SoundFX.music_enabled){
+            SoundFX.sfx_button_clicked.play();
+        }
         currentControlsTexture = controlsClickedTexture;
     }
 
     public void clickedSoundButton() {
-        SoundFX.sfx_button_clicked.play();
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOnClickedTexture;
         } else {
@@ -213,6 +216,11 @@ public class MenuScreen implements Screen {
         currentControlsTexture.dispose();
         controlsClickedTexture.dispose();
         controlsIdleTexture.dispose();
+        currentSoundTexture.dispose();
+        soundOnIdleButton.dispose();
+        soundOnClickedButton.dispose();
+        soundOffIdleButton.dispose();
+        soundOffClickedButton.dispose();
         SoundFX.sfx_menu.stop();
     }
 

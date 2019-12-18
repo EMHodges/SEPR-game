@@ -44,6 +44,13 @@ public class GameScreen implements Screen {
     private Rectangle homeButton;
     private Texture currentHomeTexture;
 
+    private Rectangle soundButton;
+    private Texture soundOnIdleButton;
+    private Texture soundOffIdleButton;
+    private Texture soundOnClickedButton;
+    private Texture soundOffClickedButton;
+    private Texture currentSoundTexture;
+
     private GUI gui;
 
     public GameState gameState;
@@ -64,6 +71,7 @@ public class GameScreen implements Screen {
         shapeMapRenderer.setProjectionMatrix(camera.combined);
 
         shapeGUIRenderer = new ShapeRenderer();
+
         // test
         gui = new GUI(game, shapeGUIRenderer, 275, 275);
 
@@ -365,7 +373,9 @@ public class GameScreen implements Screen {
     }
 
     public void clickedHomeButton() {
-        SoundFX.sfx_button_clicked.play();
+        if (SoundFX.music_enabled){
+            SoundFX.sfx_button_clicked.play();
+        }
         currentHomeTexture = homeButtonClicked;
     }
 
