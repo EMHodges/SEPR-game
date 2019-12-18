@@ -3,6 +3,7 @@ package com.mozarellabytes.kroy.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
@@ -69,8 +70,10 @@ public class GameScreen implements Screen {
 
         camShake = new CameraShake();
 
-        SoundFX.sfx_soundtrack.setVolume(.5f);
-        SoundFX.sfx_soundtrack.play();
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_soundtrack.setVolume(.5f);
+            SoundFX.sfx_soundtrack.play();
+        }
 
         station = new FireStation(this,4,2);
 
@@ -109,6 +112,8 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        System.out.println(SoundFX.music_enabled);
 
         // check to see if the game has been won/lost
         if (gameState.checkWin()) {
@@ -189,7 +194,9 @@ public class GameScreen implements Screen {
             if(fortresses.get(i).getHP() <= 0) {
                 gameState.addFortress();
                 fortresses.remove(fortresses.get(i));
-                SoundFX.sfx_fortress_destroyed.play();
+                if (SoundFX.music_enabled) {
+                    SoundFX.sfx_fortress_destroyed.play();
+                }
             }
         }
 

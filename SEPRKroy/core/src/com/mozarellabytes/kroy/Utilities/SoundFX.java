@@ -5,6 +5,8 @@ import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 
 public class SoundFX {
+    public static boolean music_enabled = true;
+
     public static Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
     public static Music sfx_soundtrack = Gdx.audio.newMusic(Gdx.files.internal("sounds/soundtrack.mp3"));
 
@@ -17,4 +19,16 @@ public class SoundFX {
     public static Sound sfx_unpause = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/unpause.wav"));
     public static Sound sfx_horn = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/horn.mp3"));
     public static Sound sfx_button_clicked = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/button_clicked.wav"));
+
+
+    public static void StopMusic() {
+        sfx_soundtrack.stop();
+        sfx_menu.stop();
+    }
+
+    public static void PlayMusic() {
+        sfx_soundtrack.play();
+    }
+
+
 }

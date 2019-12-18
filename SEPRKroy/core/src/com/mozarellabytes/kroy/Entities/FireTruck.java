@@ -244,7 +244,9 @@ public class FireTruck extends Sprite {
     public float getReserve() { return this.reserve; }
 
     public void fortressDamage(float HP) {
-        SoundFX.sfx_truck_damage.play();
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_truck_damage.play();
+        }
         this.HP -= HP;
     }
 
