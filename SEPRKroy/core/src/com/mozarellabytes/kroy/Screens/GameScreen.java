@@ -2,8 +2,6 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -110,10 +108,10 @@ public class GameScreen implements Screen {
         currentHomeTexture = homeButtonIdle;
 
         homeButton = new Rectangle();
-        homeButton.x = 39;
-        homeButton.y = 23;
-        homeButton.width = 1;
-        homeButton.height = 1;
+        homeButton.width = 50;
+        homeButton.height = 50;
+        homeButton.x = Gdx.graphics.getWidth() - homeButton.width - 5;
+        homeButton.y = Gdx.graphics.getHeight() - homeButton.height - 5;
 
     }
 
@@ -129,8 +127,6 @@ public class GameScreen implements Screen {
         Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        System.out.println(SoundFX.music_enabled);
 
         // check to see if the game has been won/lost
         if (gameState.checkWin()) {
@@ -238,6 +234,7 @@ public class GameScreen implements Screen {
         shapeMapRenderer.end();
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
+
         // for each fire truck
         for (FireTruck truck : station.getTrucks()) {
             // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
@@ -258,12 +255,10 @@ public class GameScreen implements Screen {
         }
 
         for (Fortress fortress: fortresses) {
+
             shapeMapRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
             shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
             shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
-        }
-
-        for (Fortress fortress: fortresses) {
 
             for (int i = 0; i < fortress.getBombs().size(); i++) {
                 Bomb bomb = fortress.getBombs().get(i);
@@ -284,12 +279,8 @@ public class GameScreen implements Screen {
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);
 
-        batch.begin();
-        batch.draw(currentHomeTexture, homeButton.x, homeButton.y,  homeButton.width, homeButton.height);
-        batch.end();
-
         gui.render(selectedEntity);
-
+        gui.renderHomeButton(currentHomeTexture, homeButton);
 
     }
 
@@ -342,7 +333,6 @@ public class GameScreen implements Screen {
         return false;
     }
 
-
     public ArrayList<Fortress> getFortresses() {
         return this.fortresses;
     }
@@ -379,10 +369,6 @@ public class GameScreen implements Screen {
         currentHomeTexture = homeButtonClicked;
     }
 
-    public void idleHomeButton() {
-        currentHomeTexture = homeButtonIdle;
-    }
-
     public Rectangle getHomeButton(){
         return this.homeButton;
     }
@@ -390,6 +376,10 @@ public class GameScreen implements Screen {
     public void toHomeScreen() {
         ScreenHandler.ToMenu(game);
         SoundFX.sfx_soundtrack.dispose();
+    }
+
+    public void idleHomeButton() {
+        currentHomeTexture = homeButtonIdle;
     }
 }
 

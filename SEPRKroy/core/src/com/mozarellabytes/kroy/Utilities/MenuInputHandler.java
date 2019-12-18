@@ -66,6 +66,7 @@ public class MenuInputHandler implements InputProcessor {
         } else {
             menu.idlePlayButton();
             menu.idleControlsButton();
+            menu.idleSoundButton();
         }
         return true;
     }

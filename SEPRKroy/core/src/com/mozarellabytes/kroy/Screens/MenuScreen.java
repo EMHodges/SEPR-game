@@ -27,10 +27,10 @@ public class MenuScreen implements Screen {
     private Texture currentControlsTexture;
 
     private Rectangle soundButton;
-    private Texture soundOnIdleButton;
-    private Texture soundOffIdleButton;
-    private Texture soundOnClickedButton;
-    private Texture soundOffClickedButton;
+    private Texture soundOnIdleTexture;
+    private Texture soundOffIdleTexture;
+    private Texture soundOnClickedTexture;
+    private Texture soundOffClickedTexture;
     private Texture currentSoundTexture;
 
     private MenuInputHandler ih;
@@ -54,14 +54,14 @@ public class MenuScreen implements Screen {
         controlsClickedTexture = new Texture(Gdx.files.internal("ui/controls_clicked.png"), true);
         controlsClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        soundOnIdleButton = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
-        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        soundOffIdleButton = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
-        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        soundOnClickedButton = new Texture(Gdx.files.internal("ui/sound_on_clicked.png"), true);
-        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        soundOffClickedButton = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
-        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
+        soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffIdleTexture = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
+        soundOffIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOnClickedTexture = new Texture(Gdx.files.internal("ui/sound_on_clicked.png"), true);
+        soundOnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffClickedTexture = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
+        soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         ih = new MenuInputHandler(this);
 
@@ -73,10 +73,10 @@ public class MenuScreen implements Screen {
         currentPlayTexture = playIdleTexture;
         currentControlsTexture = controlsIdleTexture;
 
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffIdleButton;
+        if (SoundFX.music_enabled) {
+            currentSoundTexture = soundOnIdleTexture;
         } else {
-            currentSoundTexture = soundOnIdleButton;
+            currentSoundTexture = soundOffIdleTexture;
         }
 
         playButton = new Rectangle();
@@ -92,10 +92,10 @@ public class MenuScreen implements Screen {
         controlsButton.y = (int) ((camera.viewportHeight/2 - controlsButton.height/2)*0.4);
 
         soundButton = new Rectangle();
-        soundButton.x = 1200;
-        soundButton.y = 720;
         soundButton.width = 50;
         soundButton.height = 50;
+        soundButton.x = camera.viewportWidth - soundButton.getWidth() - 5;
+        soundButton.y = camera.viewportHeight - soundButton.getHeight() - 5;
 
         Gdx.input.setInputProcessor(ih);
 
@@ -129,23 +129,21 @@ public class MenuScreen implements Screen {
     public void clickedSoundButton() {
         SoundFX.sfx_button_clicked.play();
         if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffClickedButton;
+            currentSoundTexture = soundOnClickedTexture;
         } else {
-            currentSoundTexture = soundOnClickedButton;
+            currentSoundTexture = soundOffClickedTexture;
         }
     }
 
     public void changeSound() {
         if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnIdleButton;
+            currentSoundTexture = soundOffIdleTexture;
             SoundFX.StopMusic();
         } else {
-            currentSoundTexture = soundOffIdleButton;
+            currentSoundTexture = soundOnIdleTexture;
             SoundFX.PlayMenuMusic();
         }
-
-}
-
+    }
 
     public void idlePlayButton() {
         currentPlayTexture = playIdleTexture;
@@ -153,6 +151,14 @@ public class MenuScreen implements Screen {
 
     public void idleControlsButton() {
         currentControlsTexture = controlsIdleTexture;
+    }
+
+    public void idleSoundButton() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOnIdleTexture;
+        } else {
+            currentSoundTexture = soundOffIdleTexture;
+        }
     }
 
     @Override

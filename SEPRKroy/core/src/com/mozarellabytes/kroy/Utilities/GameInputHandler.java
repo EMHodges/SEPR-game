@@ -3,7 +3,6 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
@@ -13,7 +12,6 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
-    private boolean attacking;
 
     public GameInputHandler(GameScreen gameScreen) {
         this.gameScreen = gameScreen;
@@ -66,7 +64,6 @@ public class GameInputHandler implements InputProcessor {
         return true;
     }
 
-
     @Override
     public boolean keyTyped(char character) {
         return false;
@@ -77,7 +74,6 @@ public class GameInputHandler implements InputProcessor {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
         Vector2 position2d = new Vector2((int) position.x, (int)position.y);
-
         if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
             if (gameScreen.checkClick(position2d)) {
                 gameScreen.selectedTruck.resetPath();
@@ -91,7 +87,8 @@ public class GameInputHandler implements InputProcessor {
         } else {
             checkFortressClick(position2d);
         }
-        if (gameScreen.getHomeButton().contains(position2d)){
+        Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
+        if (gameScreen.getHomeButton().contains(screenCoords)) {
             gameScreen.clickedHomeButton();
         }
         return true;
@@ -101,7 +98,6 @@ public class GameInputHandler implements InputProcessor {
         boolean selected = false;
         for (Fortress fortress : gameScreen.getFortresses()) {
             if (fortress.getArea().contains(position2d)) {
-                Gdx.app.log(fortress.getName(), fortress.getArea().toString());
                 gameScreen.selectedEntity = fortress;
                 selected = true;
             }
@@ -148,9 +144,11 @@ public class GameInputHandler implements InputProcessor {
             gameScreen.selectedTruck.setMoving(true);
         }
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
-        Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (gameScreen.getHomeButton().contains(position.x, position.y)) {
+        Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
+        if (gameScreen.getHomeButton().contains(screenCoords)) {
             gameScreen.toHomeScreen();
+        } else {
+            gameScreen.idleHomeButton();
         }
         return true;
     }
