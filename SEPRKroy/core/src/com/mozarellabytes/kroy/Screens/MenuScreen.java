@@ -26,6 +26,13 @@ public class MenuScreen implements Screen {
     private Texture controlsClickedTexture;
     private Texture currentControlsTexture;
 
+    private Rectangle soundButton;
+    private Texture soundOnIdleButton;
+    private Texture soundOffIdleButton;
+    private Texture soundOnClickedButton;
+    private Texture soundOffClickedButton;
+    private Texture currentSoundTexture;
+
     private MenuInputHandler ih;
 
     public MenuScreen(final Kroy game) {
@@ -47,6 +54,15 @@ public class MenuScreen implements Screen {
         controlsClickedTexture = new Texture(Gdx.files.internal("ui/controls_clicked.png"), true);
         controlsClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        soundOnIdleButton = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
+        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffIdleButton = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
+        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOnClickedButton = new Texture(Gdx.files.internal("ui/sound_on_clicked.png"), true);
+        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffClickedButton = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
+        controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         ih = new MenuInputHandler(this);
 
         if (SoundFX.music_enabled) {
@@ -56,6 +72,12 @@ public class MenuScreen implements Screen {
 
         currentPlayTexture = playIdleTexture;
         currentControlsTexture = controlsIdleTexture;
+
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffIdleButton;
+        } else {
+            currentSoundTexture = soundOnIdleButton;
+        }
 
         playButton = new Rectangle();
         playButton.width = (float) (currentPlayTexture.getWidth()*0.75);
@@ -68,6 +90,12 @@ public class MenuScreen implements Screen {
         controlsButton.height = (float) (currentControlsTexture.getHeight()*0.75);
         controlsButton.x = (int) (camera.viewportWidth/2 - controlsButton.width/2);
         controlsButton.y = (int) ((camera.viewportHeight/2 - controlsButton.height/2)*0.4);
+
+        soundButton = new Rectangle();
+        soundButton.x = 1200;
+        soundButton.y = 720;
+        soundButton.width = 50;
+        soundButton.height = 50;
 
         Gdx.input.setInputProcessor(ih);
 
@@ -86,6 +114,8 @@ public class MenuScreen implements Screen {
         return controlsButton;
     }
 
+    public Rectangle getSoundButton() {return soundButton; }
+
     public void clickedPlayButton() {
         SoundFX.sfx_button_clicked.play();
         currentPlayTexture = playClickedTexture;
@@ -95,6 +125,27 @@ public class MenuScreen implements Screen {
         SoundFX.sfx_button_clicked.play();
         currentControlsTexture = controlsClickedTexture;
     }
+
+    public void clickedSoundButton() {
+        SoundFX.sfx_button_clicked.play();
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffClickedButton;
+        } else {
+            currentSoundTexture = soundOnClickedButton;
+        }
+    }
+
+    public void changeSound() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOnIdleButton;
+            SoundFX.StopMusic();
+        } else {
+            currentSoundTexture = soundOffIdleButton;
+            SoundFX.PlayMenuMusic();
+        }
+
+}
+
 
     public void idlePlayButton() {
         currentPlayTexture = playIdleTexture;
@@ -122,6 +173,7 @@ public class MenuScreen implements Screen {
         game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
         game.batch.draw(currentPlayTexture, playButton.x, playButton.y, playButton.width, playButton.height);
         game.batch.draw(currentControlsTexture, controlsButton.x, controlsButton.y, controlsButton.width, controlsButton.height);
+        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.end();
 
     }

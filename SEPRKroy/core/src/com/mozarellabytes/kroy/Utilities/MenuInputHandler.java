@@ -47,6 +47,8 @@ public class MenuInputHandler implements InputProcessor {
             menu.clickedPlayButton();
         } else if (menu.getControlsButton().contains(position.x, position.y)) {
             menu.clickedControlsButton();
+        } else if (menu.getSoundButton().contains(position.x, position.y)) {
+            menu.clickedSoundButton();
         }
         return true;
     }
@@ -59,6 +61,8 @@ public class MenuInputHandler implements InputProcessor {
             menu.toGameScreen();
         } else if (menu.getControlsButton().contains(position.x, position.y)) {
             menu.toControlScreen();
+        } else if (menu.getSoundButton().contains(position.x, position.y)){
+            menu.changeSound();
         } else {
             menu.idlePlayButton();
             menu.idleControlsButton();

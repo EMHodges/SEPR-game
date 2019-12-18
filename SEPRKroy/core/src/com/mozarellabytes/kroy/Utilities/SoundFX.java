@@ -24,11 +24,17 @@ public class SoundFX {
     public static void StopMusic() {
         sfx_soundtrack.stop();
         sfx_menu.stop();
+        music_enabled = false;
     }
 
     public static void PlayMusic() {
         sfx_soundtrack.play();
+        music_enabled = true;
     }
 
+    public static void PlayMenuMusic() {
+        sfx_menu.play();
+        music_enabled = true;
+    }
 
 }
