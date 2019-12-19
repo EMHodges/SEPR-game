@@ -74,9 +74,9 @@ public class MenuScreen implements Screen {
         currentControlsTexture = controlsIdleTexture;
 
         if (SoundFX.music_enabled) {
-            currentSoundTexture = soundOnIdleTexture;
-        } else {
             currentSoundTexture = soundOffIdleTexture;
+        } else {
+            currentSoundTexture = soundOnIdleTexture;
         }
 
         playButton = new Rectangle();
@@ -132,18 +132,18 @@ public class MenuScreen implements Screen {
 
     public void clickedSoundButton() {
         if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnClickedTexture;
-        } else {
             currentSoundTexture = soundOffClickedTexture;
+        } else {
+            currentSoundTexture = soundOnClickedTexture;
         }
     }
 
     public void changeSound() {
         if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffIdleTexture;
+            currentSoundTexture = soundOnIdleTexture;
             SoundFX.StopMusic();
         } else {
-            currentSoundTexture = soundOnIdleTexture;
+            currentSoundTexture = soundOffIdleTexture;
             SoundFX.PlayMenuMusic();
         }
     }
@@ -158,9 +158,9 @@ public class MenuScreen implements Screen {
 
     public void idleSoundButton() {
         if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnIdleTexture;
-        } else {
             currentSoundTexture = soundOffIdleTexture;
+        } else {
+            currentSoundTexture = soundOnIdleTexture;
         }
     }
 
@@ -168,6 +168,7 @@ public class MenuScreen implements Screen {
     public void show() {
 
     }
+
 
     @Override
     public void render(float delta) {
@@ -184,6 +185,8 @@ public class MenuScreen implements Screen {
         game.batch.draw(currentControlsTexture, controlsButton.x, controlsButton.y, controlsButton.width, controlsButton.height);
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.end();
+
+
 
     }
 
@@ -217,10 +220,10 @@ public class MenuScreen implements Screen {
         controlsClickedTexture.dispose();
         controlsIdleTexture.dispose();
         currentSoundTexture.dispose();
-        soundOnIdleButton.dispose();
-        soundOnClickedButton.dispose();
-        soundOffIdleButton.dispose();
-        soundOffClickedButton.dispose();
+        soundOnIdleTexture.dispose();
+        soundOnClickedTexture.dispose();
+        soundOffIdleTexture.dispose();
+        soundOffClickedTexture.dispose();
         SoundFX.sfx_menu.stop();
     }
 

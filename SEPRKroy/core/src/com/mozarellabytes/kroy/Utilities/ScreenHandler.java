@@ -8,6 +8,7 @@ import com.mozarellabytes.kroy.Screens.MenuScreen;
 
 public class ScreenHandler {
 
+
     public static void ToMenu(Kroy game) {
         game.setScreen(new MenuScreen(game));
     }

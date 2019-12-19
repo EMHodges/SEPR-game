@@ -45,11 +45,12 @@ public class GameScreen implements Screen {
     private Texture currentHomeTexture;
 
     private Rectangle soundButton;
-    private Texture soundOnIdleButton;
-    private Texture soundOffIdleButton;
-    private Texture soundOnClickedButton;
-    private Texture soundOffClickedButton;
+    private Texture soundOnIdleTexture;
+    private Texture soundOffIdleTexture;
+    private Texture soundOnClickedTexture;
+    private Texture soundOffClickedTexture;
     private Texture currentSoundTexture;
+
 
     private GUI gui;
 
@@ -113,13 +114,34 @@ public class GameScreen implements Screen {
         homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
         homeButtonClicked = new Texture(Gdx.files.internal("ui/home_clicked.png"), true);
 
+        soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
+        soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffIdleTexture = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
+        soundOffIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOnClickedTexture = new Texture(Gdx.files.internal("ui/sound_on_clicked.png"), true);
+        soundOnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffClickedTexture = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
+        soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         currentHomeTexture = homeButtonIdle;
 
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffIdleTexture;
+        } else {
+            currentSoundTexture = soundOnIdleTexture;
+        }
+
         homeButton = new Rectangle();
-        homeButton.width = 50;
-        homeButton.height = 50;
-        homeButton.x = Gdx.graphics.getWidth() - homeButton.width - 5;
-        homeButton.y = Gdx.graphics.getHeight() - homeButton.height - 5;
+        homeButton.width = 30;
+        homeButton.height = 30;
+        homeButton.x = Gdx.graphics.getWidth() - homeButton.width - 3;
+        homeButton.y = Gdx.graphics.getHeight() - homeButton.height - 3;
+
+        soundButton = new Rectangle();
+        soundButton.width = 30;
+        soundButton.height = 30;
+        soundButton.x = Gdx.graphics.getWidth() - homeButton.width - 40;
+        soundButton.y = Gdx.graphics.getHeight() - homeButton.height - 3;
 
     }
 
@@ -289,6 +311,7 @@ public class GameScreen implements Screen {
 
         gui.render(selectedEntity);
         gui.renderHomeButton(currentHomeTexture, homeButton);
+        gui.renderSoundButton(currentSoundTexture, soundButton);
 
     }
 
@@ -390,6 +413,28 @@ public class GameScreen implements Screen {
 
     public void idleHomeButton() {
         currentHomeTexture = homeButtonIdle;
+    }
+
+    public Rectangle getSoundButton(){
+        return this.soundButton;
+    }
+
+    public void clickedSoundButton() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffClickedTexture;
+        } else {
+            currentSoundTexture = soundOnClickedTexture;
+        }
+    }
+
+    public void changeSound() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOnIdleTexture;
+            SoundFX.StopMusic();
+        } else {
+            currentSoundTexture = soundOffIdleTexture;
+            SoundFX.PlayMusic();
+        }
     }
 }
 

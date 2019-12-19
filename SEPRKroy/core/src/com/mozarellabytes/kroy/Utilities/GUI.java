@@ -114,4 +114,10 @@ public class GUI {
         game.batch.end();
     }
 
+    public void renderSoundButton(Texture currentSoundTexture, Rectangle soundButton){
+        game.batch.begin();
+        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
+        game.batch.end();
+    }
+
 }

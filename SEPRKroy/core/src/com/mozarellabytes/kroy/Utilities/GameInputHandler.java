@@ -91,6 +91,9 @@ public class GameInputHandler implements InputProcessor {
         if (gameScreen.getHomeButton().contains(screenCoords)) {
             gameScreen.clickedHomeButton();
         }
+         if (gameScreen.getSoundButton().contains(position.x, position.y)) {
+             gameScreen.clickedSoundButton();
+         }
         return true;
     }
 
@@ -150,6 +153,10 @@ public class GameInputHandler implements InputProcessor {
         } else {
             gameScreen.idleHomeButton();
         }
+        if (gameScreen.getSoundButton().contains(screenCoords)){
+            gameScreen.changeSound();
+        }
+
         return true;
     }
 

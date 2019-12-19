@@ -137,8 +137,6 @@ public class ControlsScreen implements Screen {
         font2.draw(batch, "follow the path", 165,camera.viewportHeight - 525);
         font2.draw(batch, "Or click and drag from the", 165,camera.viewportHeight - 590);
         font2.draw(batch, "end of the trucks path", 165,camera.viewportHeight - 625);
-
-
         batch.end();
 
         batch.begin();
@@ -205,7 +203,6 @@ public class ControlsScreen implements Screen {
         renderer.end();
 
         batch.begin();
-
         font4.draw(batch, "X", 1192, camera.viewportHeight - 65);
         batch.end();
 
@@ -254,27 +251,17 @@ public class ControlsScreen implements Screen {
         }
     }
 
-    // public void toMenuScreen() { this.game.setScreen(new MenuScreen(this.game)); }
-
     public void changeScreen() {
         if (this.screen == "game") {
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent));
             this.game.setScreen(parent);
-            // ScreenHandler.ToGame(parent);
         } else if (this.screen == "menu"){
-          //  Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
-
-            ScreenHandler.ToMenu(game);
-
-         //   this.game.setScreen(parent);
+            Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
+            this.game.setScreen(parent);
         }
-
+       // this.game.setScreen(parent);
     }
 
-    public Rectangle getExitButton(){
-
-        return this.exitButton;
-    }
-
+    public Rectangle getExitButton(){  return this.exitButton; }
 
 }
