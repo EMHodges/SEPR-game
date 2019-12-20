@@ -433,9 +433,18 @@ public class GameScreen implements Screen {
             SoundFX.StopMusic();
         } else {
             currentSoundTexture = soundOffIdleTexture;
-            SoundFX.PlayMusic();
+            SoundFX.PlayMenuMusic();
         }
     }
+
+    public void idleSoundButton() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffIdleTexture;
+        } else {
+            currentSoundTexture = soundOnIdleTexture;
+        }
+    }
+
 }
 
 
