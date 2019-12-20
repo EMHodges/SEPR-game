@@ -16,13 +16,58 @@ public class GUI {
     private ShapeRenderer renderer;
     private int x, y, w, h;
 
-    public GUI(Kroy game, ShapeRenderer shapeRenderer, int w, int h) {
+    private Texture homeButtonIdle;
+    private Texture homeButtonClicked;
+    private Rectangle homeButton;
+    private Texture currentHomeTexture;
+
+    private Rectangle soundButton;
+    private Texture soundOnIdleTexture;
+    private Texture soundOffIdleTexture;
+    private Texture soundOnClickedTexture;
+    private Texture soundOffClickedTexture;
+    private Texture currentSoundTexture;
+
+    public GUI(Kroy game, int w, int h) {
         this.game = game;
-        this.renderer = shapeRenderer;
+        this.renderer = new ShapeRenderer();
         this.x = 10;
         this.y = Gdx.graphics.getHeight() - 10 - h;
         this.w = w;
         this.h = h;
+
+        homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
+        homeButtonClicked = new Texture(Gdx.files.internal("ui/home_clicked.png"), true);
+
+        soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
+        soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffIdleTexture = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
+        soundOffIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOnClickedTexture = new Texture(Gdx.files.internal("ui/sound_on_clicked.png"), true);
+        soundOnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        soundOffClickedTexture = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
+        soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
+        currentHomeTexture = homeButtonIdle;
+
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffIdleTexture;
+        } else {
+            currentSoundTexture = soundOnIdleTexture;
+        }
+
+        homeButton = new Rectangle();
+        homeButton.width = 30;
+        homeButton.height = 30;
+        homeButton.x = Gdx.graphics.getWidth() - homeButton.width - 3;
+        homeButton.y = Gdx.graphics.getHeight() - homeButton.height - 3;
+
+        soundButton = new Rectangle();
+        soundButton.width = 30;
+        soundButton.height = 30;
+        soundButton.x = Gdx.graphics.getWidth() - homeButton.width - 40;
+        soundButton.y = Gdx.graphics.getHeight() - homeButton.height - 3;
+
     }
 
     public void render(Object entity) {
@@ -43,7 +88,6 @@ public class GUI {
                 renderFortress(fortress);
             }
             renderer.end();
-
         }
     }
 
@@ -108,16 +152,62 @@ public class GUI {
         renderer.rect(this.x + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.y + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
 
-    public void renderHomeButton(Texture currentHomeTexture, Rectangle homeButton) {
+    public void renderButtons(){
+        renderSoundButton();
+        renderHomeButton();
+    }
+
+
+    public void renderHomeButton() {
         game.batch.begin();
         game.batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);
         game.batch.end();
     }
 
-    public void renderSoundButton(Texture currentSoundTexture, Rectangle soundButton){
+    public void clickedHomeButton() {
+        if (SoundFX.music_enabled){
+            SoundFX.sfx_button_clicked.play();
+        }
+        currentHomeTexture = homeButtonClicked;
+    }
+
+    public void idleHomeButton() { currentHomeTexture = homeButtonIdle; }
+
+    public Rectangle getHomeButton(){ return this.homeButton; }
+
+
+    public void renderSoundButton(){
         game.batch.begin();
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.end();
     }
+
+    public void clickedSoundButton() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffClickedTexture;
+        } else {
+            currentSoundTexture = soundOnClickedTexture;
+        }
+    }
+
+    public void changeSound() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOnIdleTexture;
+            SoundFX.StopMusic();
+        } else {
+            currentSoundTexture = soundOffIdleTexture;
+            SoundFX.PlayMusic();
+        }
+    }
+
+    public void idleSoundButton() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffIdleTexture;
+        } else {
+            currentSoundTexture = soundOnIdleTexture;
+        }
+    }
+
+    public Rectangle getSoundButton(){ return this.soundButton; }
 
 }

@@ -8,13 +8,16 @@ import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Utilities.GUI;
 
 public class GameInputHandler implements InputProcessor {
 
     private GameScreen gameScreen;
+    private GUI gui;
 
-    public GameInputHandler(GameScreen gameScreen) {
+    public GameInputHandler(GameScreen gameScreen, GUI gui) {
         this.gameScreen = gameScreen;
+        this.gui = gui;
     }
 
     @Override
@@ -88,11 +91,11 @@ public class GameInputHandler implements InputProcessor {
             checkFortressClick(position2d);
         }
         Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
-        if (gameScreen.getHomeButton().contains(screenCoords)) {
-            gameScreen.clickedHomeButton();
+        if (gui.getHomeButton().contains(screenCoords)) {
+            gui.clickedHomeButton();
         }
-         if (gameScreen.getSoundButton().contains(screenCoords)) {
-             gameScreen.clickedSoundButton();
+         if (gui.getSoundButton().contains(screenCoords)) {
+             gui.clickedSoundButton();
          }
         return true;
     }
@@ -148,16 +151,17 @@ public class GameInputHandler implements InputProcessor {
         }
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
-        if (gameScreen.getHomeButton().contains(screenCoords)) {
+        if (gui.getHomeButton().contains(screenCoords)) {
             gameScreen.toHomeScreen();
         } else {
-            gameScreen.idleHomeButton();
+            gui.idleHomeButton();
         }
-        if (gameScreen.getSoundButton().contains(screenCoords)){
-            gameScreen.changeSound();
+        if (gui.getSoundButton().contains(screenCoords)){
+            gui.changeSound();
+
         }
         else {
-            gameScreen.idleSoundButton();
+            gui.idleSoundButton();
         }
 
         return true;

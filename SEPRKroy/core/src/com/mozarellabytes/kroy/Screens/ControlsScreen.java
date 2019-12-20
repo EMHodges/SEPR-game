@@ -12,10 +12,7 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mozarellabytes.kroy.Kroy;
-import com.mozarellabytes.kroy.Utilities.ControlScreenInputHandler;
-import com.mozarellabytes.kroy.Utilities.GameInputHandler;
-import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
-import com.mozarellabytes.kroy.Utilities.ScreenHandler;
+import com.mozarellabytes.kroy.Utilities.*;
 
 import java.awt.*;
 
@@ -253,7 +250,8 @@ public class ControlsScreen implements Screen {
 
     public void changeScreen() {
         if (this.screen == "game") {
-            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent));
+            GUI gui = new GUI(game, 275, 275);
+            Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent, gui));
             this.game.setScreen(parent);
         } else if (this.screen == "menu"){
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));

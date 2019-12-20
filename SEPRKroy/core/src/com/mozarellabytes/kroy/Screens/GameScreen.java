@@ -39,19 +39,6 @@ public class GameScreen implements Screen {
     public FireStation station;
     public Object selectedEntity;
 
-    private Texture homeButtonIdle;
-    private Texture homeButtonClicked;
-    private Rectangle homeButton;
-    private Texture currentHomeTexture;
-
-    private Rectangle soundButton;
-    private Texture soundOnIdleTexture;
-    private Texture soundOffIdleTexture;
-    private Texture soundOnClickedTexture;
-    private Texture soundOffClickedTexture;
-    private Texture currentSoundTexture;
-
-
     private GUI gui;
 
     public GameState gameState;
@@ -74,9 +61,9 @@ public class GameScreen implements Screen {
         shapeGUIRenderer = new ShapeRenderer();
 
         // test
-        gui = new GUI(game, shapeGUIRenderer, 275, 275);
+        gui = new GUI(game, 275, 275);
 
-        Gdx.input.setInputProcessor(new GameInputHandler(this));
+        Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
 
         gameState = new GameState();
 
@@ -87,7 +74,7 @@ public class GameScreen implements Screen {
             SoundFX.sfx_soundtrack.play();
         }
 
-        station = new FireStation(this,4,2);
+        station = new FireStation(this, 4, 2);
 
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(this, 12, 20, FortressType.Default));
@@ -96,9 +83,9 @@ public class GameScreen implements Screen {
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
-        backgroundLayerIndex = new int[] {  mapLayers.getIndex("background")};
+        backgroundLayerIndex = new int[]{mapLayers.getIndex("background")};
 
-        structureLayersIndices = new int[] { mapLayers.getIndex("structures"),
+        structureLayersIndices = new int[]{mapLayers.getIndex("structures"),
                 mapLayers.getIndex("structures2"),
                 mapLayers.getIndex("transparentStructures")};
 
@@ -106,42 +93,10 @@ public class GameScreen implements Screen {
         station.spawn(FireTruckType.Speed);
 
         for (FireTruck truck : station.getTrucks()) {
-            truck.setOrigin(Constants.TILE_WxH/2, Constants.TILE_WxH/2);
+            truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
         }
 
         batch = renderer.getBatch();
-
-        homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
-        homeButtonClicked = new Texture(Gdx.files.internal("ui/home_clicked.png"), true);
-
-        soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
-        soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        soundOffIdleTexture = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
-        soundOffIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        soundOnClickedTexture = new Texture(Gdx.files.internal("ui/sound_on_clicked.png"), true);
-        soundOnClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        soundOffClickedTexture = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
-        soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-
-        currentHomeTexture = homeButtonIdle;
-
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffIdleTexture;
-        } else {
-            currentSoundTexture = soundOnIdleTexture;
-        }
-
-        homeButton = new Rectangle();
-        homeButton.width = 30;
-        homeButton.height = 30;
-        homeButton.x = Gdx.graphics.getWidth() - homeButton.width - 3;
-        homeButton.y = Gdx.graphics.getHeight() - homeButton.height - 3;
-
-        soundButton = new Rectangle();
-        soundButton.width = 30;
-        soundButton.height = 30;
-        soundButton.x = Gdx.graphics.getWidth() - homeButton.width - 40;
-        soundButton.y = Gdx.graphics.getHeight() - homeButton.height - 3;
 
     }
 
@@ -310,9 +265,7 @@ public class GameScreen implements Screen {
         shapeMapRenderer.setColor(Color.WHITE);
 
         gui.render(selectedEntity);
-        gui.renderHomeButton(currentHomeTexture, homeButton);
-        gui.renderSoundButton(currentSoundTexture, soundButton);
-
+        gui.renderButtons();
     }
 
     @Override
@@ -391,58 +344,11 @@ public class GameScreen implements Screen {
         return false;
     }
 
-    public void toControlScreen() {
-        ScreenHandler.ToControls(game, this, "game");
-    }
-
-    public void clickedHomeButton() {
-        if (SoundFX.music_enabled){
-            SoundFX.sfx_button_clicked.play();
-        }
-        currentHomeTexture = homeButtonClicked;
-    }
-
-    public Rectangle getHomeButton(){
-        return this.homeButton;
-    }
+    public void toControlScreen() { ScreenHandler.ToControls(game, this, "game"); }
 
     public void toHomeScreen() {
         ScreenHandler.ToMenu(game);
         SoundFX.sfx_soundtrack.dispose();
-    }
-
-    public void idleHomeButton() {
-        currentHomeTexture = homeButtonIdle;
-    }
-
-    public Rectangle getSoundButton(){
-        return this.soundButton;
-    }
-
-    public void clickedSoundButton() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffClickedTexture;
-        } else {
-            currentSoundTexture = soundOnClickedTexture;
-        }
-    }
-
-    public void changeSound() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnIdleTexture;
-            SoundFX.StopMusic();
-        } else {
-            currentSoundTexture = soundOffIdleTexture;
-            SoundFX.PlayMenuMusic();
-        }
-    }
-
-    public void idleSoundButton() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffIdleTexture;
-        } else {
-            currentSoundTexture = soundOnIdleTexture;
-        }
     }
 
 }
