@@ -1,13 +1,11 @@
 package com.mozarellabytes.kroy.Utilities;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.ControlsScreen;
-import com.mozarellabytes.kroy.Screens.MenuScreen;
+
 
 public class ControlScreenInputHandler implements InputProcessor {
 

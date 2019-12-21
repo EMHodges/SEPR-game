@@ -3,7 +3,6 @@ package com.mozarellabytes.kroy.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.utils.TimeUtils;
 import com.mozarellabytes.kroy.Kroy;
 import com.badlogic.gdx.graphics.GL20;
