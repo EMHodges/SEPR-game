@@ -33,6 +33,7 @@ public class GameOverInputHandler implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        SoundFX.StopGameMusic();
         gameOver.toMenuScreen();
         return true;
     }

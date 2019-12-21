@@ -37,4 +37,8 @@ public class SoundFX {
         music_enabled = true;
     }
 
+    public static void StopGameMusic(){
+        sfx_soundtrack.stop();
+    }
+
 }

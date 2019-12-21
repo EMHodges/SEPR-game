@@ -39,7 +39,7 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.C:
                 gameScreen.toControlScreen();
                 break;
-            case Input.Keys.P:
+            case Input.Keys.B:
                 gameScreen.camShake.shakeIt(.2f);
                 break;
             case Input.Keys.F:
@@ -49,7 +49,10 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.G:
                 SoundFX.music_enabled = true;
                 SoundFX.PlayMusic();
-
+                break;
+            case Input.Keys.P:
+                gui.clickedPauseButton();
+                gameScreen.changeState();
         }
         return true;
     }
@@ -89,14 +92,21 @@ public class GameInputHandler implements InputProcessor {
             }
         } else {
             checkFortressClick(position2d);
+            checkButtonClick( new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y));
         }
-        Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
-        if (gui.getHomeButton().contains(screenCoords)) {
+        return true;
+    }
+
+    private Boolean checkButtonClick(Vector2 position2d){
+        if (gui.getHomeButton().contains(position2d)) {
             gui.clickedHomeButton();
         }
-         if (gui.getSoundButton().contains(screenCoords)) {
-             gui.clickedSoundButton();
-         }
+        if (gui.getPauseButton().contains(position2d)){
+            gui.clickedPauseButton();
+        }
+        if (gui.getSoundButton().contains(position2d)) {
+            gui.clickedSoundButton();
+        }
         return true;
     }
 
@@ -149,6 +159,11 @@ public class GameInputHandler implements InputProcessor {
             }
             gameScreen.selectedTruck.setMoving(true);
         }
+        checkButtonUnclick(screenX, screenY);
+        return true;
+    }
+
+    private Boolean checkButtonUnclick(int screenX, int screenY){
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
         if (gui.getHomeButton().contains(screenCoords)) {
@@ -158,12 +173,16 @@ public class GameInputHandler implements InputProcessor {
         }
         if (gui.getSoundButton().contains(screenCoords)){
             gui.changeSound();
-
         }
         else {
             gui.idleSoundButton();
         }
-
+        if (gui.getPauseButton().contains(screenCoords)){
+            gameScreen.changeState();
+        }
+        else {
+            gui.idlePauseButton();
+        }
         return true;
     }
 

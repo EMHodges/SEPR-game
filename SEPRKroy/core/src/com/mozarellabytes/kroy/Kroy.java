@@ -15,6 +15,7 @@ public class Kroy extends Game {
 	public SpriteBatch batch;
 	public BitmapFont bigFont;
 	public BitmapFont smallFont;
+	public BitmapFont biggestFont;
 
 	// Method called once when the application is created.
 	@Override
@@ -24,6 +25,8 @@ public class Kroy extends Game {
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magero.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+		parameter.size = 60;
+		biggestFont = generator.generateFont(parameter);
 		parameter.size = 26;
 		bigFont = generator.generateFont(parameter);
 		parameter.size = 19;

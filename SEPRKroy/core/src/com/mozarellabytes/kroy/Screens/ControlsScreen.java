@@ -250,14 +250,14 @@ public class ControlsScreen implements Screen {
 
     public void changeScreen() {
         if (this.screen == "game") {
-            GUI gui = new GUI(game, 275, 275);
+            GUI gui = new GUI(game, (GameScreen) parent, 275, 275);
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent, gui));
             this.game.setScreen(parent);
         } else if (this.screen == "menu"){
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
             this.game.setScreen(parent);
         }
-       // this.game.setScreen(parent);
+        // this.game.setScreen(parent);
     }
 
     public Rectangle getExitButton(){  return this.exitButton; }

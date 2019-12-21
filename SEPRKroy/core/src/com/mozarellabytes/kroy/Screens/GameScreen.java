@@ -3,7 +3,8 @@ package com.mozarellabytes.kroy.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
-import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
@@ -19,6 +20,8 @@ import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
 
+
+
 // when you click on another truck while a truck is following the path then try to move the path of the stationary truck
 public class GameScreen implements Screen {
 
@@ -27,10 +30,11 @@ public class GameScreen implements Screen {
     private OrthogonalTiledMapRenderer renderer;
     public OrthographicCamera camera;
     private ShapeRenderer shapeMapRenderer;
-    private ShapeRenderer shapeGUIRenderer;
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
     public CameraShake camShake;
+    public BitmapFont bigFont;
+    public BitmapFont smallerFont;
 
     private Batch batch;
 
@@ -39,12 +43,17 @@ public class GameScreen implements Screen {
     public FireStation station;
     public Object selectedEntity;
 
+    private State state;
+
     private GUI gui;
 
     public GameState gameState;
+    private Texture pauseImage;
 
     public GameScreen(Kroy game) {
         this.game = game;
+
+        state = State.PLAY;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
@@ -55,13 +64,13 @@ public class GameScreen implements Screen {
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
         renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
 
+        pauseImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+        pauseImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         shapeMapRenderer = new ShapeRenderer();
         shapeMapRenderer.setProjectionMatrix(camera.combined);
 
-        shapeGUIRenderer = new ShapeRenderer();
-
-        // test
-        gui = new GUI(game, 275, 275);
+        gui = new GUI(game, this,275, 275);
 
         Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
 
@@ -98,6 +107,7 @@ public class GameScreen implements Screen {
 
         batch = renderer.getBatch();
 
+
     }
 
     @Override
@@ -108,163 +118,178 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
-        // Initial rendering "options"
-        Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        switch (state) {
+            case PLAY:
 
-        // check to see if the game has been won/lost
-        if (gameState.checkWin()) {
-            this.game.setScreen(new GameOverScreen(this.game, true));
-        } else if (gameState.checkLose()) {
-            this.game.setScreen(new GameOverScreen(this.game, false));
-        }
+                // Initial rendering "options"
+                Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // update camera
-        camera.update();
+                // check to see if the game has been won/lost
+                if (gameState.checkWin()) {
+                    this.game.setScreen(new GameOverScreen(this.game, true));
+                } else if (gameState.checkLose()) {
+                    this.game.setScreen(new GameOverScreen(this.game, false));
+                }
 
-        // check to see if trucks can be repaired/refilled
-        station.containsTrucks();
+                // update camera
+                camera.update();
 
-        // render what our camera sees
-        renderer.setView(camera);
+                // check to see if trucks can be repaired/refilled
+                station.containsTrucks();
 
-        camShake.update(delta, camera, new Vector2(camera.viewportWidth/2f, camera.viewportHeight/2f));
+                // render what our camera sees
+                renderer.setView(camera);
 
-        // renders the background layer of the map
-        renderer.render(backgroundLayerIndex);
+                camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
-        // setups batch for rendering entities
-        batch.begin();
+                // renders the background layer of the map
+                renderer.render(backgroundLayerIndex);
 
-        // for each truck (uses standard for loop because it may delete truck when a truck is destroyed)
-        for (int i=0; i<station.getTrucks().size();i++) {
+                // setups batch for rendering entities
+                batch.begin();
 
-            // creates local truck
-            FireTruck truck = station.getTruck(i);
+                // for each truck (uses standard for loop because it may delete truck when a truck is destroyed)
+                for (int i = 0; i < station.getTrucks().size(); i++) {
 
-            // damages truck if within range of fortress
-            for (Fortress fortress : this.fortresses) {
-                fortress.checkRange(truck);
-            }
+                    // creates local truck
+                    FireTruck truck = station.getTruck(i);
 
-            truck.attack();
-
-            station.checkCollision();
-
-            // move the position of the truck
-            truck.mouseMove();
-
-            // draws the truck
-            batch.draw(truck, truck.getX(), truck.getY(), 1, 1);
-
-            // if truck has a path
-            if (!truck.trailPath.isEmpty()) {
-
-                // for each tile in the path
-                for (Vector2 tile : truck.trailPath) {
-
-                    // if last tile
-                    if (tile.equals(truck.trailPath.last())) {
-
-                        // overlay the border square
-                        batch.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                    // damages truck if within range of fortress
+                    for (Fortress fortress : this.fortresses) {
+                        fortress.checkRange(truck);
                     }
 
-                    // draws transparent trail path
-                    batch.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
+                    truck.attack();
+
+                    station.checkCollision();
+
+                    // move the position of the truck
+                    truck.mouseMove();
+
+                    // draws the truck
+                    batch.draw(truck, truck.getX(), truck.getY(), 1, 1);
+
+                    // if truck has a path
+                    if (!truck.trailPath.isEmpty()) {
+
+                        // for each tile in the path
+                        for (Vector2 tile : truck.trailPath) {
+
+                            // if last tile
+                            if (tile.equals(truck.trailPath.last())) {
+
+                                // overlay the border square
+                                batch.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                            }
+
+                            // draws transparent trail path
+                            batch.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
+                        }
+                    }
+
+                    // if health of truck reaches 0
+                    if (truck.getHP() <= 0) {
+                        station.destroyTruck(truck);
+                        if (truck.equals(this.selectedTruck)) {
+                            this.selectedTruck = null;
+                        }
+                    }
+
+                    truck.updateSpray(delta);
+
                 }
-            }
 
-            // if health of truck reaches 0
-            if (truck.getHP() <= 0) {
-                station.destroyTruck(truck);
-                if (truck.equals(this.selectedTruck)) {
-                    this.selectedTruck = null;
+                for (int i = 0; i < fortresses.size(); i++) {
+                    if (fortresses.get(i).getHP() <= 0) {
+                        gameState.addFortress();
+                        fortresses.remove(fortresses.get(i));
+                        if (SoundFX.music_enabled) {
+                            SoundFX.sfx_fortress_destroyed.play();
+                        }
+                    }
                 }
-            }
 
-            truck.updateSpray(delta);
+                // draw the station
+                batch.draw(station.getTexture(), station.getPosition().x - 1, station.getPosition().y, 5, 3);
 
-        }
-
-        for (int i=0; i<fortresses.size(); i++) {
-            if(fortresses.get(i).getHP() <= 0) {
-                gameState.addFortress();
-                fortresses.remove(fortresses.get(i));
-                if (SoundFX.music_enabled) {
-                    SoundFX.sfx_fortress_destroyed.play();
+                // draw the fortress
+                for (Fortress fortress : this.fortresses) {
+                    batch.draw(fortress.getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
                 }
-            }
-        }
 
-        // draw the station
-        batch.draw(station.getTexture(), station.getPosition().x-1, station.getPosition().y, 5, 3);
+                // finish rendering of entities
+                batch.end();
 
-        // draw the fortress
-        for (Fortress fortress : this.fortresses) {
-            batch.draw(fortress.getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
-        }
+                // render structures
+                renderer.render(structureLayersIndices);
 
-        // finish rendering of entities
-        batch.end();
-
-        // render structures
-        renderer.render(structureLayersIndices);
-
-        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (Fortress fortress: fortresses) {
-            shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
-        }
-        shapeMapRenderer.end();
-
-        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        // for each fire truck
-        for (FireTruck truck : station.getTrucks()) {
-            // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
-            shapeMapRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f,0.8f);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.266f , truck.getPosition().y + 1.4f, 0.2f,(float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.533f , truck.getPosition().y + 1.4f, 0.2f,0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f , 0.2f, (float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-            for (int i=0; i<truck.getSpray().size(); i++) {
-                Particle particle = truck.getSpray().get(i);
-                if (particle.isHit()) {
-                    truck.damage(particle);
-                    truck.removeParticle(particle);
-                } else {
-                    shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y , particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
+                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
+                for (Fortress fortress : fortresses) {
+                    shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
                 }
-            }
-        }
+                shapeMapRenderer.end();
 
-        for (Fortress fortress: fortresses) {
+                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
-            shapeMapRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
-            shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-            shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
-
-            for (int i = 0; i < fortress.getBombs().size(); i++) {
-                Bomb bomb = fortress.getBombs().get(i);
-                bomb.newUpdatePosition(delta);
-                shapeMapRenderer.setColor(Color.RED);
-                shapeMapRenderer.circle(bomb.getPosition().x, bomb.getPosition().y, 0.2f,40);
-
-                if (bomb.checkHit()) {
-                    bomb.boom();
-                    camShake.shakeIt(.2f);
-                    fortress.removeBomb(bomb);
-                } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
-                    fortress.removeBomb(bomb);
+                // for each fire truck
+                for (FireTruck truck : station.getTrucks()) {
+                    // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
+                    shapeMapRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f, 0.8f);
+                    shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f, 0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+                    shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+                    shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+                    shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f, 0.2f, (float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+                    for (int i = 0; i < truck.getSpray().size(); i++) {
+                        Particle particle = truck.getSpray().get(i);
+                        if (particle.isHit()) {
+                            truck.damage(particle);
+                            truck.removeParticle(particle);
+                        } else {
+                            shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
+                        }
+                    }
                 }
-            }
+
+                for (Fortress fortress : fortresses) {
+
+                    shapeMapRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
+                    shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+                    shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+
+                    for (int i = 0; i < fortress.getBombs().size(); i++) {
+                        Bomb bomb = fortress.getBombs().get(i);
+                        bomb.newUpdatePosition(delta);
+                        shapeMapRenderer.setColor(Color.RED);
+                        shapeMapRenderer.circle(bomb.getPosition().x, bomb.getPosition().y, 0.2f, 40);
+
+                        if (bomb.checkHit()) {
+                            bomb.boom();
+                            camShake.shakeIt(.2f);
+                            fortress.removeBomb(bomb);
+                        } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
+                            fortress.removeBomb(bomb);
+                        }
+                    }
+                }
+
+                shapeMapRenderer.end();
+                shapeMapRenderer.setColor(Color.WHITE);
+
+                gui.render(selectedEntity);
+                break;
+
+            case PAUSE:
+                Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
+                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+                renderer.setView(camera);
+                batch.begin();
+                batch.draw(pauseImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
+                batch.end();
+                gui.renderPauseScreenText();
         }
-
-        shapeMapRenderer.end();
-        shapeMapRenderer.setColor(Color.WHITE);
-
-        gui.render(selectedEntity);
         gui.renderButtons();
     }
 
@@ -292,7 +317,6 @@ public class GameScreen implements Screen {
     public void dispose() {
         map.dispose();
         renderer.dispose();
-        shapeGUIRenderer.dispose();
         shapeMapRenderer.dispose();
         batch.dispose();
         SoundFX.sfx_soundtrack.stop();
@@ -351,9 +375,18 @@ public class GameScreen implements Screen {
         SoundFX.sfx_soundtrack.dispose();
     }
 
+    public void changeState() {
+        if (this.state.equals(State.PLAY)){
+            this.state = State.PAUSE;
+        } else {
+            this.state = State.PLAY;
+        }
+    }
+
+    public State getState(){
+        return this.state;
+    }
 }
-
-
 
 
 

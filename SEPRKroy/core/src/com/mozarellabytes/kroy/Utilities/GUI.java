@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Utilities;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -9,17 +10,25 @@ import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Kroy;
+import com.mozarellabytes.kroy.Screens.GameScreen;
+import com.mozarellabytes.kroy.Screens.State;
 
 public class GUI {
 
     private Kroy game;
     private ShapeRenderer renderer;
     private int x, y, w, h;
+    private GameScreen gameScreen;
 
+    private Rectangle homeButton;
     private Texture homeButtonIdle;
     private Texture homeButtonClicked;
-    private Rectangle homeButton;
     private Texture currentHomeTexture;
+
+    private Rectangle pauseButton;
+    private Texture pauseButtonIdle;
+    private Texture pauseButtonClicked;
+    private Texture currentPauseTexture;
 
     private Rectangle soundButton;
     private Texture soundOnIdleTexture;
@@ -28,8 +37,9 @@ public class GUI {
     private Texture soundOffClickedTexture;
     private Texture currentSoundTexture;
 
-    public GUI(Kroy game, int w, int h) {
+    public GUI(Kroy game, GameScreen gameScreen, int w, int h) {
         this.game = game;
+        this.gameScreen = gameScreen;
         this.renderer = new ShapeRenderer();
         this.x = 10;
         this.y = Gdx.graphics.getHeight() - 10 - h;
@@ -37,7 +47,14 @@ public class GUI {
         this.h = h;
 
         homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
+        homeButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         homeButtonClicked = new Texture(Gdx.files.internal("ui/home_clicked.png"), true);
+        homeButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
+        pauseButtonIdle = new Texture(Gdx.files.internal("ui/pause_idle.png"), true);
+        pauseButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        pauseButtonClicked = new Texture(Gdx.files.internal("ui/pause_clicked.png"), true);
+        pauseButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
         soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -50,6 +67,8 @@ public class GUI {
 
         currentHomeTexture = homeButtonIdle;
 
+        currentPauseTexture = pauseButtonIdle;
+
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffIdleTexture;
         } else {
@@ -61,6 +80,12 @@ public class GUI {
         homeButton.height = 30;
         homeButton.x = Gdx.graphics.getWidth() - homeButton.width - 3;
         homeButton.y = Gdx.graphics.getHeight() - homeButton.height - 3;
+
+        pauseButton = new Rectangle();
+        pauseButton.width = 30;
+        pauseButton.height = 30;
+        pauseButton.x = Gdx.graphics.getWidth() - pauseButton.width - 77;
+        pauseButton.y = Gdx.graphics.getHeight() - pauseButton.height - 3;
 
         soundButton = new Rectangle();
         soundButton.width = 30;
@@ -155,6 +180,7 @@ public class GUI {
     public void renderButtons(){
         renderSoundButton();
         renderHomeButton();
+        renderPauseButton();
     }
 
 
@@ -209,5 +235,36 @@ public class GUI {
     }
 
     public Rectangle getSoundButton(){ return this.soundButton; }
+
+    public void renderPauseButton() {
+        game.batch.begin();
+        game.batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
+        game.batch.end();
+    }
+
+    public void clickedPauseButton() {
+        if (SoundFX.music_enabled){
+            SoundFX.sfx_button_clicked.play();
+        }
+        if (gameScreen.getState().equals(State.PLAY)){
+            currentPauseTexture = pauseButtonClicked;
+        } else {
+            currentPauseTexture = pauseButtonIdle;
+        }
+    }
+
+
+
+    public void idlePauseButton() { currentPauseTexture = pauseButtonIdle; }
+
+    public Rectangle getPauseButton(){ return this.pauseButton; }
+
+    public void renderPauseScreenText(){
+        game.batch.begin();
+        game.biggestFont.draw(game.batch, "GAME PAUSED", this.x + 427, this.y - 60);
+        game.bigFont.draw(game.batch, "Press 'P' or the Pause button", this.x + 417, this.y - 140);
+        game.bigFont.draw(game.batch, "to return to game", this.x + 500, this.y - 170);
+        game.batch.end();
+    }
 
 }
