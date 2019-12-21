@@ -4,23 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
-import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
-import org.w3c.dom.css.Rect;
 
 import java.util.ArrayList;
-
-
 
 // when you click on another truck while a truck is following the path then try to move the path of the stationary truck
 public class GameScreen implements Screen {
@@ -33,8 +28,6 @@ public class GameScreen implements Screen {
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
     public CameraShake camShake;
-    public BitmapFont bigFont;
-    public BitmapFont smallerFont;
 
     private Batch batch;
 
@@ -86,9 +79,9 @@ public class GameScreen implements Screen {
         station = new FireStation(this, 4, 2);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(this, 12, 20, FortressType.Default));
-        fortresses.add(new Fortress(this, 30, 17, FortressType.Walmgate));
-        fortresses.add(new Fortress(this, 16, 3, FortressType.Clifford));
+        fortresses.add(new Fortress(12, 20, FortressType.Default));
+        fortresses.add(new Fortress( 30, 17, FortressType.Walmgate));
+        fortresses.add(new Fortress(16, 3, FortressType.Clifford));
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
@@ -118,26 +111,18 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
 
+        // Initial rendering "options"
+        Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
         switch (state) {
             case PLAY:
-
-                // Initial rendering "options"
-                Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
-                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
                 // check to see if the game has been won/lost
-                if (gameState.checkWin()) {
-                    this.game.setScreen(new GameOverScreen(this.game, true));
-                } else if (gameState.checkLose()) {
-                    this.game.setScreen(new GameOverScreen(this.game, false));
-                }
+                gameState.hasGameEnded(game);
 
                 // update camera
                 camera.update();
-
-                // check to see if trucks can be repaired/refilled
-                station.containsTrucks();
 
                 // render what our camera sees
                 renderer.setView(camera);
@@ -147,6 +132,9 @@ public class GameScreen implements Screen {
                 // renders the background layer of the map
                 renderer.render(backgroundLayerIndex);
 
+                // check to see if trucks can be repaired/refilled
+                station.containsTrucks();
+
                 // setups batch for rendering entities
                 batch.begin();
 
@@ -155,6 +143,7 @@ public class GameScreen implements Screen {
 
                     // creates local truck
                     FireTruck truck = station.getTruck(i);
+                    FireTruckType truckType = truck.getType();
 
                     // damages truck if within range of fortress
                     for (Fortress fortress : this.fortresses) {
@@ -181,11 +170,11 @@ public class GameScreen implements Screen {
                             if (tile.equals(truck.trailPath.last())) {
 
                                 // overlay the border square
-                                batch.draw(truck.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                                batch.draw(truckType.getTrailImageEnd(), tile.x, tile.y, 1, 1);
                             }
 
                             // draws transparent trail path
-                            batch.draw(truck.getTrailImage(), tile.x, tile.y, 1, 1);
+                            batch.draw(truckType.getTrailImage(), tile.x, tile.y, 1, 1);
                         }
                     }
 
@@ -216,7 +205,7 @@ public class GameScreen implements Screen {
 
                 // draw the fortress
                 for (Fortress fortress : this.fortresses) {
-                    batch.draw(fortress.getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
+                    batch.draw(fortress.getType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
                 }
 
                 // finish rendering of entities
@@ -227,7 +216,7 @@ public class GameScreen implements Screen {
 
                 shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
                 for (Fortress fortress : fortresses) {
-                    shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getRange());
+                    shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getType().getRange());
                 }
                 shapeMapRenderer.end();
 
@@ -256,16 +245,16 @@ public class GameScreen implements Screen {
 
                     shapeMapRenderer.rect(fortress.getPosition().x - 0.26f, fortress.getPosition().y + 1.4f, 0.6f, 1.2f);
                     shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-                    shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, (float) fortress.getHP() / (float) fortress.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+                    shapeMapRenderer.rect(fortress.getPosition().x - 0.13f, fortress.getPosition().y + 1.5f, 0.36f, fortress.getHP() / fortress.getType().getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
 
                     for (int i = 0; i < fortress.getBombs().size(); i++) {
                         Bomb bomb = fortress.getBombs().get(i);
-                        bomb.newUpdatePosition(delta);
+                        bomb.newUpdatePosition();
                         shapeMapRenderer.setColor(Color.RED);
                         shapeMapRenderer.circle(bomb.getPosition().x, bomb.getPosition().y, 0.2f, 40);
-
+                        shapeMapRenderer.setColor(Color.WHITE);
                         if (bomb.checkHit()) {
-                            bomb.boom();
+                            bomb.damageTruck();
                             camShake.shakeIt(.2f);
                             fortress.removeBomb(bomb);
                         } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
@@ -281,16 +270,16 @@ public class GameScreen implements Screen {
                 break;
 
             case PAUSE:
-                Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
-                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-                Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
                 renderer.setView(camera);
                 batch.begin();
                 batch.draw(pauseImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
                 batch.end();
                 gui.renderPauseScreenText();
         }
+
         gui.renderButtons();
+
     }
 
     @Override

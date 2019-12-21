@@ -38,7 +38,7 @@ public class Particle {
     }
 
     public boolean isHit() {
-        return (((int) this.targetPosition.x == (int) this.position.x) && ((int) this.targetPosition.x == (int) this.position.x));
+        return (((int) this.targetPosition.x == (int) this.position.x) && ((int) this.targetPosition.y == (int) this.position.y));
     }
 
     public void createTargetPosition(Fortress fortress) {

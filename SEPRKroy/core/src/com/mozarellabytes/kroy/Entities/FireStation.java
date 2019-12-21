@@ -1,7 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Screens.GameScreen;
@@ -17,8 +16,6 @@ public class FireStation {
     private Vector2 bayTile1;
     private Vector2 bayTile2;
 
-    private String name;
-
     private Texture texture;
 
     public FireStation(GameScreen gameScreen, int x, int y) {
@@ -30,7 +27,6 @@ public class FireStation {
         this.spawnTile = new Vector2(this.x + 2, this.y);
         this.trucks = new ArrayList<FireTruck>();
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
-        this.name = "Fire Station";
     }
 
     public ArrayList<FireTruck> getTrucks() {

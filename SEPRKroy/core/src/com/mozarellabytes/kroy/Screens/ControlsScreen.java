@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
 
@@ -111,8 +110,6 @@ public class ControlsScreen implements Screen {
         Gdx.gl.glClearColor(0, 0.3f, 0.7f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        //    Color purple = new Color(65f/255f,30f/255f,80f/255f,1);
-
         camera.update();
         batch.setProjectionMatrix(camera.combined);
 
@@ -125,6 +122,7 @@ public class ControlsScreen implements Screen {
         renderer.end();
 
         batch.begin();
+
         font.draw(batch, "Control screen", 430, camera.viewportHeight - 115);
         font2.draw(batch, "Flood the fortresses before the fortresses destroy your fire trucks to win", 110,camera.viewportHeight - 180);
         font3.draw(batch, "Moving the Fire Trucks", 135, camera.viewportHeight - 250 );
@@ -132,11 +130,7 @@ public class ControlsScreen implements Screen {
         font2.draw(batch, "This gives the truck a path:", 165,camera.viewportHeight - 345);
         font2.draw(batch, "Unclick and the truck will", 165,camera.viewportHeight - 495);
         font2.draw(batch, "follow the path", 165,camera.viewportHeight - 525);
-        font2.draw(batch, "Or click and drag from the", 165,camera.viewportHeight - 590);
-        font2.draw(batch, "end of the trucks path", 165,camera.viewportHeight - 625);
-        batch.end();
 
-        batch.begin();
         batch.draw(blueTileImage, 180, camera.viewportHeight - 450);
         batch.draw(blueTileImage, 230, camera.viewportHeight - 450);
         batch.draw(blueTileImage, 280, camera.viewportHeight - 450);
@@ -146,23 +140,24 @@ public class ControlsScreen implements Screen {
         batch.draw(blueTileImage, 480, camera.viewportHeight - 450);
         batch.draw(blueEndTileImage, 480, camera.viewportHeight - 450);
         batch.draw(blueTruck, 172, camera.viewportHeight - 457);
-        batch.end();
 
-        batch.begin();
-        batch.draw(blueEndTileImage, 380, camera.viewportHeight - 710);
-        batch.draw(redEndTileImage, 270, camera.viewportHeight - 710);
+        font2.draw(batch, "Or click and drag from the", 165,camera.viewportHeight - 590);
+        font2.draw(batch, "end of the trucks path", 165,camera.viewportHeight - 625);
+
         batch.draw(blueTileImage, 380, camera.viewportHeight - 710);
+        batch.draw(blueEndTileImage, 380, camera.viewportHeight - 710);
         batch.draw(redTileImage, 270, camera.viewportHeight - 710);
+        batch.draw(redEndTileImage, 270, camera.viewportHeight - 710);
         batch.end();
 
         batch.begin();
         font3.draw(batch, "Attacking the fortresses", 680, camera.viewportHeight - 250);
         font2.draw(batch, "When a firetruck is within range ", 685,camera.viewportHeight - 310);
         font2.draw(batch, "of a fortress press A to attack", 685,camera.viewportHeight - 345);
-        batch.end();
 
-        batch.begin();
         batch.draw(fortress,790, camera.viewportHeight - 670);
+        batch.draw(redTruck,1040, camera.viewportHeight - 610);
+
         batch.end();
 
         renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -170,10 +165,6 @@ public class ControlsScreen implements Screen {
         renderer.rect(875, camera.viewportHeight - 485, 24, 50, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
         renderer.rect(875, camera.viewportHeight - 485, 24,  HP / 4, Color.RED, Color.RED, Color.RED, Color.RED);
         renderer.end();
-
-        batch.begin();
-        batch.draw(redTruck,1040, camera.viewportHeight - 610);
-        batch.end();
 
         if (count <= 30) {
 
@@ -185,15 +176,15 @@ public class ControlsScreen implements Screen {
             font3.draw(batch, "A", 1062, camera.viewportHeight - 515);
             batch.end();
             damageHP();
-
         }
 
-        count += 1;
+        count++;
 
         if (count == 60){
             count = 0;
         }
 
+        // Hopefully have a 'back' button instead of this
         renderer.begin(ShapeRenderer.ShapeType.Filled);
         renderer.rect(1185,  camera.viewportHeight - 90, 30, 30, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
         renderer.rect(1187,  camera.viewportHeight - 88, 26, 26, Color.RED, Color.RED, Color.RED, Color.RED);

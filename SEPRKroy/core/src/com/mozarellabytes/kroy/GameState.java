@@ -1,7 +1,6 @@
 package com.mozarellabytes.kroy;
 
-import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
+import com.mozarellabytes.kroy.Utilities.ScreenHandler;
 
 public class GameState {
 
@@ -11,7 +10,6 @@ public class GameState {
     public GameState() {
         this.activeFireTrucks = 0;
         this.fortressesDestroyed = 0;
-        // do we need this.fortressesDestroyed to also = 0
     }
 
     public void addFireTruck() {
@@ -26,21 +24,21 @@ public class GameState {
         this.fortressesDestroyed++;
     }
 
-    public boolean checkWin() {
+    public void hasGameEnded(Kroy game) {
         if (fortressesDestroyed == 3) {
-            return true;
+            endGame(true, game);
+        } else if (this.activeFireTrucks == 0) {
+            endGame(false, game);
         }
-        return false;
-    }
-    public boolean checkLose() {
-        if (this.activeFireTrucks == 0) {
-            return true;
-        }
-        return false;
     }
 
-    public void removeFortress() {
-        fortressesDestroyed ++;
-
+    public void endGame(Boolean playerWon, Kroy game){
+        if (playerWon) {
+            ScreenHandler.ToGameOverScreen(game, true);
+        } else {
+            ScreenHandler.ToGameOverScreen(game, false);
+        }
     }
+
+
 }

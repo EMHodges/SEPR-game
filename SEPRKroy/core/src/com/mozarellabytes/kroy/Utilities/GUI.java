@@ -8,7 +8,9 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Entities.Fortress;
+import com.mozarellabytes.kroy.Entities.FortressType;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Screens.State;
@@ -123,43 +125,45 @@ public class GUI {
 
     private void renderTruck(FireTruck truck) {
         // also render text stats along left side
-        renderBar(truck.getHP(), truck.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
-        renderBar(truck.getReserve(), truck.getMaxReserve(), Color.CYAN, Color.BLUE, 2);
+        renderBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2);
         renderText(truck);
     }
 
     private void renderFortress(Fortress fortress) {
-        renderBar(fortress.getHP(), fortress.getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderBar(fortress.getHP(), fortress.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderText(fortress);
     }
 
     private void renderText(FireTruck truck) {
+        FireTruckType truckType = truck.getType();
         int newLine = 20;
         game.batch.begin();
-        game.bigFont.draw(game.batch, truck.getName(), this.x + 10, this.y + this.h - 10);
+        game.bigFont.draw(game.batch, truckType.getName(), this.x + 10, this.y + this.h - 10);
         game.smallFont.draw(game.batch, "HP: ", this.x + 15, this.y + this.h - 50);
-        game.smallFont.draw(game.batch, String.format("%.1f", truck.getHP()) + " / " + String.format("%.1f", truck.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
+        game.smallFont.draw(game.batch, String.format("%.1f", truck.getHP()) + " / " + String.format("%.1f", truckType.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
         game.smallFont.draw(game.batch, "Reserve: ", this.x + 15, this.y + this.h - 50 - newLine*2);
-        game.smallFont.draw(game.batch, String.format("%.1f", truck.getReserve()) + " / " + String.format("%.1f", truck.getMaxReserve()), this.x + 20, this.y + this.h - 50 - newLine*3);
+        game.smallFont.draw(game.batch, String.format("%.1f", truck.getReserve()) + " / " + String.format("%.1f", truckType.getMaxReserve()), this.x + 20, this.y + this.h - 50 - newLine*3);
         game.smallFont.draw(game.batch, "Speed: ", this.x + 15, this.y + this.h - 50 - newLine*4);
-        game.smallFont.draw(game.batch, String.format("%.1f", truck.getSpeed()), this.x + 20, this.y + this.h - 50 - newLine*5);
+        game.smallFont.draw(game.batch, String.format("%.1f", truckType.getSpeed()), this.x + 20, this.y + this.h - 50 - newLine*5);
         game.smallFont.draw(game.batch, "Range: ", this.x + 15, this.y + this.h - 50 - newLine*6);
-        game.smallFont.draw(game.batch, String.format("%.1f", truck.getRange()), this.x + 20, this.y + this.h - 50 - newLine*7);
+        game.smallFont.draw(game.batch, String.format("%.1f", truckType.getRange()), this.x + 20, this.y + this.h - 50 - newLine*7);
         game.smallFont.draw(game.batch, "AP: ", this.x + 15, this.y + this.h - 50 - newLine*8);
-        game.smallFont.draw(game.batch, String.format("%.2f", truck.getAP()), this.x + 20, this.y + this.h - 50 - newLine*9);
+        game.smallFont.draw(game.batch, String.format("%.2f", truckType.getAP()), this.x + 20, this.y + this.h - 50 - newLine*9);
         game.batch.end();
     }
 
     private void renderText(Fortress fortress) {
         int newLine = 20;
+        FortressType fortressType = fortress.getType();
         game.batch.begin();
-        game.bigFont.draw(game.batch, fortress.getName(), this.x + 10, this.y + this.h - 10);
+        game.bigFont.draw(game.batch, fortressType.getName(), this.x + 10, this.y + this.h - 10);
         game.smallFont.draw(game.batch, "HP: ", this.x + 15, this.y + this.h - 50);
-        game.smallFont.draw(game.batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortress.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
+        game.smallFont.draw(game.batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortressType.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
         game.smallFont.draw(game.batch, "Range: ", this.x + 15, this.y + this.h - 50 - newLine*2);
-        game.smallFont.draw(game.batch, String.format("%.1f", fortress.getRange()), this.x + 20, this.y + this.h - 50 - newLine*3);
+        game.smallFont.draw(game.batch, String.format("%.1f", fortressType.getRange()), this.x + 20, this.y + this.h - 50 - newLine*3);
         game.smallFont.draw(game.batch, "AP: ", this.x + 15, this.y + this.h - 50 - newLine*4);
-        game.smallFont.draw(game.batch, String.format("%.2f", fortress.getAP()), this.x + 20, this.y + this.h - 50 - newLine*5);
+        game.smallFont.draw(game.batch, String.format("%.2f", fortressType.getAP()), this.x + 20, this.y + this.h - 50 - newLine*5);
         game.batch.end();
     }
 

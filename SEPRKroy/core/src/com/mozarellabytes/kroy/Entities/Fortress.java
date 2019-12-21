@@ -1,11 +1,7 @@
 package com.mozarellabytes.kroy.Entities;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
-import com.mozarellabytes.kroy.Screens.GameScreen;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
@@ -13,46 +9,32 @@ import java.util.Random;
 
 public class Fortress {
 
-    private GameScreen gameScreen;
-    private FortressType type;
-    private float HP, AP, maxHP, range;
+    private float HP;
     private Vector2  position;
-    private Texture texture;
-    private String name;
     private Rectangle area;
     private Random rand;
     private ArrayList<Bomb> bombs;
     private long lastFire;
-    private int delay, h, w;
+    private FortressType fortressType;
 
-    public Fortress(GameScreen gameScreen, float x, float y, FortressType type) {
-        this.gameScreen = gameScreen;
+    public Fortress(float x, float y, FortressType type) {
+        this.fortressType = type;
         this.position = new Vector2(x, y);
-
-        this.type = type;
-        this.name = type.getName();
-        this.range = type.getRange();
-        this.maxHP = type.getMaxHP();
-        this.HP = maxHP;
-        this.AP = type.getAP();
-        this.delay = type.getDelay();
-        this.texture = type.getTexture();
-        this.w = type.getW();
-        this.h = type.getH();
-
+        this.HP = type.getMaxHP();
         this.rand = new Random();
         this.bombs = new ArrayList<Bomb>();
         this.lastFire = System.currentTimeMillis();
-        this.area = new Rectangle(this.position.x-this.w/2, this.position.y-this.h/2, this.w, this.h);
+        this.area = new Rectangle(this.position.x-this.fortressType.getW()/2, this.position.y-this.fortressType.getH()/2,
+                this.fortressType.getW(), this.fortressType.getH());
     }
 
     public void checkRange(FireTruck target) {
         Vector2 targetPos = new Vector2(((float) (target.getPosition().x + 0.5)), (float) (target.getPosition().y + 0.5));
-        if (targetPos.dst(this.position) <= range) {
+        if (targetPos.dst(this.position) <= fortressType.getRange()) {
             ArrayList<Vector2> truckTarget = new ArrayList<Vector2>();
             for (int i = -2; i < 2; i++){
                 for (int j = -2; j < 2; j++){
-                    truckTarget.add(new Vector2((float)targetPos.x + i, (float) (targetPos.y + j)));
+                    truckTarget.add(new Vector2(targetPos.x + i, targetPos.y + j));
                 }
             }
             int randomIndex = rand.nextInt(truckTarget.size());
@@ -63,33 +45,21 @@ public class Fortress {
     }
 
     private void attack(FireTruck target){
-        if (this.lastFire + this.delay < System.currentTimeMillis()) {
+        if (this.lastFire + this.fortressType.getDelay() < System.currentTimeMillis()) {
             this.lastFire = System.currentTimeMillis();
-            this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.AP, 3f));
+            this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.fortressType.getAP()));
             if (SoundFX.music_enabled) {
                 SoundFX.sfx_fortress_attack.play();
             }
         }
     }
 
-    public Texture getTexture() {
-        return this.texture;
-    }
-
     public Vector2 getPosition() {
         return this.position;
     }
 
-    public float getRange() {
-        return this.range;
-    }
-
     public float getHP() {
         return this.HP;
-    }
-
-    public float getMaxHP() {
-        return this.maxHP;
     }
 
     public void damage(float HP){
@@ -100,20 +70,16 @@ public class Fortress {
         return this.area;
     }
 
-    public String getName() {
-        return this.name;
-    }
-
-    public float getAP() {
-        return this.AP;
-    }
-
     public ArrayList<Bomb> getBombs() {
         return this.bombs;
     }
 
     public void removeBomb(Bomb bomb) {
         this.bombs.remove(bomb);
+    }
+
+    public FortressType getType(){
+        return  this.fortressType;
     }
 
 }

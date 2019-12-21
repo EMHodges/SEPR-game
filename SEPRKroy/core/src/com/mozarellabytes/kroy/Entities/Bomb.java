@@ -9,14 +9,12 @@ import com.badlogic.gdx.math.Vector2;
 public class Bomb extends Sprite {
     private Vector2 position;
     private Vector2 targetPosition;
-    private float velocity;
     private FireTruck truck;
     private float damage;
     private Vector2 originalPosition;
 
-    public Bomb(float x, float y, FireTruck truck, float damage, float velocity) {
+    public Bomb(float x, float y, FireTruck truck, float damage) {
         this.position = new Vector2(x,y);
-        this.velocity = velocity;
         this.targetPosition = getMiddleOfTile(truck.getPosition());
         this.truck = truck;
         this.damage = damage;
@@ -31,7 +29,7 @@ public class Bomb extends Sprite {
         return (getMiddleOfTile(position).equals(getMiddleOfTile(truck.getPosition())));
     }
 
-    public void newUpdatePosition(float delta) {
+    public void newUpdatePosition() {
         this.position = this.originalPosition.interpolate(this.targetPosition, 0.03f, Interpolation.pow5Out);
     }
 
@@ -39,7 +37,7 @@ public class Bomb extends Sprite {
         return new Vector2((int) pos.x + 0.5f, (int) pos.y + 0.5f);
     }
 
-    public void boom() {
+    public void damageTruck() {
         this.truck.fortressDamage(this.damage);
     }
 
