@@ -8,7 +8,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import com.mozarellabytes.kroy.Utilities.GUI;
+import com.mozarellabytes.kroy.Screens.State;
 
 public class GameInputHandler implements InputProcessor {
 
@@ -23,7 +23,7 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
-            case Input.Keys.ESCAPE:
+            case Input.Keys.Q:
                 Gdx.app.exit();
                 System.exit(1);
                 break;
@@ -50,7 +50,7 @@ public class GameInputHandler implements InputProcessor {
                 SoundFX.music_enabled = true;
                 SoundFX.PlayMusic();
                 break;
-            case Input.Keys.P:
+            case Input.Keys.ESCAPE:
                 gui.clickedPauseButton();
                 gameScreen.changeState();
         }
@@ -59,13 +59,15 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        switch (keycode) {
-            case Input.Keys.A:
-                SoundFX.sfx_truck_attack.stop();
-                for (FireTruck truck : gameScreen.station.getTrucks()) {
-                    truck.setAttacking(false);
-                }
-                break;
+        if (this.gameScreen.getState().equals(State.PLAY)) {
+            switch (keycode) {
+                case Input.Keys.A:
+                    SoundFX.sfx_truck_attack.stop();
+                    for (FireTruck truck : gameScreen.station.getTrucks()) {
+                        truck.setAttacking(false);
+                    }
+                    break;
+            }
         }
         return true;
     }
@@ -79,38 +81,91 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        Vector2 position2d = new Vector2((int) position.x, (int)position.y);
-        if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
-            if (gameScreen.checkClick(position2d)) {
-                gameScreen.selectedTruck.resetPath();
-                gameScreen.selectedTruck.addTileToPath(position2d);
+        Vector2 position2d = new Vector2((int) position.x, (int) position.y);
+        if (this.gameScreen.getState().equals(State.PLAY)) {
+            if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
+                if (gameScreen.checkClick(position2d)) {
+                    gameScreen.selectedTruck.resetPath();
+                    gameScreen.selectedTruck.addTileToPath(position2d);
+                } else {
+                    if (!gameScreen.checkTrailClick(position2d) && !checkFortressClick(position2d)) {
+                        gameScreen.selectedTruck = null;
+                        gameScreen.selectedEntity = null;
+                    }
+                }
             } else {
-                if (!gameScreen.checkTrailClick(position2d) && !checkFortressClick(position2d)) {
-                    gameScreen.selectedTruck = null;
-                    gameScreen.selectedEntity = null;
+                checkFortressClick(position2d);
+            }
+        }
+        checkButtonClick(new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y));
+
+        return true;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        if (this.gameScreen.getState().equals(State.PLAY)) {
+            if (gameScreen.selectedTruck != null) {
+                Vector2 clickCoordinates = new Vector2(screenX, screenY);
+                Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+                Vector2 position2d = new Vector2((int) position.x, (int) position.y);
+                if (gameScreen.selectedTruck.isValidMove(position2d)) {
+                    gameScreen.selectedTruck.addTileToPath(position2d);
                 }
             }
-        } else {
-            checkFortressClick(position2d);
-            checkButtonClick( new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y));
         }
         return true;
     }
 
-    private Boolean checkButtonClick(Vector2 position2d){
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        // this is to prevent trucks being on the same tiles
+        if (this.gameScreen.getState().equals(State.PLAY)) {
+            if (gameScreen.selectedTruck != null) {
+                for (FireTruck truck : gameScreen.station.getTrucks()) {
+                    if (!truck.equals(gameScreen.selectedTruck) &&
+                            !gameScreen.selectedTruck.trailPath.isEmpty() &&
+                            !truck.getPath().isEmpty() &&
+                            truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last()) ||
+                            truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
+                        gameScreen.selectedTruck.trailPath.removeLast();
+                        while (!gameScreen.selectedTruck.trailPath.isEmpty() && !gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
+                            gameScreen.selectedTruck.path.removeLast();
+                        }
+                    }
+                }
+                gameScreen.selectedTruck.setMoving(true);
+            } else {
+                checkButtonUnclick(screenX, screenY);
+            }
+        } else {
+            checkButtonUnclick(screenX, screenY);
+        }
+        return true;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
+    }
+
+    private boolean checkButtonClick(Vector2 position2d){
         if (gui.getHomeButton().contains(position2d)) {
             gui.clickedHomeButton();
-        }
-        if (gui.getPauseButton().contains(position2d)){
+        } else if (gui.getPauseButton().contains(position2d)){
             gui.clickedPauseButton();
-        }
-        if (gui.getSoundButton().contains(position2d)) {
+        } else if (gui.getSoundButton().contains(position2d)) {
             gui.clickedSoundButton();
         }
         return true;
     }
 
-    private Boolean checkFortressClick(Vector2 position2d) {
+    private boolean checkFortressClick(Vector2 position2d) {
         boolean selected = false;
         for (Fortress fortress : gameScreen.getFortresses()) {
             if (fortress.getArea().contains(position2d)) {
@@ -127,43 +182,7 @@ public class GameInputHandler implements InputProcessor {
         }
     }
 
-    @Override
-    public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (gameScreen.selectedTruck != null) {
-            Vector2 clickCoordinates = new Vector2(screenX, screenY);
-            Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-            Vector2 position2d = new Vector2((int) position.x, (int)position.y);
-            if (gameScreen.selectedTruck.isValidMove(position2d)) {
-                gameScreen.selectedTruck.addTileToPath(position2d);
-            }
-        }
-        return true;
-    }
-    // this has a bug where if you dont move from the spawning tile, game crashes as there is a truck behind it!
-    @Override
-    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // this is to prevent trucks being on the same tiles
-        if (gameScreen.selectedTruck != null) {
-            for (FireTruck truck : gameScreen.station.getTrucks()) {
-                if (!truck.equals(gameScreen.selectedTruck)) {
-                    if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
-                        if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
-                                || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
-                            gameScreen.selectedTruck.trailPath.removeLast();
-                            while (!gameScreen.selectedTruck.trailPath.isEmpty() && !gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
-                                gameScreen.selectedTruck.path.removeLast();
-                            }
-                        }
-                    }
-                }
-            }
-            gameScreen.selectedTruck.setMoving(true);
-        }
-        checkButtonUnclick(screenX, screenY);
-        return true;
-    }
-
-    private Boolean checkButtonUnclick(int screenX, int screenY){
+    private boolean checkButtonUnclick(int screenX, int screenY){
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
         if (gui.getHomeButton().contains(screenCoords)) {
@@ -171,28 +190,18 @@ public class GameInputHandler implements InputProcessor {
         } else {
             gui.idleHomeButton();
         }
+
         if (gui.getSoundButton().contains(screenCoords)){
             gui.changeSound();
-        }
-        else {
+        } else {
             gui.idleSoundButton();
         }
+
         if (gui.getPauseButton().contains(screenCoords)){
             gameScreen.changeState();
-        }
-        else {
+        } else {
             gui.idlePauseButton();
         }
         return true;
-    }
-
-    @Override
-    public boolean mouseMoved(int screenX, int screenY) {
-        return false;
-    }
-
-    @Override
-    public boolean scrolled(int amount) {
-        return false;
     }
 }

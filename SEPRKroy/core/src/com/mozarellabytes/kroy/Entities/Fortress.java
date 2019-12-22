@@ -1,5 +1,10 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
@@ -81,9 +86,15 @@ public class Fortress {
         this.bombs.remove(bomb);
     }
 
-    public FortressType getType(){
-        return  this.fortressType;
+    public void drawRange(ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.setColor(Color.WHITE);
+        shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, this.getRange());
     }
 
+    public void drawStats(ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.rect(this.getPosition().x - 0.26f, this.getPosition().y + 1.4f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, this.getHP() / this.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+    }
 }
 
