@@ -61,4 +61,8 @@ public enum FireTruckType {
 
     public Texture getTrailImageEnd() { return this.trailImageEnd; }
 
+    public String getTrailColour() {
+        return this.trailColour;
+    }
+
 }

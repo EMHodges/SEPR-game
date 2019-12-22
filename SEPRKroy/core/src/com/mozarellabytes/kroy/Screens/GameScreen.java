@@ -29,7 +29,6 @@ public class GameScreen implements Screen {
     public Object selectedEntity;
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
-    public CameraShake camShake;
     private OrthogonalTiledMapRenderer renderer;
 
     private Batch batch;
@@ -42,7 +41,6 @@ public class GameScreen implements Screen {
     private Texture pauseImage;
     private GUI gui;
 
-    public GameState gameState;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -125,7 +123,7 @@ public class GameScreen implements Screen {
 
         // draw the fortress
         for (Fortress fortress : this.fortresses) {
-            batch.draw(fortress.getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
+            batch.draw(fortress.getFortressType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
         }
 
         // finish rendering of entities
@@ -212,14 +210,10 @@ public class GameScreen implements Screen {
     public void update(float delta) {
 
         // check to see if the game has been won/lost
-        if (gameState.checkWin()) {
-            this.game.setScreen(new GameOverScreen(this.game, true));
-        } else if (gameState.checkLose()) {
-            this.game.setScreen(new GameOverScreen(this.game, false));
-        }
+        gameState.hasGameEnded(game);
 
         // check to see if trucks can be repaired/refilled
-        station.containsTrucks();
+        station.restoreTrucks();
 
         camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
@@ -231,15 +225,15 @@ public class GameScreen implements Screen {
 
             // damages truck if within range of fortress
             for (Fortress fortress : this.fortresses) {
-                fortress.checkRange(truck);
+                fortress.attack(truck);
             }
 
             truck.attack();
 
-            station.checkCollision();
+            station.checkForCollisions();
 
             // move the position of the truck
-            truck.mouseMove();
+            truck.move();
 
             // if health of truck reaches 0
             if (truck.getHP() <= 0) {
@@ -269,9 +263,9 @@ public class GameScreen implements Screen {
             }
             for (int j = 0; j < fortresses.get(i).getBombs().size(); j++) {
                 Bomb bomb = fortresses.get(i).getBombs().get(j);
-                bomb.newUpdatePosition(delta);
+                bomb.newUpdatePosition();
                 if (bomb.checkHit()) {
-                    bomb.boom();
+                    bomb.damageTruck();
                     camShake.shakeIt(.2f);
                     fortresses.get(i).removeBomb(bomb);
                 } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
@@ -338,7 +332,7 @@ public class GameScreen implements Screen {
             drawTrailPath(truck);
         }
         for (Fortress fortress : this.fortresses) {
-            batch.draw(fortress.getType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
+            batch.draw(fortress.getFortressType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
         }
         batch.draw(station.getTexture(), station.getPosition().x - 1, station.getPosition().y, 5, 3);
         batch.end();
@@ -399,7 +393,7 @@ public class GameScreen implements Screen {
     public void renderFortressRange() {
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
         for (Fortress fortress : fortresses) {
-            shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getType().getRange());
+            shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getFortressType().getRange());
         }
         shapeMapRenderer.end();
 

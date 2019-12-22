@@ -1,6 +1,7 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -228,50 +229,15 @@ public class FireTruck extends Sprite {
         this.HP -= HP;
     }
 
-    public float getMaxHP() {
-        return this.maxHP;
-    }
-
-    public float getMaxReserve() {
-        return this.maxReserve;
-    }
-
-    public void setAttacking(boolean b) {
-        this.attacking = b;
-    }
-
-    public String getName() {
-        return this.name;
-    }
-
-    public double getSpeed() {
-        return this.speed;
-    }
-
-    public float getAP() {
-        return this.AP;
-    }
-
-    public float getRange() {
-        return this.range;
-    }
-
-    public ArrayList<Particle> getSpray() {
-        return this.spray;
-    }
-
-    public void removeParticle(Particle particle) {
-        this.spray.remove(particle);
-    }
 
     public void drawPath(Batch batch) {
         if (!this.trailPath.isEmpty()) {
-            batch.setColor(this.colour);
+            batch.setColor(Color.RED);
             for (Vector2 tile : this.trailPath) {
                 if (tile.equals(this.trailPath.last())) {
-                    batch.draw(this.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                    batch.draw(this.type.getTrailImageEnd(), tile.x, tile.y, 1, 1);
                 }
-                batch.draw(this.getTrailImage(), tile.x, tile.y, 1, 1);
+                batch.draw(this.type.getTrailImage(), tile.x, tile.y, 1, 1);
             }
             batch.setColor(Color.WHITE);
         }

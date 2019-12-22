@@ -131,7 +131,7 @@ public class GUI {
     }
 
     private void renderFortress(Fortress fortress) {
-        renderBar(fortress.getHP(), fortress.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
+        renderBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderText(fortress);
     }
 
@@ -155,7 +155,7 @@ public class GUI {
 
     private void renderText(Fortress fortress) {
         int newLine = 20;
-        FortressType fortressType = fortress.getType();
+        FortressType fortressType = fortress.getFortressType();
         game.batch.begin();
         game.bigFont.draw(game.batch, fortressType.getName(), this.x + 10, this.y + this.h - 10);
         game.smallFont.draw(game.batch, "HP: ", this.x + 15, this.y + this.h - 50);
