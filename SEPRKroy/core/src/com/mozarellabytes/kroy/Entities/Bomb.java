@@ -1,7 +1,9 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
@@ -47,4 +49,9 @@ public class Bomb extends Sprite {
         return this.targetPosition;
     }
 
+    public void drawCircle(ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.setColor(Color.RED);
+        shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, 0.2f, 40);
+        shapeMapRenderer.setColor(Color.WHITE);
+    }
 }

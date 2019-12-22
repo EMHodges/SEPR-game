@@ -3,8 +3,11 @@ package com.mozarellabytes.kroy.Entities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.Screens.GameScreen;
@@ -17,7 +20,7 @@ public class FireTruck extends Sprite {
     private GameScreen gameScreen;
 
     public FireTruckType type;
-    private String colour;
+    private Color colour;
     private float HP, reserve, maxHP, maxReserve, range, AP;
     private double speed;
     private float x, y;
@@ -72,8 +75,8 @@ public class FireTruck extends Sprite {
         trailPath = new Queue<Vector2>();
         moving = false;
 
-        trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail.png"));
-        trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/" + colour + "_trail_end.png"));
+        trailImage = new Texture(Gdx.files.internal("sprites/firetruck/trail.png"));
+        trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/TrailEnd.png"));
     }
 
     public void arrowMove() {
@@ -284,6 +287,34 @@ public class FireTruck extends Sprite {
 
     public void removeParticle(Particle particle) {
         this.spray.remove(particle);
+    }
+
+    public void drawPath(Batch batch) {
+        if (!this.trailPath.isEmpty()) {
+            batch.setColor(this.colour);
+            for (Vector2 tile : this.trailPath) {
+                if (tile.equals(this.trailPath.last())) {
+                    batch.draw(this.getTrailImageEnd(), tile.x, tile.y, 1, 1);
+                }
+                batch.draw(this.getTrailImage(), tile.x, tile.y, 1, 1);
+            }
+            batch.setColor(Color.WHITE);
+        }
+    }
+
+    public void drawStats(ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.6f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+        shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, (float) this.getReserve() / (float) this.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+        shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, (float) this.getHP() / (float) this.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+        for (Particle particle : this.getSpray()) {
+            shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
+        }
+    }
+
+    public void drawSprite(Batch batch) {
+        batch.draw(this, this.getX(), this.getY(), 1, 1);
     }
 }
 

@@ -101,6 +101,66 @@ public class MenuScreen implements Screen {
 
     }
 
+    @Override
+    public void show() {
+
+    }
+
+    @Override
+    public void render(float delta) {
+        Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        camera.update();
+
+        game.batch.setProjectionMatrix(camera.combined);
+
+        game.batch.begin();
+        game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
+        game.batch.draw(currentPlayTexture, playButton.x, playButton.y, playButton.width, playButton.height);
+        game.batch.draw(currentControlsTexture, controlsButton.x, controlsButton.y, controlsButton.width, controlsButton.height);
+        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
+        game.batch.end();
+
+    }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        backgroundImage.dispose();
+        currentPlayTexture.dispose();
+        playClickedTexture.dispose();
+        playIdleTexture.dispose();
+        currentControlsTexture.dispose();
+        controlsClickedTexture.dispose();
+        controlsIdleTexture.dispose();
+        currentSoundTexture.dispose();
+        soundOnIdleTexture.dispose();
+        soundOnClickedTexture.dispose();
+        soundOffIdleTexture.dispose();
+        soundOffClickedTexture.dispose();
+        SoundFX.sfx_menu.stop();
+    }
+
     public void toGameScreen() {
         game.setScreen(new GameScreen(game));
         this.dispose();
@@ -162,69 +222,6 @@ public class MenuScreen implements Screen {
         } else {
             currentSoundTexture = soundOnIdleTexture;
         }
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
-        camera.update();
-
-        game.batch.setProjectionMatrix(camera.combined);
-
-        game.batch.begin();
-        game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
-        game.batch.draw(currentPlayTexture, playButton.x, playButton.y, playButton.width, playButton.height);
-        game.batch.draw(currentControlsTexture, controlsButton.x, controlsButton.y, controlsButton.width, controlsButton.height);
-        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
-        game.batch.end();
-
-
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        backgroundImage.dispose();
-        currentPlayTexture.dispose();
-        playClickedTexture.dispose();
-        playIdleTexture.dispose();
-        currentControlsTexture.dispose();
-        controlsClickedTexture.dispose();
-        controlsIdleTexture.dispose();
-        currentSoundTexture.dispose();
-        soundOnIdleTexture.dispose();
-        soundOnClickedTexture.dispose();
-        soundOffIdleTexture.dispose();
-        soundOffClickedTexture.dispose();
-        SoundFX.sfx_menu.stop();
     }
 
     public void toControlScreen(){ ScreenHandler.ToControls(game, this, "menu"); }

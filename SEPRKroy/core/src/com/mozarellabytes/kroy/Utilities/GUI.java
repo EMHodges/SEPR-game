@@ -183,7 +183,6 @@ public class GUI {
         renderPauseButton();
     }
 
-
     public void renderHomeButton() {
         game.batch.begin();
         game.batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);
@@ -200,7 +199,6 @@ public class GUI {
     public void idleHomeButton() { currentHomeTexture = homeButtonIdle; }
 
     public Rectangle getHomeButton(){ return this.homeButton; }
-
 
     public void renderSoundButton(){
         game.batch.begin();
@@ -253,16 +251,14 @@ public class GUI {
         }
     }
 
-
-
     public void idlePauseButton() { currentPauseTexture = pauseButtonIdle; }
 
     public Rectangle getPauseButton(){ return this.pauseButton; }
 
-    public void renderPauseScreenText(){
+    public void renderPauseScreenText() {
         game.batch.begin();
         game.biggestFont.draw(game.batch, "GAME PAUSED", this.x + 427, this.y - 60);
-        game.bigFont.draw(game.batch, "Press 'P' or the Pause button", this.x + 417, this.y - 140);
+        game.bigFont.draw(game.batch, "Press 'ESC' or the Pause button", this.x + 417, this.y - 140);
         game.bigFont.draw(game.batch, "to return to game", this.x + 500, this.y - 170);
         game.batch.end();
     }

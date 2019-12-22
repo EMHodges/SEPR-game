@@ -1,20 +1,22 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.graphics.Color;
+
 public enum FireTruckType {
 
-    Speed (100, 100, 2, "Red", "Speed Truck", 5, 0.08f),
-    Tank (100,250,1, "Green", "Tank Truck", 5, 0.08f),
-    Ocean(250,100,1, "Blue", "Ocean Truck", 8, 0.08f);
+    Speed (100, 100, 2, Color.RED, "Speed Truck", 5, 0.08f),
+    Tank (100,250,1, Color.GREEN, "Tank Truck", 5, 0.08f),
+    Ocean(250,100,1, Color.CYAN, "Ocean Truck", 8, 0.08f);
 
     private int maxReserve;
     private int maxHP;
     private int speed;
-    private String colour;
+    private Color colour;
     private String name;
     private float range;
     private float AP;
 
-    FireTruckType(int maxReserve, int maxHP, int speed, String colour, String name, float range, float AP) {
+    FireTruckType(int maxReserve, int maxHP, int speed, Color colour, String name, float range, float AP) {
         this.maxReserve = maxReserve;
         this.maxHP = maxHP;
         this.speed = speed;
@@ -36,7 +38,7 @@ public enum FireTruckType {
         return this.speed;
     }
 
-    public String getColour(){
+    public Color getColour(){
         return this.colour;
     }
 
