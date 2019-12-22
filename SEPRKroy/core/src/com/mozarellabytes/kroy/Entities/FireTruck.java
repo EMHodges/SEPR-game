@@ -92,7 +92,6 @@ public class FireTruck extends Sprite {
         this.inCollision = true;
     }
 
-
     public Vector2 getPosition() {
         return new Vector2(getX(), getY());
     }
@@ -140,17 +139,14 @@ public class FireTruck extends Sprite {
         this.path.addLast(new Vector2(((int) coordinate.x), ((int) coordinate.y)));
     }
 
-
     public void followPath() {
         if (this.path.size > 0) {
             Vector2 nextTile = path.first();
             this.x = nextTile.x;
             this.y = nextTile.y;
 
-            if (this.trailPath.size != 0) {
-                if (((int) this.x) == this.trailPath.first().x && ((int) this.y) == this.trailPath.first().y) {
-                    this.trailPath.removeFirst();
-                }
+            if (!this.trailPath.isEmpty() && (int) this.x == this.trailPath.first().x && (int) this.y == this.trailPath.first().y) {
+                this.trailPath.removeFirst();
             }
             if (!this.inCollision) {
                 changeSprite(nextTile);
@@ -180,7 +176,6 @@ public class FireTruck extends Sprite {
         this.trailPath.clear();
     }
 
-
     public Fortress findFortressWithinRange() {
         if (this.attacking) {
             for (Fortress fortress : gameScreen.fortresses) {
@@ -191,7 +186,6 @@ public class FireTruck extends Sprite {
         }
         return null;
     }
-
 
     public void setAttacking(boolean b) {
         this.attacking = b;
@@ -229,10 +223,9 @@ public class FireTruck extends Sprite {
         this.HP -= HP;
     }
 
-
     public void drawPath(Batch batch) {
         if (!this.trailPath.isEmpty()) {
-            batch.setColor(Color.RED);
+            batch.setColor(this.type.getTrailColour());
             for (Vector2 tile : this.trailPath) {
                 if (tile.equals(this.trailPath.last())) {
                     batch.draw(this.type.getTrailImageEnd(), tile.x, tile.y, 1, 1);

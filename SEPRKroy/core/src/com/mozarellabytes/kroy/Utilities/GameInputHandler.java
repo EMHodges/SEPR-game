@@ -123,14 +123,15 @@ public class GameInputHandler implements InputProcessor {
         if (this.gameScreen.getState().equals(State.PLAY)) {
             if (gameScreen.selectedTruck != null) {
                 for (FireTruck truck : gameScreen.station.getTrucks()) {
-                    if (!truck.equals(gameScreen.selectedTruck) &&
-                            !gameScreen.selectedTruck.trailPath.isEmpty() &&
-                            !truck.getPath().isEmpty() &&
-                            truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last()) ||
-                            truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
-                        gameScreen.selectedTruck.trailPath.removeLast();
-                        while (!gameScreen.selectedTruck.trailPath.isEmpty() && !gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
-                            gameScreen.selectedTruck.path.removeLast();
+                    if (!truck.equals(gameScreen.selectedTruck)) {
+                        if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
+                            if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
+                                    || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
+                                gameScreen.selectedTruck.trailPath.removeLast();
+                                while (!gameScreen.selectedTruck.trailPath.isEmpty() && !gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
+                                    gameScreen.selectedTruck.path.removeLast();
+                                }
+                            }
                         }
                     }
                 }

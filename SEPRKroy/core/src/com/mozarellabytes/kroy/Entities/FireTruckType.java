@@ -1,18 +1,18 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 
 public enum FireTruckType {
 
-    Speed (100, 100, 2, "Red", "Speed Truck", 5, 0.08f),
-//    Tank (100,250,1, "Green", "Tank Truck", 5, 0.08f),
-    Ocean(250,100,1, "Blue", "Ocean Truck", 8, 0.08f);
+    Speed (100, 100, 2, Color.RED, "Speed Truck", 5, 0.08f),
+    Ocean(250,100,1, Color.CYAN, "Ocean Truck", 8, 0.08f);
 
     private float maxReserve;
     private float maxHP;
     private float speed;
-    private String trailColour;
+    private Color trailColour;
     private String name;
     private float range;
     private float AP;
@@ -20,7 +20,7 @@ public enum FireTruckType {
     private Texture trailImage;
     private Texture trailImageEnd;
 
-    FireTruckType(int maxReserve, int maxHP, int speed, String trailColour, String name, float range, float AP) {
+    FireTruckType(int maxReserve, int maxHP, int speed, Color trailColour, String name, float range, float AP) {
         this.maxReserve = maxReserve;
         this.maxHP = maxHP;
         this.speed = speed;
@@ -29,8 +29,8 @@ public enum FireTruckType {
         this.range = range;
         this.AP = AP;
 
-        this.trailImage = new Texture(Gdx.files.internal("sprites/firetruck/" + this.trailColour + "_trail.png"));
-        this.trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/" + this.trailColour + "_trail_end.png"));
+        this.trailImage = new Texture(Gdx.files.internal("sprites/firetruck/trail.png"));
+        this.trailImageEnd = new Texture(Gdx.files.internal("sprites/firetruck/trailEnd.png"));
     }
 
     public float getMaxReserve(){
@@ -61,7 +61,7 @@ public enum FireTruckType {
 
     public Texture getTrailImageEnd() { return this.trailImageEnd; }
 
-    public String getTrailColour() {
+    public Color getTrailColour() {
         return this.trailColour;
     }
 

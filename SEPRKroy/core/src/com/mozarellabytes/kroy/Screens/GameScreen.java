@@ -125,8 +125,8 @@ public class GameScreen implements Screen {
 
         // for each truck (uses standard for loop because it may delete truck when a truck is destroyed)
         for (FireTruck truck : station.getTrucks()) {
-            truck.drawSprite(batch);
             truck.drawPath(batch);
+            truck.drawSprite(batch);
         }
 
         // draw the station
