@@ -20,59 +20,72 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     private final Kroy game;
-    public GameState gameState;
-
-    public OrthographicCamera camera;
-    public CameraShake camShake;
-
     private TiledMap map;
-    public Object selectedEntity;
+    private OrthogonalTiledMapRenderer renderer;
+    public OrthographicCamera camera;
+    private ShapeRenderer shapeMapRenderer;
     private MapLayers mapLayers;
     private int[] structureLayersIndices, backgroundLayerIndex;
-    private OrthogonalTiledMapRenderer renderer;
+    public CameraShake camShake;
 
     private Batch batch;
-    private ShapeRenderer shapeMapRenderer;
+
     public ArrayList<Fortress> fortresses;
     public FireTruck selectedTruck;
     public FireStation station;
+    public Object selectedEntity;
 
     private State state;
-    private Texture pauseImage;
+
     private GUI gui;
 
+    public GameState gameState;
 
     public GameScreen(Kroy game) {
         this.game = game;
 
-        gameState = new GameState();
+        state = State.PLAY;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
-        camShake = new CameraShake();
+
+        // if this is commented out, it still works fine? so what does this actually do
+        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
 
         map = new TmxMapLoader().load("maps/YorkMap.tmx");
-        //Orders renderer to start rendering the background, then the player layer, then structures
-        mapLayers = map.getLayers();
-
-        backgroundLayerIndex = new int[]{mapLayers.getIndex("background")};
-        structureLayersIndices = new int[]{mapLayers.getIndex("structures"),
-                mapLayers.getIndex("structures2"),
-                mapLayers.getIndex("transparentStructures")};
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
 
         shapeMapRenderer = new ShapeRenderer();
         shapeMapRenderer.setProjectionMatrix(camera.combined);
 
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
+        gui = new GUI(game, this,275, 275);
 
-        batch = renderer.getBatch();
+        Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
+
+        gameState = new GameState();
+
+        camShake = new CameraShake();
+
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_soundtrack.setVolume(.5f);
+            SoundFX.sfx_soundtrack.play();
+        }
+
+        station = new FireStation(this, 4, 2);
 
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 20, FortressType.Default));
         fortresses.add(new Fortress(30, 17, FortressType.Walmgate));
         fortresses.add(new Fortress(16, 3, FortressType.Clifford));
 
-        station = new FireStation(this, 4, 2);
+        //Orders renderer to start rendering the background, then the player layer, then structures
+        mapLayers = map.getLayers();
+        backgroundLayerIndex = new int[]{mapLayers.getIndex("background")};
+
+        structureLayersIndices = new int[]{mapLayers.getIndex("structures"),
+                mapLayers.getIndex("structures2"),
+                mapLayers.getIndex("transparentStructures")};
+
         station.spawn(FireTruckType.Ocean);
         station.spawn(FireTruckType.Speed);
 
@@ -80,9 +93,7 @@ public class GameScreen implements Screen {
             truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
         }
 
-        state = State.PLAY;
-        pauseImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
-        pauseImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        batch = renderer.getBatch();
 
     }
 
@@ -175,7 +186,6 @@ public class GameScreen implements Screen {
         }
 
         gui.renderButtons();
-
     }
 
     @Override
@@ -209,10 +219,7 @@ public class GameScreen implements Screen {
 
     public void update(float delta) {
 
-        // check to see if the game has been won/lost
         gameState.hasGameEnded(game);
-
-        // check to see if trucks can be repaired/refilled
         station.restoreTrucks();
 
         camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
@@ -325,19 +332,6 @@ public class GameScreen implements Screen {
         return false;
     }
 
-    private void renderEntities() {
-        batch.begin();
-        for (FireTruck truck : station.getTrucks()) {
-            batch.draw(truck, truck.getX(), truck.getY(), 1, 1); // draw r
-            drawTrailPath(truck);
-        }
-        for (Fortress fortress : this.fortresses) {
-            batch.draw(fortress.getFortressType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
-        }
-        batch.draw(station.getTexture(), station.getPosition().x - 1, station.getPosition().y, 5, 3);
-        batch.end();
-    }
-
     public void toControlScreen() { ScreenHandler.ToControls(game, this, "game"); }
 
     public void toHomeScreen() {
@@ -356,50 +350,5 @@ public class GameScreen implements Screen {
     public State getState(){
         return this.state;
     }
-
-    private void drawTrailPath(FireTruck truck) {
-        if (!truck.trailPath.isEmpty()) {
-            for (Vector2 tile : truck.trailPath) {
-                if (tile.equals(truck.trailPath.last())) {
-                    batch.draw(truck.getType().getTrailImageEnd(), tile.x, tile.y, 1, 1); // overlay the border square
-                }
-                batch.draw(truck.getType().getTrailImage(), tile.x, tile.y, 1, 1); // draws transparent trail path
-            }
-        }
-    }
-
-    public void checkIfFortressDestroyed() {
-        for (int i = 0; i < fortresses.size(); i++) {
-            if (fortresses.get(i).getHP() <= 0) {
-                gameState.addFortress();
-                fortresses.remove(fortresses.get(i));
-                if (SoundFX.music_enabled) {
-                    SoundFX.sfx_fortress_destroyed.play();
-                }
-            }
-        }
-    }
-
-    public void checkIfTruckDestroyed(FireTruck truck) {
-        if (truck.getHP() <= 0) {
-            station.destroyTruck(truck);
-            if (truck.equals(this.selectedTruck)) {
-                this.selectedTruck = null;
-            }
-        }
-    }
-
-    // Are we going to keep this?
-    public void renderFortressRange() {
-        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (Fortress fortress : fortresses) {
-            shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getFortressType().getRange());
-        }
-        shapeMapRenderer.end();
-
-    }
 }
-
-
-
 
