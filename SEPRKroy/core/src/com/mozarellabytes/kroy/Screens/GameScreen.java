@@ -21,76 +21,58 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     private final Kroy game;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
+    public GameState gameState;
+
     public OrthographicCamera camera;
-    private ShapeRenderer shapeMapRenderer;
-    private MapLayers mapLayers;
-    private int[] structureLayersIndices, backgroundLayerIndex;
     public CameraShake camShake;
 
-    private Batch batch;
+    private TiledMap map;
+    public Object selectedEntity;
+    private MapLayers mapLayers;
+    private int[] structureLayersIndices, backgroundLayerIndex;
+    private OrthogonalTiledMapRenderer renderer;
 
+    private Batch batch;
+    private ShapeRenderer shapeMapRenderer;
     public ArrayList<Fortress> fortresses;
     public FireTruck selectedTruck;
     public FireStation station;
-    public Object selectedEntity;
 
     private State state;
-
-    private GUI gui;
-
-    public GameState gameState;
     private Texture pauseImage;
+    private GUI gui;
 
     public GameScreen(Kroy game) {
         this.game = game;
 
-        state = State.PLAY;
+        gameState = new GameState();
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
-
-        // if this is commented out, it still works fine? so what does this actually do
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-
-        map = new TmxMapLoader().load("maps/YorkMap.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
-
-        pauseImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
-        pauseImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-
-        shapeMapRenderer = new ShapeRenderer();
-        shapeMapRenderer.setProjectionMatrix(camera.combined);
-
-        gui = new GUI(game, this,275, 275);
-
-        Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
-
-        gameState = new GameState();
-
         camShake = new CameraShake();
 
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_soundtrack.setVolume(.5f);
-            SoundFX.sfx_soundtrack.play();
-        }
-
-        station = new FireStation(this, 4, 2);
-
-        fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(12, 20, FortressType.Default));
-        fortresses.add(new Fortress( 30, 17, FortressType.Walmgate));
-        fortresses.add(new Fortress(16, 3, FortressType.Clifford));
-
+        map = new TmxMapLoader().load("maps/YorkMap.tmx");
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
-        backgroundLayerIndex = new int[]{mapLayers.getIndex("background")};
 
+        backgroundLayerIndex = new int[]{mapLayers.getIndex("background")};
         structureLayersIndices = new int[]{mapLayers.getIndex("structures"),
                 mapLayers.getIndex("structures2"),
                 mapLayers.getIndex("transparentStructures")};
 
+        shapeMapRenderer = new ShapeRenderer();
+        shapeMapRenderer.setProjectionMatrix(camera.combined);
+
+        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
+
+        batch = renderer.getBatch();
+
+        fortresses = new ArrayList<Fortress>();
+        fortresses.add(new Fortress(12, 20, FortressType.Default));
+        fortresses.add(new Fortress(30, 17, FortressType.Walmgate));
+        fortresses.add(new Fortress(16, 3, FortressType.Clifford));
+
+        station = new FireStation(this, 4, 2);
         station.spawn(FireTruckType.Ocean);
         station.spawn(FireTruckType.Speed);
 
@@ -98,9 +80,17 @@ public class GameScreen implements Screen {
             truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
         }
 
-        batch = renderer.getBatch();
+        state = State.PLAY;
+        pauseImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
+        pauseImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        gui = new GUI(game, this,275, 275);
+        Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
 
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_soundtrack.setVolume(.5f);
+            SoundFX.sfx_soundtrack.play();
+        }
     }
 
     @Override
@@ -118,128 +108,52 @@ public class GameScreen implements Screen {
 
         switch (state) {
             case PLAY:
-                // check to see if the game has been won/lost
+
                 gameState.hasGameEnded(game);
 
-                // update camera
                 camera.update();
-
-                // render what our camera sees
+                camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
                 renderer.setView(camera);
 
-                camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
-
-                // renders the background layer of the map
                 renderer.render(backgroundLayerIndex);
+                renderEntities();
+                renderer.render(structureLayersIndices);
+                renderFortressRange();
 
-                // check to see if trucks can be repaired/refilled
-                station.containsTrucks();
+                station.restoreTrucks();
 
-                // setups batch for rendering entities
-                batch.begin();
-
-                // for each truck (uses standard for loop because it may delete truck when a truck is destroyed)
+                // uses standard for loop because it may delete truck when a truck is destroyed
                 for (int i = 0; i < station.getTrucks().size(); i++) {
-
-                    // creates local truck
                     FireTruck truck = station.getTruck(i);
-                    FireTruckType truckType = truck.getType();
-
-                    // damages truck if within range of fortress
-                    for (Fortress fortress : this.fortresses) {
-                        fortress.checkRange(truck);
-                    }
-
+                    truck.move();
+                    station.checkForCollisions(); // checks Trucks do not end on the same tile
                     truck.attack();
 
-                    station.checkCollision();
-
-                    // move the position of the truck
-                    truck.mouseMove();
-
-                    // draws the truck
-                    batch.draw(truck, truck.getX(), truck.getY(), 1, 1);
-
-                    // if truck has a path
-                    if (!truck.trailPath.isEmpty()) {
-
-                        // for each tile in the path
-                        for (Vector2 tile : truck.trailPath) {
-
-                            // if last tile
-                            if (tile.equals(truck.trailPath.last())) {
-
-                                // overlay the border square
-                                batch.draw(truckType.getTrailImageEnd(), tile.x, tile.y, 1, 1);
-                            }
-
-                            // draws transparent trail path
-                            batch.draw(truckType.getTrailImage(), tile.x, tile.y, 1, 1);
-                        }
+                    for (Fortress fortress : this.fortresses) {
+                        fortress.attack(truck);
                     }
-
-                    // if health of truck reaches 0
-                    if (truck.getHP() <= 0) {
-                        station.destroyTruck(truck);
-                        if (truck.equals(this.selectedTruck)) {
-                            this.selectedTruck = null;
-                        }
-                    }
-
+                    checkIfTruckDestroyed(truck);
                     truck.updateSpray(delta);
-
+                    gui.renderTruckBars(truck, shapeMapRenderer);
                 }
 
-                for (int i = 0; i < fortresses.size(); i++) {
-                    if (fortresses.get(i).getHP() <= 0) {
-                        gameState.addFortress();
-                        fortresses.remove(fortresses.get(i));
-                        if (SoundFX.music_enabled) {
-                            SoundFX.sfx_fortress_destroyed.play();
-                        }
-                    }
-                }
+                checkIfFortressDestroyed();
 
-                // draw the station
-                batch.draw(station.getTexture(), station.getPosition().x - 1, station.getPosition().y, 5, 3);
-
-                // draw the fortress
-                for (Fortress fortress : this.fortresses) {
-                    batch.draw(fortress.getType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
-                }
-
-                // finish rendering of entities
-                batch.end();
-
-                // render structures
-                renderer.render(structureLayersIndices);
-
-                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
-                for (Fortress fortress : fortresses) {
-                    shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getType().getRange());
-                }
-                shapeMapRenderer.end();
-
-                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
-
-                // for each fire truck
+                // for each fire truck put this in GUI?
                 for (FireTruck truck : station.getTrucks()) {
-                    // 1: white background, 2: hp background, 3: hp, 4: reserve background, 5: reserve
-                    shapeMapRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f, 0.8f);
-                    shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f, 0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-                    shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
-                    shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-                    shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f, 0.2f, (float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
                     for (int i = 0; i < truck.getSpray().size(); i++) {
                         Particle particle = truck.getSpray().get(i);
                         if (particle.isHit()) {
                             truck.damage(particle);
                             truck.removeParticle(particle);
                         } else {
+                            shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
                             shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
+                            shapeMapRenderer.end();
                         }
                     }
                 }
+                shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
                 for (Fortress fortress : fortresses) {
 
@@ -270,7 +184,6 @@ public class GameScreen implements Screen {
                 break;
 
             case PAUSE:
-
                 renderer.setView(camera);
                 batch.begin();
                 batch.draw(pauseImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
@@ -357,6 +270,19 @@ public class GameScreen implements Screen {
         return false;
     }
 
+    private void renderEntities() {
+        batch.begin();
+        for (FireTruck truck : station.getTrucks()) {
+            batch.draw(truck, truck.getX(), truck.getY(), 1, 1); // draw r
+            drawTrailPath(truck);
+        }
+        for (Fortress fortress : this.fortresses) {
+            batch.draw(fortress.getType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
+        }
+        batch.draw(station.getTexture(), station.getPosition().x - 1, station.getPosition().y, 5, 3);
+        batch.end();
+    }
+
     public void toControlScreen() { ScreenHandler.ToControls(game, this, "game"); }
 
     public void toHomeScreen() {
@@ -374,6 +300,48 @@ public class GameScreen implements Screen {
 
     public State getState(){
         return this.state;
+    }
+
+    private void drawTrailPath(FireTruck truck) {
+        if (!truck.trailPath.isEmpty()) {
+            for (Vector2 tile : truck.trailPath) {
+                if (tile.equals(truck.trailPath.last())) {
+                    batch.draw(truck.getType().getTrailImageEnd(), tile.x, tile.y, 1, 1); // overlay the border square
+                }
+                batch.draw(truck.getType().getTrailImage(), tile.x, tile.y, 1, 1); // draws transparent trail path
+            }
+        }
+    }
+
+    public void checkIfFortressDestroyed() {
+        for (int i = 0; i < fortresses.size(); i++) {
+            if (fortresses.get(i).getHP() <= 0) {
+                gameState.addFortress();
+                fortresses.remove(fortresses.get(i));
+                if (SoundFX.music_enabled) {
+                    SoundFX.sfx_fortress_destroyed.play();
+                }
+            }
+        }
+    }
+
+    public void checkIfTruckDestroyed(FireTruck truck) {
+        if (truck.getHP() <= 0) {
+            station.destroyTruck(truck);
+            if (truck.equals(this.selectedTruck)) {
+                this.selectedTruck = null;
+            }
+        }
+    }
+
+    // Are we going to keep this?
+    public void renderFortressRange() {
+        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
+        for (Fortress fortress : fortresses) {
+            shapeMapRenderer.circle(fortress.getPosition().x, fortress.getPosition().y, fortress.getType().getRange());
+        }
+        shapeMapRenderer.end();
+
     }
 }
 

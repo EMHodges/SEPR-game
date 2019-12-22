@@ -28,7 +28,7 @@ public class Fortress {
                 this.fortressType.getW(), this.fortressType.getH());
     }
 
-    public void checkRange(FireTruck target) {
+    private boolean IsTruckInRange(FireTruck target) {
         Vector2 targetPos = new Vector2(((float) (target.getPosition().x + 0.5)), (float) (target.getPosition().y + 0.5));
         if (targetPos.dst(this.position) <= fortressType.getRange()) {
             ArrayList<Vector2> truckTarget = new ArrayList<Vector2>();
@@ -39,17 +39,20 @@ public class Fortress {
             }
             int randomIndex = rand.nextInt(truckTarget.size());
             if (truckTarget.get(randomIndex).equals(targetPos)){
-                attack(target);
+                return true;
             }
         }
+        return false;
     }
 
-    private void attack(FireTruck target){
-        if (this.lastFire + this.fortressType.getDelay() < System.currentTimeMillis()) {
-            this.lastFire = System.currentTimeMillis();
-            this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.fortressType.getAP()));
-            if (SoundFX.music_enabled) {
-                SoundFX.sfx_fortress_attack.play();
+    public void attack(FireTruck target) {
+        if (IsTruckInRange(target)) {
+            if (this.lastFire + this.fortressType.getDelay() < System.currentTimeMillis()) {
+                this.lastFire = System.currentTimeMillis();
+                this.bombs.add(new Bomb(this.position.x, this.position.y, target, this.fortressType.getAP()));
+                if (SoundFX.music_enabled) {
+                    SoundFX.sfx_fortress_attack.play();
+                }
             }
         }
     }

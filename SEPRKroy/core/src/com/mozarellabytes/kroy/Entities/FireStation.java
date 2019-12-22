@@ -63,7 +63,7 @@ public class FireStation {
         }
     }
 
-    public void containsTrucks() {
+    public void restoreTrucks() {
         for (FireTruck truck : this.trucks) {
             if (truck.getPosition().equals(this.bayTile1) || truck.getPosition().equals(this.bayTile2)) {
                 refill(truck);
@@ -77,7 +77,7 @@ public class FireStation {
         gameScreen.gameState.removeFireTruck();
     }
 
-    public void checkCollision() {
+    public void checkForCollisions() {
         for (FireTruck truck : trucks) {
             boolean isCollision = false;
             for (int i = 0; i < trucks.size(); i++) {

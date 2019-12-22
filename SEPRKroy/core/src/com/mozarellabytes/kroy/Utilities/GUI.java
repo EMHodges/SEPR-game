@@ -181,6 +181,16 @@ public class GUI {
         renderer.rect(this.x + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.y + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
 
+    public void renderTruckBars(FireTruck truck, ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
+        shapeMapRenderer.rect(truck.getPosition().x + 0.2f, truck.getPosition().y + 1.3f, 0.6f, 0.8f);
+        shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f, 0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
+        shapeMapRenderer.rect(truck.getPosition().x + 0.266f, truck.getPosition().y + 1.4f, 0.2f, (float) truck.getReserve() / (float) truck.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+        shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        shapeMapRenderer.rect(truck.getPosition().x + 0.533f, truck.getPosition().y + 1.4f, 0.2f, (float) truck.getHP() / (float) truck.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
+        shapeMapRenderer.end();
+    }
+
     public void renderButtons(){
         renderSoundButton();
         renderHomeButton();

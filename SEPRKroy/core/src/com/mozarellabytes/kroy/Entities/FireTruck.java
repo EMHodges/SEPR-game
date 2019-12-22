@@ -63,7 +63,7 @@ public class FireTruck extends Sprite {
         this.moving = t;
     }
 
-    public void mouseMove() {
+    public void move() {
         if (this.moving) {
             followPath();
         }
@@ -84,7 +84,6 @@ public class FireTruck extends Sprite {
     public float getReserve() { return this.reserve; }
 
     public FireTruckType getType(){ return this.type; }
-
 
     public void setCollision(){
         this.inCollision = true;
