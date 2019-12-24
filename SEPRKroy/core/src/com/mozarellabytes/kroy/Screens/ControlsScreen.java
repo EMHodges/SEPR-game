@@ -20,23 +20,23 @@ public class ControlsScreen implements Screen {
     private final Kroy game;
 
     private Texture backgroundImage;
-    private Texture blueTileImage;
-    private Texture blueEndTileImage;
-    private Texture redTileImage;
-    private Texture redEndTileImage;
-    private Texture blueTruck;
-    private Texture redTruck;
+    private Texture trailImage;
+    private Texture trailEndImage;
+    private Texture truckRight;
+    private Texture truckLeft;
     private Texture fortress;
 
     public OrthographicCamera camera;
 
     private Rectangle exitButton;
     private SpriteBatch batch;
+
+    private ShapeRenderer renderer;
     private BitmapFont font;
     private BitmapFont font2;
     private BitmapFont font3;
     private BitmapFont font4;
-    private ShapeRenderer renderer;
+
     private int HP;
     private int count;
     private String screen;
@@ -60,15 +60,11 @@ public class ControlsScreen implements Screen {
 
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        blueTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Blue_trail.png"), true);
-        blueEndTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Blue_trail_end.png"), true);
+        trailImage = new Texture(Gdx.files.internal("sprites/firetruck/trail.png"), true);
+        trailEndImage = new Texture(Gdx.files.internal("sprites/firetruck/trailEnd.png"), true);
 
-        redTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Red_trail.png"), true);
-        redEndTileImage = new Texture(Gdx.files.internal("sprites/firetruck/Red_trail_end.png"), true);
-
-        blueTruck = new Texture(Gdx.files.internal("sprites/firetruck/right.png"), true);
-
-        redTruck = new Texture(Gdx.files.internal("sprites/firetruck/left.png"), true);
+        truckRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"), true);
+        truckLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"), true);
 
         fortress = new Texture(Gdx.files.internal("sprites/fortress/fortress.png"), true);
 
@@ -85,10 +81,8 @@ public class ControlsScreen implements Screen {
         font = generator.generateFont(parameter);
         parameter.size = 25;
         font2 = generator.generateFont(parameter);
-
         parameter.size = 33;
         font3 = generator.generateFont(parameter);
-
         parameter.size = 33;
         parameter.color = Color.FIREBRICK;
         font4 = generator.generateFont(parameter);
@@ -131,32 +125,34 @@ public class ControlsScreen implements Screen {
         font2.draw(batch, "Unclick and the truck will", 165,camera.viewportHeight - 495);
         font2.draw(batch, "follow the path", 165,camera.viewportHeight - 525);
 
-        batch.draw(blueTileImage, 180, camera.viewportHeight - 450);
-        batch.draw(blueTileImage, 230, camera.viewportHeight - 450);
-        batch.draw(blueTileImage, 280, camera.viewportHeight - 450);
-        batch.draw(blueTileImage, 330, camera.viewportHeight - 450);
-        batch.draw(blueTileImage, 380, camera.viewportHeight - 450);
-        batch.draw(blueTileImage, 430, camera.viewportHeight - 450);
-        batch.draw(blueTileImage, 480, camera.viewportHeight - 450);
-        batch.draw(blueEndTileImage, 480, camera.viewportHeight - 450);
-        batch.draw(blueTruck, 172, camera.viewportHeight - 457);
+        batch.setColor(Color.CYAN);
+        batch.draw(trailImage, 180,camera.viewportHeight - 450);
+        batch.draw(trailImage, 230, camera.viewportHeight - 450);
+        batch.draw(trailImage, 280, camera.viewportHeight - 450);
+        batch.draw(trailImage, 330, camera.viewportHeight - 450);
+        batch.draw(trailImage, 380, camera.viewportHeight - 450);
+        batch.draw(trailImage, 430, camera.viewportHeight - 450);
+        batch.draw(trailImage, 480, camera.viewportHeight - 450);
+        batch.draw(trailImage, 480, camera.viewportHeight - 450);
 
         font2.draw(batch, "Or click and drag from the", 165,camera.viewportHeight - 590);
         font2.draw(batch, "end of the trucks path", 165,camera.viewportHeight - 625);
 
-        batch.draw(blueTileImage, 380, camera.viewportHeight - 710);
-        batch.draw(blueEndTileImage, 380, camera.viewportHeight - 710);
-        batch.draw(redTileImage, 270, camera.viewportHeight - 710);
-        batch.draw(redEndTileImage, 270, camera.viewportHeight - 710);
-        batch.end();
+        batch.draw(trailImage, 380, camera.viewportHeight - 710);
+        batch.draw(trailEndImage, 380, camera.viewportHeight - 710);
 
-        batch.begin();
+        batch.setColor(Color.RED);
+        batch.draw(trailImage, 270, camera.viewportHeight - 710);
+        batch.draw(trailEndImage, 270, camera.viewportHeight - 710);
+
+        batch.setColor(Color.WHITE);
+        batch.draw(truckRight, 172, camera.viewportHeight - 457);
+        batch.draw(fortress,790, camera.viewportHeight - 670);
+        batch.draw(truckLeft,1040, camera.viewportHeight - 610);
+
         font3.draw(batch, "Attacking the fortresses", 680, camera.viewportHeight - 250);
         font2.draw(batch, "When a firetruck is within range ", 685,camera.viewportHeight - 310);
         font2.draw(batch, "of a fortress press A to attack", 685,camera.viewportHeight - 345);
-
-        batch.draw(fortress,790, camera.viewportHeight - 670);
-        batch.draw(redTruck,1040, camera.viewportHeight - 610);
 
         batch.end();
 
@@ -225,9 +221,10 @@ public class ControlsScreen implements Screen {
         font3.dispose();
         font4.dispose();
         fortress.dispose();
-        redTruck.dispose();
-        redEndTileImage.dispose();
-        redTileImage.dispose();
+        trailImage.dispose();
+        trailEndImage.dispose();
+        truckRight.dispose();
+        truckLeft.dispose();
     }
 
     public int damageHP() {
@@ -248,7 +245,6 @@ public class ControlsScreen implements Screen {
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
             this.game.setScreen(parent);
         }
-        // this.game.setScreen(parent);
     }
 
     public Rectangle getExitButton(){  return this.exitButton; }

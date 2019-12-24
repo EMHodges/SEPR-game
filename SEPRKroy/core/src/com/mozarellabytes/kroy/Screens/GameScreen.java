@@ -162,7 +162,7 @@ public class GameScreen implements Screen {
         for (Fortress fortress : fortresses) {
             fortress.drawStats(shapeMapRenderer);
             for (Bomb bomb : fortress.getBombs()) {
-                bomb.drawCircle(shapeMapRenderer);
+                bomb.drawBomb(shapeMapRenderer);
             }
         }
 
@@ -221,25 +221,18 @@ public class GameScreen implements Screen {
 
         gameState.hasGameEnded(game);
         station.restoreTrucks();
-
         camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
-        // for each fire truck
         for (int i = 0; i < station.getTrucks().size(); i++) {
 
-            // creates local truck
             FireTruck truck = station.getTruck(i);
 
-            // damages truck if within range of fortress
             for (Fortress fortress : this.fortresses) {
                 fortress.attack(truck);
             }
 
             truck.attack();
-
             station.checkForCollisions();
-
-            // move the position of the truck
             truck.move();
 
             // if health of truck reaches 0

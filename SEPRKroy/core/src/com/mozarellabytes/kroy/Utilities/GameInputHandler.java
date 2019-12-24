@@ -23,7 +23,7 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
-            case Input.Keys.Q:
+            case Input.Keys.ESCAPE:
                 Gdx.app.exit();
                 System.exit(1);
                 break;
@@ -50,7 +50,7 @@ public class GameInputHandler implements InputProcessor {
                 SoundFX.music_enabled = true;
                 SoundFX.PlayMusic();
                 break;
-            case Input.Keys.ESCAPE:
+            case Input.Keys.P:
                 gui.clickedPauseButton();
                 gameScreen.changeState();
         }
