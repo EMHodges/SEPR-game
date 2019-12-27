@@ -24,12 +24,8 @@ public class Bomb extends Sprite {
         this.truck = truck;
         Vector2 truckPosition = truck.getPosition();
         this.truckPosition = new Vector2(getMiddleOfTile(truckPosition));
-
-        // Bomb starts at the centre of the fortress, it's current position is updated as it moves towards
-        // it's target position
         this.startPosition = new Vector2(fortress.getPosition());
         this.currentPosition = this.startPosition;
-
 
         // Note: Target position is different to the truck position
         // Target position is the tile where the bomb "lands" which is not always the tile where the Truck is

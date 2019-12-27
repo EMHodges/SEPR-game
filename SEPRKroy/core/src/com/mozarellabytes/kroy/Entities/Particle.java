@@ -6,31 +6,32 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Particle {
 
-    private Color colour;
-    private Vector2 position;
-    private Vector2 targetPosition;
-    private Vector2 originalPosition;
     private Fortress target;
+    private Color colour;
     private float size;
+    private Vector2 startPosition;
+    private Vector2 currentPosition;
+    private Vector2 targetPosition;
 
     public Particle(FireTruck truck, Fortress target) {
+        this.target = target;
         Color[] colors = new Color[] { Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
         Color randomColor = colors[(int)( Math.random() * 4)];
         this.colour = randomColor;
-        this.position = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
-        this.originalPosition = this.position;
-        this.targetPosition = target.getPosition();
-        this.target = target;
         this.size = (float) (Math.random()/5 + 0.1);
+        this.startPosition = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
+        this.currentPosition = startPosition;
+        this.targetPosition = target.getPosition();
+
         createTargetPosition(target);
     }
 
     public Vector2 getPosition() {
-        return this.position;
+        return this.currentPosition;
     }
 
     public void updatePosition(float delta) {
-        this.position = this.originalPosition.interpolate(this.targetPosition, 0.2f, Interpolation.circle);
+        this.currentPosition = this.startPosition.interpolate(this.targetPosition, 0.2f, Interpolation.circle);
     }
 
     public Color getColour() {
@@ -38,7 +39,8 @@ public class Particle {
     }
 
     public boolean isHit() {
-        return (((int) this.targetPosition.x == (int) this.position.x) && ((int) this.targetPosition.y == (int) this.position.y));
+        return (((int) this.targetPosition.x == (int) this.currentPosition.x) &&
+                ((int) this.targetPosition.y == (int) this.currentPosition.y));
     }
 
     public void createTargetPosition(Fortress fortress) {

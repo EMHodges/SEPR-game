@@ -183,6 +183,7 @@ public class GameInputHandler implements InputProcessor {
     private boolean checkButtonUnclick(int screenX, int screenY){
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
+
         if (gui.getHomeButton().contains(screenCoords)) {
             gameScreen.toHomeScreen();
         } else {

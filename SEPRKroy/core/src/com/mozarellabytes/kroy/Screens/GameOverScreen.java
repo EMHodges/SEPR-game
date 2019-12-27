@@ -31,7 +31,7 @@ public class GameOverScreen implements Screen {
         backgroundLogo = new Texture(Gdx.files.internal("images/backgroundLogo.png"), true);
         backgroundLogo.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        Gdx.input.setInputProcessor(new GameOverInputHandler(this));
+        Gdx.input.setInputProcessor(new GameOverInputHandler(game));
 
         layout = new GlyphLayout();
         if (this.won) {
@@ -86,7 +86,5 @@ public class GameOverScreen implements Screen {
         backgroundLogo.dispose();
     }
 
-    public void toMenuScreen() {
-        this.game.setScreen(new MenuScreen(this.game));
-    }
+
 }

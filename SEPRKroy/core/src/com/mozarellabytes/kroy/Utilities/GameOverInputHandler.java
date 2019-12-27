@@ -1,14 +1,15 @@
 package com.mozarellabytes.kroy.Utilities;
 
 import com.badlogic.gdx.InputProcessor;
-import com.mozarellabytes.kroy.Screens.GameOverScreen;
+import com.mozarellabytes.kroy.Kroy;
+
 
 public class GameOverInputHandler implements InputProcessor {
 
-    private GameOverScreen gameOver;
+    private Kroy game;
 
-    public GameOverInputHandler(GameOverScreen gameOver) {
-        this.gameOver = gameOver;
+    public GameOverInputHandler(Kroy game) {
+        this.game = game;
     }
 
     @Override
@@ -33,8 +34,8 @@ public class GameOverInputHandler implements InputProcessor {
 
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        SoundFX.StopGameMusic();
-        gameOver.toMenuScreen();
+        SoundFX.StopGameMusic();//
+        ScreenHandler.ToMenu(game);
         return true;
     }
 
