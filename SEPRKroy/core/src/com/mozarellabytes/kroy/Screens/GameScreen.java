@@ -106,6 +106,7 @@ public class GameScreen implements Screen {
 
         // update camera
         camera.update();
+        mapRenderer.setView(camera);
 
         // renders the background layer of the map
         mapRenderer.render(backgroundLayerIndex);
