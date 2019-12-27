@@ -1,6 +1,5 @@
 package com.mozarellabytes.kroy.Utilities;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
@@ -17,36 +16,34 @@ import com.mozarellabytes.kroy.Screens.State;
 
 public class GUI {
 
-    private Kroy game;
-    private ShapeRenderer renderer;
-    private int x, y, w, h;
-    private GameScreen gameScreen;
+    private final Kroy game;
+    private final int selectedX, selectedY, h, w;
+    private final GameScreen gameScreen;
 
     private Rectangle homeButton;
-    private Texture homeButtonIdle;
-    private Texture homeButtonClicked;
+    private final Texture homeButtonIdle;
+    private final Texture homeButtonClicked;
     private Texture currentHomeTexture;
 
     private Rectangle pauseButton;
-    private Texture pauseButtonIdle;
-    private Texture pauseButtonClicked;
+    private final Texture pauseButtonIdle;
+    private final Texture pauseButtonClicked;
     private Texture currentPauseTexture;
 
     private Rectangle soundButton;
-    private Texture soundOnIdleTexture;
-    private Texture soundOffIdleTexture;
-    private Texture soundOnClickedTexture;
-    private Texture soundOffClickedTexture;
+    private final Texture soundOnIdleTexture;
+    private final Texture soundOffIdleTexture;
+    private final Texture soundOnClickedTexture;
+    private final Texture soundOffClickedTexture;
     private Texture currentSoundTexture;
 
-    public GUI(Kroy game, GameScreen gameScreen, int w, int h) {
+    public GUI(Kroy game, GameScreen gameScreen) {
         this.game = game;
         this.gameScreen = gameScreen;
-        this.renderer = new ShapeRenderer();
-        this.x = 10;
-        this.y = Gdx.graphics.getHeight() - 10 - h;
-        this.w = w;
-        this.h = h;
+        this.h = 275;
+        this.w = 275;
+        this.selectedX = 10;
+        this.selectedY = Gdx.graphics.getHeight() - 10 - 275;
 
         homeButtonIdle = new Texture(Gdx.files.internal("ui/home_idle.png"), true);
         homeButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -101,11 +98,11 @@ public class GUI {
         if (entity != null) {
             Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
             Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-            renderer.begin(ShapeRenderer.ShapeType.Filled);
+            game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             renderBackground();
-            renderer.end();
+            game.shapeRenderer.end();
             Gdx.gl.glDisable(GL20.GL_BLEND);
-            renderer.begin(ShapeRenderer.ShapeType.Filled);
+            game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
             // if fire truck is selected
             if (entity instanceof FireTruck) {
                 FireTruck truck = (FireTruck) entity;
@@ -114,13 +111,13 @@ public class GUI {
                 Fortress fortress = (Fortress) entity;
                 renderFortress(fortress);
             }
-            renderer.end();
+            game.shapeRenderer.end();
         }
     }
 
     private void renderBackground() {
-        renderer.setColor(0, 0, 0, 0.5f);
-        renderer.rect(x, y, w, h);
+        game.shapeRenderer.setColor(0, 0, 0, 0.5f);
+        game.shapeRenderer.rect(selectedX, selectedY, 275, 275);
     }
 
     private void renderTruck(FireTruck truck) {
@@ -139,17 +136,17 @@ public class GUI {
         FireTruckType truckType = truck.getType();
         int newLine = 20;
         game.batch.begin();
-        game.bigFont.draw(game.batch, truckType.getName(), this.x + 10, this.y + this.h - 10);
-        game.smallFont.draw(game.batch, "HP: ", this.x + 15, this.y + this.h - 50);
-        game.smallFont.draw(game.batch, String.format("%.1f", truck.getHP()) + " / " + String.format("%.1f", truckType.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
-        game.smallFont.draw(game.batch, "Reserve: ", this.x + 15, this.y + this.h - 50 - newLine*2);
-        game.smallFont.draw(game.batch, String.format("%.1f", truck.getReserve()) + " / " + String.format("%.1f", truckType.getMaxReserve()), this.x + 20, this.y + this.h - 50 - newLine*3);
-        game.smallFont.draw(game.batch, "Speed: ", this.x + 15, this.y + this.h - 50 - newLine*4);
-        game.smallFont.draw(game.batch, String.format("%.1f", truckType.getSpeed()), this.x + 20, this.y + this.h - 50 - newLine*5);
-        game.smallFont.draw(game.batch, "Range: ", this.x + 15, this.y + this.h - 50 - newLine*6);
-        game.smallFont.draw(game.batch, String.format("%.1f", truckType.getRange()), this.x + 20, this.y + this.h - 50 - newLine*7);
-        game.smallFont.draw(game.batch, "AP: ", this.x + 15, this.y + this.h - 50 - newLine*8);
-        game.smallFont.draw(game.batch, String.format("%.2f", truckType.getAP()), this.x + 20, this.y + this.h - 50 - newLine*9);
+        game.font26.draw(game.batch, truckType.getName(), this.selectedX + 10, this.selectedY + this.h - 10);
+        game.font19.draw(game.batch, "HP: ", this.selectedX + 15, this.selectedY + this.h - 50);
+        game.font19.draw(game.batch, String.format("%.1f", truck.getHP()) + " / " + String.format("%.1f", truckType.getMaxHP()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine);
+        game.font19.draw(game.batch, "Reserve: ", this.selectedX + 15, this.selectedY + this.h - 50 - newLine*2);
+        game.font19.draw(game.batch, String.format("%.1f", truck.getReserve()) + " / " + String.format("%.1f", truckType.getMaxReserve()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine*3);
+        game.font19.draw(game.batch, "Speed: ", this.selectedX + 15, this.selectedY + this.h - 50 - newLine*4);
+        game.font19.draw(game.batch, String.format("%.1f", truckType.getSpeed()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine*5);
+        game.font19.draw(game.batch, "Range: ", this.selectedX + 15, this.selectedY + this.h - 50 - newLine*6);
+        game.font19.draw(game.batch, String.format("%.1f", truckType.getRange()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine*7);
+        game.font19.draw(game.batch, "AP: ", this.selectedX + 15, this.selectedY + this.h - 50 - newLine*8);
+        game.font19.draw(game.batch, String.format("%.2f", truckType.getAP()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine*9);
         game.batch.end();
     }
 
@@ -157,13 +154,13 @@ public class GUI {
         int newLine = 20;
         FortressType fortressType = fortress.getFortressType();
         game.batch.begin();
-        game.bigFont.draw(game.batch, fortressType.getName(), this.x + 10, this.y + this.h - 10);
-        game.smallFont.draw(game.batch, "HP: ", this.x + 15, this.y + this.h - 50);
-        game.smallFont.draw(game.batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortressType.getMaxHP()), this.x + 20, this.y + this.h - 50 - newLine);
-        game.smallFont.draw(game.batch, "Range: ", this.x + 15, this.y + this.h - 50 - newLine*2);
-        game.smallFont.draw(game.batch, String.format("%.1f", fortressType.getRange()), this.x + 20, this.y + this.h - 50 - newLine*3);
-        game.smallFont.draw(game.batch, "AP: ", this.x + 15, this.y + this.h - 50 - newLine*4);
-        game.smallFont.draw(game.batch, String.format("%.2f", fortressType.getAP()), this.x + 20, this.y + this.h - 50 - newLine*5);
+        game.font26.draw(game.batch, fortressType.getName(), this.selectedX + 10, this.selectedY + this.h - 10);
+        game.font19.draw(game.batch, "HP: ", this.selectedX + 15, this.selectedY + this.h - 50);
+        game.font19.draw(game.batch, String.format("%.1f", fortress.getHP()) + " / " + String.format("%.1f", fortressType.getMaxHP()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine);
+        game.font19.draw(game.batch, "Range: ", this.selectedX + 15, this.selectedY + this.h - 50 - newLine*2);
+        game.font19.draw(game.batch, String.format("%.1f", fortressType.getRange()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine*3);
+        game.font19.draw(game.batch, "AP: ", this.selectedX + 15, this.selectedY + this.h - 50 - newLine*4);
+        game.font19.draw(game.batch, String.format("%.2f", fortressType.getAP()), this.selectedX + 20, this.selectedY + this.h - 50 - newLine*5);
         game.batch.end();
     }
 
@@ -176,9 +173,9 @@ public class GUI {
         int positionSpacer = position * whiteW;
         int barSpacer = 0;
         if (position > 1) barSpacer = 5;
-        renderer.rect(this.x + this.w - positionSpacer - outerSpacing - barSpacer, this.y + outerSpacing, whiteW, this.h - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        renderer.rect(this.x + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.y + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
-        renderer.rect(this.x + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.y + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
+        game.shapeRenderer.rect(this.selectedX + this.w - positionSpacer - outerSpacing - barSpacer, this.selectedY + outerSpacing, whiteW, this.h - outerSpacing*2 - spaceForText, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        game.shapeRenderer.rect(this.selectedX + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, barHeight, backgroundColour, backgroundColour, backgroundColour, backgroundColour);
+        game.shapeRenderer.rect(this.selectedX + this.w - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
 
     public void renderTruckBars(FireTruck truck, ShapeRenderer shapeMapRenderer) {
@@ -192,14 +189,10 @@ public class GUI {
     }
 
     public void renderButtons(){
-        renderSoundButton();
-        renderHomeButton();
-        renderPauseButton();
-    }
-
-    public void renderHomeButton() {
         game.batch.begin();
+        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);
+        game.batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
         game.batch.end();
     }
 
@@ -210,48 +203,12 @@ public class GUI {
         currentHomeTexture = homeButtonClicked;
     }
 
-    public void idleHomeButton() { currentHomeTexture = homeButtonIdle; }
-
-    public Rectangle getHomeButton(){ return this.homeButton; }
-
-    public void renderSoundButton(){
-        game.batch.begin();
-        game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
-        game.batch.end();
-    }
-
     public void clickedSoundButton() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffClickedTexture;
         } else {
             currentSoundTexture = soundOnClickedTexture;
         }
-    }
-
-    public void changeSound() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOnIdleTexture;
-            SoundFX.StopMusic();
-        } else {
-            currentSoundTexture = soundOffIdleTexture;
-            SoundFX.PlayMusic();
-        }
-    }
-
-    public void idleSoundButton() {
-        if (SoundFX.music_enabled){
-            currentSoundTexture = soundOffIdleTexture;
-        } else {
-            currentSoundTexture = soundOnIdleTexture;
-        }
-    }
-
-    public Rectangle getSoundButton(){ return this.soundButton; }
-
-    public void renderPauseButton() {
-        game.batch.begin();
-        game.batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
-        game.batch.end();
     }
 
     public void clickedPauseButton() {
@@ -265,15 +222,49 @@ public class GUI {
         }
     }
 
-    public void idlePauseButton() { currentPauseTexture = pauseButtonIdle; }
+    public Rectangle getHomeButton() {
+        return this.homeButton;
+    }
 
-    public Rectangle getPauseButton(){ return this.pauseButton; }
+    public Rectangle getSoundButton() {
+        return this.soundButton;
+    }
+
+    public Rectangle getPauseButton() {
+        return this.pauseButton;
+    }
+
+    public void idleHomeButton() {
+        currentHomeTexture = homeButtonIdle;
+    }
+
+    public void idlePauseButton() {
+        currentPauseTexture = pauseButtonIdle;
+    }
+
+    public void idleSoundButton() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOffIdleTexture;
+        } else {
+            currentSoundTexture = soundOnIdleTexture;
+        }
+    }
+
+    public void changeSound() {
+        if (SoundFX.music_enabled){
+            currentSoundTexture = soundOnIdleTexture;
+            SoundFX.StopMusic();
+        } else {
+            currentSoundTexture = soundOffIdleTexture;
+            SoundFX.PlayMusic();
+        }
+    }
 
     public void renderPauseScreenText() {
         game.batch.begin();
-        game.biggestFont.draw(game.batch, "GAME PAUSED", this.x + 427, this.y - 60);
-        game.bigFont.draw(game.batch, "Press 'ESC' or the Pause button", this.x + 417, this.y - 140);
-        game.bigFont.draw(game.batch, "to return to game", this.x + 500, this.y - 170);
+        game.font60.draw(game.batch, "GAME PAUSED", this.selectedX + 427, this.selectedY - 60);
+        game.font26.draw(game.batch, "Press 'ESC' or the Pause button", this.selectedX + 417, this.selectedY - 140);
+        game.font26.draw(game.batch, "to return to game", this.selectedX + 500, this.selectedY - 170);
         game.batch.end();
     }
 

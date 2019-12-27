@@ -32,15 +32,12 @@ public class GameInputHandler implements InputProcessor {
                     SoundFX.sfx_truck_attack.loop();
                     SoundFX.sfx_truck_attack.play();
                 }
-                for (FireTruck truck: gameScreen.station.getTrucks()){
+                for (FireTruck truck: gameScreen.getStation().getTrucks()){
                     truck.setAttacking(true);
                 }
                 break;
             case Input.Keys.C:
                 gameScreen.toControlScreen();
-                break;
-            case Input.Keys.B:
-                gameScreen.camShake.shakeIt(.2f);
                 break;
             case Input.Keys.F:
                 SoundFX.music_enabled = false;
@@ -63,7 +60,7 @@ public class GameInputHandler implements InputProcessor {
             switch (keycode) {
                 case Input.Keys.A:
                     SoundFX.sfx_truck_attack.stop();
-                    for (FireTruck truck : gameScreen.station.getTrucks()) {
+                    for (FireTruck truck : gameScreen.getStation().getTrucks()) {
                         truck.setAttacking(false);
                     }
                     break;
@@ -80,7 +77,7 @@ public class GameInputHandler implements InputProcessor {
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
-        Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+        Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
         Vector2 position2d = new Vector2((int) position.x, (int) position.y);
         if (this.gameScreen.getState().equals(State.PLAY)) {
             if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
@@ -107,7 +104,7 @@ public class GameInputHandler implements InputProcessor {
         if (this.gameScreen.getState().equals(State.PLAY)) {
             if (gameScreen.selectedTruck != null) {
                 Vector2 clickCoordinates = new Vector2(screenX, screenY);
-                Vector3 position = gameScreen.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+                Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
                 Vector2 position2d = new Vector2((int) position.x, (int) position.y);
                 if (gameScreen.selectedTruck.isValidMove(position2d)) {
                     gameScreen.selectedTruck.addTileToPath(position2d);
@@ -122,7 +119,7 @@ public class GameInputHandler implements InputProcessor {
         // this is to prevent trucks being on the same tiles
         if (this.gameScreen.getState().equals(State.PLAY)) {
             if (gameScreen.selectedTruck != null) {
-                for (FireTruck truck : gameScreen.station.getTrucks()) {
+                for (FireTruck truck : gameScreen.getStation().getTrucks()) {
                     if (!truck.equals(gameScreen.selectedTruck)) {
                         if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
                             if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())

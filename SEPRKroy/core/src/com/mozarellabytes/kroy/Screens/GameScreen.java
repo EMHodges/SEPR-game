@@ -20,26 +20,22 @@ import java.util.ArrayList;
 public class GameScreen implements Screen {
 
     private final Kroy game;
-    private TiledMap map;
-    private OrthogonalTiledMapRenderer renderer;
-    public OrthographicCamera camera;
+    private OrthogonalTiledMapRenderer mapRenderer;
+    private OrthographicCamera camera;
     private ShapeRenderer shapeMapRenderer;
-    private MapLayers mapLayers;
-    private int[] structureLayersIndices, backgroundLayerIndex;
-    public CameraShake camShake;
-
-    private Batch batch;
-
-    public ArrayList<Fortress> fortresses;
-    public FireTruck selectedTruck;
-    public FireStation station;
-    public Object selectedEntity;
-
+    private final MapLayers mapLayers;
+    private final int[] structureLayersIndices, backgroundLayerIndex;
+    private final Batch mapBatch;
+    private CameraShake camShake;
     private State state;
-
     private GUI gui;
-
     public GameState gameState;
+
+    private ArrayList<Fortress> fortresses;
+    private FireStation station;
+
+    public FireTruck selectedTruck;
+    public Object selectedEntity;
 
     public GameScreen(Kroy game) {
         this.game = game;
@@ -49,34 +45,20 @@ public class GameScreen implements Screen {
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
 
-        // if this is commented out, it still works fine? so what does this actually do
-        camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
-
-        map = new TmxMapLoader().load("maps/YorkMap.tmx");
-        renderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
+        TiledMap map = new TmxMapLoader().load("maps/YorkMap.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map, 1 / Constants.TILE_WxH);
+        mapRenderer.setView(camera);
 
         shapeMapRenderer = new ShapeRenderer();
         shapeMapRenderer.setProjectionMatrix(camera.combined);
 
-        gui = new GUI(game, this,275, 275);
+        gui = new GUI(game, this);
 
         Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
 
         gameState = new GameState();
 
         camShake = new CameraShake();
-
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_soundtrack.setVolume(.5f);
-            SoundFX.sfx_soundtrack.play();
-        }
-
-        station = new FireStation(this, 4, 2);
-
-        fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(12, 20, FortressType.Default));
-        fortresses.add(new Fortress(30, 17, FortressType.Walmgate));
-        fortresses.add(new Fortress(16, 3, FortressType.Clifford));
 
         //Orders renderer to start rendering the background, then the player layer, then structures
         mapLayers = map.getLayers();
@@ -86,14 +68,27 @@ public class GameScreen implements Screen {
                 mapLayers.getIndex("structures2"),
                 mapLayers.getIndex("transparentStructures")};
 
+        station = new FireStation(this, 4, 2);
+
         station.spawn(FireTruckType.Ocean);
         station.spawn(FireTruckType.Speed);
 
+        fortresses = new ArrayList<Fortress>();
+        fortresses.add(new Fortress(12, 20, FortressType.Default));
+        fortresses.add(new Fortress(30, 17, FortressType.Walmgate));
+        fortresses.add(new Fortress(16, 3, FortressType.Clifford));
+
+        // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
             truck.setOrigin(Constants.TILE_WxH / 2, Constants.TILE_WxH / 2);
         }
 
-        batch = renderer.getBatch();
+        mapBatch = mapRenderer.getBatch();
+
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_soundtrack.setVolume(.5f);
+            SoundFX.sfx_soundtrack.play();
+        }
 
     }
 
@@ -112,40 +107,39 @@ public class GameScreen implements Screen {
 
         // update camera
         camera.update();
-        renderer.setView(camera);
 
         // renders the background layer of the map
-        renderer.render(backgroundLayerIndex);
+        mapRenderer.render(backgroundLayerIndex);
 
         // =======================
         //  START BATCH RENDERER
+
+        mapBatch.begin();
+
+        // render trucks
+        for (FireTruck truck : station.getTrucks()) {
+            truck.drawPath(mapBatch);
+            truck.drawSprite(mapBatch);
+        }
+
+        // render station
+        station.draw(mapBatch);
+
+        // render fortresses
+        for (Fortress fortress : this.fortresses) {
+            fortress.draw(mapBatch);
+        }
+
+        mapBatch.end();
+
+        //   END BATCH RENDERER
         // =======================
 
-        batch.begin();
-
-        // for each truck (uses standard for loop because it may delete truck when a truck is destroyed)
-        for (FireTruck truck : station.getTrucks()) {
-            truck.drawPath(batch);
-            truck.drawSprite(batch);
-        }
-
-        // draw the station
-        batch.draw(station.getTexture(), station.getPosition().x - 1, station.getPosition().y, 5, 3);
-
-        // draw the fortress
-        for (Fortress fortress : this.fortresses) {
-            batch.draw(fortress.getFortressType().getTexture(), fortress.getArea().x, fortress.getArea().y, fortress.getArea().width, fortress.getArea().height);
-        }
-
-        // finish rendering of entities
-        batch.end();
-
         // render structures
-        renderer.render(structureLayersIndices);
+        mapRenderer.render(structureLayersIndices);
 
         // =======================
         //  START SHAPE RENDERERS
-        // =======================
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
         for (Fortress fortress : fortresses) {
@@ -168,6 +162,9 @@ public class GameScreen implements Screen {
 
         shapeMapRenderer.end();
 
+        //   END SHAPE RENDERERS
+        // =======================
+
         gui.render(selectedEntity);
 
         switch (state) {
@@ -175,13 +172,12 @@ public class GameScreen implements Screen {
                 this.update(delta);
                 break;
             case PAUSE:
+                // render dark background
                 Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
-                Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
                 shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
                 shapeMapRenderer.setColor(0, 0, 0, 0.5f);
                 shapeMapRenderer.rect(0, 0, this.camera.viewportWidth, this.camera.viewportHeight);
                 shapeMapRenderer.end();
-                Gdx.graphics.getGL20().glDisable(GL20.GL_BLEND);
                 gui.renderPauseScreenText();
         }
 
@@ -210,10 +206,9 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-        map.dispose();
-        renderer.dispose();
+        mapRenderer.dispose();
         shapeMapRenderer.dispose();
-        batch.dispose();
+        mapBatch.dispose();
         SoundFX.sfx_soundtrack.stop();
     }
 
@@ -303,6 +298,14 @@ public class GameScreen implements Screen {
         return this.fortresses;
     }
 
+    public FireStation getStation() {
+        return this.station;
+    }
+
+    public OrthographicCamera getCamera() {
+        return this.camera;
+    }
+
     // this function is used to see whether the player clicks on the last tile of a path, so that they can extend it
     public boolean checkTrailClick(Vector2 position) {
         // for each truck, but in reverse order
@@ -340,7 +343,7 @@ public class GameScreen implements Screen {
         }
     }
 
-    public State getState(){
+    public State getState() {
         return this.state;
     }
 }

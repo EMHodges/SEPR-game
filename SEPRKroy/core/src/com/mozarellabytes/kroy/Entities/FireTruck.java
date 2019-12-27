@@ -178,7 +178,7 @@ public class FireTruck extends Sprite {
 
     public Fortress findFortressWithinRange() {
         if (this.attacking) {
-            for (Fortress fortress : gameScreen.fortresses) {
+            for (Fortress fortress : gameScreen.getFortresses()) {
                 if (new Vector2((float) (this.getPosition().x + 0.5), (float) (this.getPosition().y)).dst(fortress.getPosition()) <= this.type.getRange()) {
                     return fortress;
                 }

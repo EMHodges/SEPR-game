@@ -6,50 +6,66 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mozarellabytes.kroy.Screens.*;
 
 public class Kroy extends Game {
 
 	public SpriteBatch batch;
-	public BitmapFont bigFont;
-	public BitmapFont smallFont;
-	public BitmapFont biggestFont;
+	public ShapeRenderer shapeRenderer;
 
-	// Method called once when the application is created.
+	public BitmapFont font26;
+	public BitmapFont font19;
+	public BitmapFont font60;
+	public BitmapFont font50;
+	public BitmapFont font25;
+	public BitmapFont font33;
+	public BitmapFont font33Red;
+
 	@Override
 	public void create () {
 		Gdx.graphics.setFullscreenMode(Gdx.graphics.getDisplayMode());
+
 		batch = new SpriteBatch();
+		shapeRenderer = new ShapeRenderer();
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/Magero.ttf"));
 		FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+
 		parameter.size = 60;
-		biggestFont = generator.generateFont(parameter);
+		font60 = generator.generateFont(parameter);
 		parameter.size = 26;
-		bigFont = generator.generateFont(parameter);
+		font26 = generator.generateFont(parameter);
 		parameter.size = 19;
-		smallFont = generator.generateFont(parameter);
+		font19 = generator.generateFont(parameter);
+		parameter.size = 50;
+		font50 = generator.generateFont(parameter);
+		parameter.size = 25;
+		font25 = generator.generateFont(parameter);
+		parameter.size = 33;
+		font33 = generator.generateFont(parameter);
+		parameter.size = 33;
+		parameter.color = Color.FIREBRICK;
+		font33Red = generator.generateFont(parameter);
 
-	//	this.setScreen(new MenuScreen(this));
-
-//		this.setScreen(new ControlsScreen(this));
-		//this.setScreen(new SplashScreen(this));
-	//
 		this.setScreen(new GameScreen(this));
 	}
 
-	// Method called by the game loop from the application every time rendering should be performed. Game logic updates are usually also performed in this method.
 	@Override
 	public void render () {
 		super.render();
 	}
 
-	// Called when the application is destroyed. It is preceded by a call to pause().
 	@Override
 	public void dispose () {
 		batch.dispose();
-		bigFont.dispose();
+		shapeRenderer.dispose();
+		font19.dispose();
+		font25.dispose();
+		font26.dispose();
+		font33.dispose();
+		font33Red.dispose();
+		font50.dispose();
+		font60.dispose();
 	}
 }
