@@ -215,32 +215,23 @@ public class GameScreen implements Screen {
     public void update(float delta) {
 
         gameState.hasGameEnded(game);
-        station.restoreTrucks();
         camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
+
+        station.restoreTrucks();
+        entitiesAttack();
+        checkIfTruckDestroyed();
+        checkIfFortressDestroyed();
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
 
             FireTruck truck = station.getTruck(i);
 
-            for (Fortress fortress : this.fortresses) {
-                fortress.attack(truck);
-            }
-
-            truck.attack();
             station.checkForCollisions();
             truck.move();
 
-            // if health of truck reaches 0
-            if (truck.getHP() <= 0) {
-                station.destroyTruck(truck);
-                if (truck.equals(this.selectedTruck)) {
-                    this.selectedTruck = null;
-                }
-            }
-
             truck.updateSpray(delta);
             for (int j = 0; j < truck.getSpray().size(); j++) {
-                Particle particle = truck.getSpray().get(j);
+                WaterParticle particle = truck.getSpray().get(j);
                 if (particle.isHit()) {
                     truck.damage(particle);
                     truck.removeParticle(particle);
@@ -249,13 +240,7 @@ public class GameScreen implements Screen {
         }
 
         for (int i = 0; i < fortresses.size(); i++) {
-            if (fortresses.get(i).getHP() <= 0) {
-                gameState.addFortress();
-                fortresses.remove(fortresses.get(i));
-                if (SoundFX.music_enabled) {
-                    SoundFX.sfx_fortress_destroyed.play();
-                }
-            }
+
             for (int j = 0; j < fortresses.get(i).getBombs().size(); j++) {
                 Bomb bomb = fortresses.get(i).getBombs().get(j);
                 bomb.newUpdatePosition();
@@ -345,6 +330,46 @@ public class GameScreen implements Screen {
 
     public State getState() {
         return this.state;
+    }
+
+    private void entitiesAttack() {
+        for (int i = 0; i < station.getTrucks().size(); i++) {
+
+            FireTruck truck = station.getTruck(i);
+
+            for (Fortress fortress : this.fortresses) {
+                if (fortress.truckInRange(truck)) {
+                    fortress.attack(truck);
+                }
+                if (truck.fortressInRange(fortress)) {
+                    truck.attack(fortress);
+                }
+            }
+        }
+    }
+
+    private void checkIfTruckDestroyed(){
+        for (int i = 0; i < station.getTrucks().size(); i++) {
+            FireTruck truck = station.getTruck(i);
+            if (truck.getHP() <= 0) {
+                station.destroyTruck(truck);
+                if (truck.equals(this.selectedTruck)) {
+                    this.selectedTruck = null;
+                }
+            }
+        }
+    }
+
+    private void checkIfFortressDestroyed() {
+        for (int i = 0; i < fortresses.size(); i++) {
+            if (fortresses.get(i).getHP() <= 0) {
+                gameState.addFortress();
+                fortresses.remove(fortresses.get(i));
+                if (SoundFX.music_enabled) {
+                    SoundFX.sfx_fortress_destroyed.play();
+                }
+            }
+        }
     }
 }
 

@@ -27,7 +27,8 @@ public class FireTruck extends Sprite {
     private boolean inCollision;
     private Vector2 lastCoordinate;
 
-    private ArrayList<Particle> spray;
+    private long timeOfLastAttack;
+    private ArrayList<WaterParticle> spray;
 
     private Texture lookLeft;
     private Texture lookRight;
@@ -53,13 +54,14 @@ public class FireTruck extends Sprite {
         this.attacking = false;
         this.inCollision = false;
 
-        this.spray = new ArrayList<Particle>();
+        this.spray = new ArrayList<WaterParticle>();
 
         this.lookLeft = new Texture(Gdx.files.internal("sprites/firetruck/left.png"));
         this.lookRight = new Texture(Gdx.files.internal("sprites/firetruck/right.png"));
         this.lookUp = new Texture(Gdx.files.internal("sprites/firetruck/up.png"));
         this.lookDown = new Texture(Gdx.files.internal("sprites/firetruck/down.png"));
 
+        this.timeOfLastAttack = System.currentTimeMillis();
     }
 
     public void setMoving(boolean t) {
@@ -176,45 +178,43 @@ public class FireTruck extends Sprite {
         this.trailPath.clear();
     }
 
-    public Fortress findFortressWithinRange() {
-        if (this.attacking) {
-            for (Fortress fortress : gameScreen.getFortresses()) {
-                if (new Vector2((float) (this.getPosition().x + 0.5), (float) (this.getPosition().y)).dst(fortress.getPosition()) <= this.type.getRange()) {
-                    return fortress;
-                }
-            }
-        }
-        return null;
-    }
 
     public void setAttacking(boolean b) {
         this.attacking = b;
     }
 
-    public void attack() {
-        if (findFortressWithinRange() != null && this.reserve > 0) {
-            this.spray.add(new Particle(this, findFortressWithinRange()));
+    public void attack(Fortress fortress) {
+        if (this.attacking && this.reserve > 0){
+            this.spray.add(new WaterParticle(this, fortress));
             this.reserve -= Math.min(this.reserve, this.type.getAP());
         }
     }
+    public boolean fortressInRange(Fortress fortress) {
+        if (this.getPosition().dst(fortress.getPosition()) <= this.type.getRange()){
+            return true;
+        }
+        return false;
+    }
 
-    public ArrayList<Particle> getSpray() {
+
+
+    public ArrayList<WaterParticle> getSpray() {
         return this.spray;
     }
 
     public void updateSpray(float delta) {
         if (this.spray != null) {
-            for (Particle particle : this.spray) {
+            for (WaterParticle particle : this.spray) {
                 particle.updatePosition(delta);
             }
         }
     }
 
-    public void removeParticle(Particle particle) {
+    public void removeParticle(WaterParticle particle) {
         this.spray.remove(particle);
     }
 
-    public void damage(Particle particle) { particle.getTarget().damage(this.type.getAP()); }
+    public void damage(WaterParticle particle) { particle.getTarget().damage(this.type.getAP()); }
 
     public void fortressDamage(float HP) {
         if (SoundFX.music_enabled) {
@@ -242,13 +242,20 @@ public class FireTruck extends Sprite {
         shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, (float) this.getReserve() / (float) this.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
         shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, (float) this.getHP() / (float) this.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
-        for (Particle particle : this.getSpray()) {
+        for (WaterParticle particle : this.getSpray()) {
             shapeMapRenderer.rect(particle.getPosition().x, particle.getPosition().y, particle.getSize(), particle.getSize(), particle.getColour(), particle.getColour(), particle.getColour(), particle.getColour());
         }
     }
 
     public void drawSprite(Batch batch) {
         batch.draw(this, this.getX(), this.getY(), 1, 1);
+    }
+
+    public long getTimeOfLastAttack() {
+        return timeOfLastAttack;
+    }
+    public void resetTimeOfLastAttack(){
+        this.timeOfLastAttack = System.currentTimeMillis();
     }
 }
 

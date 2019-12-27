@@ -4,7 +4,7 @@ import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.math.Vector2;
 
-public class Particle {
+public class WaterParticle {
 
     private Fortress target;
     private Color colour;
@@ -13,12 +13,12 @@ public class Particle {
     private Vector2 currentPosition;
     private Vector2 targetPosition;
 
-    public Particle(FireTruck truck, Fortress target) {
+    public WaterParticle(FireTruck truck, Fortress target) {
         this.target = target;
         Color[] colors = new Color[] { Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
         Color randomColor = colors[(int)( Math.random() * 4)];
         this.colour = randomColor;
-        this.size = (float) (Math.random()/5 + 0.1);
+        this.size = (float)(Math.random()/5 + 0.1);
         this.startPosition = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
         this.currentPosition = startPosition;
         this.targetPosition = target.getPosition();
