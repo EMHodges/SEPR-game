@@ -183,6 +183,49 @@ public class GameScreen implements Screen {
         gui.renderButtons();
     }
 
+    public void update(float delta) {
+
+        gameState.hasGameEnded(game);
+        camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
+
+        station.restoreTrucks();
+        entitiesAttack();
+        checkIfTruckDestroyed();
+        checkIfFortressDestroyed();
+
+        for (int i = 0; i < station.getTrucks().size(); i++) {
+
+            FireTruck truck = station.getTruck(i);
+
+            station.checkForCollisions();
+            truck.move();
+
+            truck.updateSpray(delta);
+
+        }
+
+        for (int i = 0; i < fortresses.size(); i++) {
+
+            for (int j = 0; j < fortresses.get(i).getBombs().size(); j++) {
+                Bomb bomb = fortresses.get(i).getBombs().get(j);
+                bomb.newUpdatePosition();
+                if (bomb.checkHit()) {
+                    bomb.damageTruck();
+                    camShake.shakeIt(.2f);
+                    fortresses.get(i).removeBomb(bomb);
+                } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
+                    fortresses.get(i).removeBomb(bomb);
+                }
+            }
+        }
+
+        shapeMapRenderer.end();
+        shapeMapRenderer.setColor(Color.WHITE);
+
+        gui.renderSelectedEntity(selectedEntity);
+    }
+
+
     @Override
     public void resize(int width, int height) {
 
@@ -211,53 +254,6 @@ public class GameScreen implements Screen {
         SoundFX.sfx_soundtrack.stop();
     }
 
-    public void update(float delta) {
-
-        gameState.hasGameEnded(game);
-        camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
-
-        station.restoreTrucks();
-        entitiesAttack();
-        checkIfTruckDestroyed();
-        checkIfFortressDestroyed();
-
-        for (int i = 0; i < station.getTrucks().size(); i++) {
-
-            FireTruck truck = station.getTruck(i);
-
-            station.checkForCollisions();
-            truck.move();
-
-            truck.updateSpray(delta);
-            for (int j = 0; j < truck.getSpray().size(); j++) {
-                WaterParticle particle = truck.getSpray().get(j);
-                if (particle.isHit()) {
-                    truck.damage(particle);
-                    truck.removeParticle(particle);
-                }
-            }
-        }
-
-        for (int i = 0; i < fortresses.size(); i++) {
-
-            for (int j = 0; j < fortresses.get(i).getBombs().size(); j++) {
-                Bomb bomb = fortresses.get(i).getBombs().get(j);
-                bomb.newUpdatePosition();
-                if (bomb.checkHit()) {
-                    bomb.damageTruck();
-                    camShake.shakeIt(.2f);
-                    fortresses.get(i).removeBomb(bomb);
-                } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
-                    fortresses.get(i).removeBomb(bomb);
-                }
-            }
-        }
-
-        shapeMapRenderer.end();
-        shapeMapRenderer.setColor(Color.WHITE);
-
-        gui.renderSelectedEntity(selectedEntity);
-    }
 
     public enum State {
         PLAY, PAUSE
@@ -359,6 +355,18 @@ public class GameScreen implements Screen {
                 }
             }
         }
+    }
+
+    public FireStation getStation(){
+        return this.station;
+    }
+
+    public OrthographicCamera getCamera() {
+        return this.camera;
+    }
+
+    public ArrayList<Fortress> getFortresses(){
+        return this.fortresses;
     }
 }
 

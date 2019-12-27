@@ -36,24 +36,24 @@ public class FireStation {
         gameScreen.gameState.addFireTruck();
     }
 
-    public void repair(FireTruck truck) {
-        if (truck.getHP() < truck.type.getMaxHP()) {
-            truck.repair();
-        }
-    }
-
-    public void refill(FireTruck truck) {
-        if (truck.getReserve() < truck.type.getMaxReserve()) {
-            truck.refill();
-        }
-    }
-
     public void restoreTrucks() {
         for (FireTruck truck : this.trucks) {
             if (truck.getPosition().equals(this.bayTile1) || truck.getPosition().equals(this.bayTile2)) {
                 refill(truck);
                 repair(truck);
             }
+        }
+    }
+
+    public void refill(FireTruck truck) {
+        if (truck.getReserve() < truck.type.getMaxReserve()) {
+            truck.refill(0.06f);
+        }
+    }
+
+    public void repair(FireTruck truck) {
+        if (truck.getHP() < truck.type.getMaxHP()) {
+            truck.repair(0.04f);
         }
     }
 
@@ -85,9 +85,9 @@ public class FireStation {
         }
     }
 
-    private void resetTrucks(FireTruck truck, FireTruck truck2, boolean bothMoving) {
+    private void resetTrucks(FireTruck truck, FireTruck truck2, boolean headOnCollision) {
         SoundFX.sfx_horn.play();
-        if (bothMoving) {
+        if (headOnCollision) {
             Vector2 hold = truck.trailPath.first();
 
             truck.resetPath();

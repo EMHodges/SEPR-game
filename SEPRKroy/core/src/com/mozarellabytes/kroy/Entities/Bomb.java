@@ -55,8 +55,8 @@ public class Bomb extends Sprite {
 
     public Vector2 generateBombTarget() {
         // Generates a Vector2 of a tile near to (and sometimes including) the truck's position
-        float xCoord = (int)(Math.random() * (((truckPosition.x+1) - (truckPosition.x - 1) + 1)));
-        float yCoord = (int)(Math.random() * (((truckPosition.y+1) - (truckPosition.y - 1) + 1)));
+        float xCoord = (int)(Math.random() * (((truckPosition.x + 1) - (truckPosition.x - 1) + 1)));
+        float yCoord = (int)(Math.random() * (((truckPosition.y + 1) - (truckPosition.y - 1) + 1)));
         Vector2 positionNearTruck = new Vector2(truckPosition.x - 1 + xCoord, truckPosition.y - 1 + yCoord);
         // Randomly selects whether the bombTarget will be the truck or a position near to the truck
         return new Random().nextBoolean() ? truckPosition : positionNearTruck;

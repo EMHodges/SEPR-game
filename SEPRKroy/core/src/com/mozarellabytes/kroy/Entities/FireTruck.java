@@ -74,12 +74,12 @@ public class FireTruck extends Sprite {
         }
     }
 
-    public void repair() {
-        this.HP += 0.04f;
+    public void repair(float HP) {
+        this.HP += HP;
     }
 
-    public void refill() {
-        this.reserve += 0.06f;
+    public void refill(float reserve) {
+        this.reserve += reserve;
     }
 
     public float getHP(){
@@ -182,16 +182,24 @@ public class FireTruck extends Sprite {
     public void attack(Fortress fortress) {
         if (this.attacking && this.reserve > 0){
             this.spray.add(new WaterParticle(this, fortress));
+
+            for (int j = 0; j < spray.size(); j++) {
+                WaterParticle particle = spray.get(j);
+                if (particle.isHit()) {
+                    this.damage(fortress);
+                    this.removeParticle(particle);
+                }
+            }
             this.reserve -= Math.min(this.reserve, this.type.getAP());
         }
     }
+
     public boolean fortressInRange(Fortress fortress) {
         if (this.getPosition().dst(fortress.getPosition()) <= this.type.getRange()){
             return true;
         }
         return false;
     }
-
 
 
     public ArrayList<WaterParticle> getSpray() {
@@ -210,7 +218,9 @@ public class FireTruck extends Sprite {
         this.spray.remove(particle);
     }
 
-    public void damage(WaterParticle particle) { particle.getTarget().damage(this.type.getAP()); }
+    public void damage(Fortress fortress) {
+        fortress.damage(this.type.getAP());
+    }
 
     public void fortressDamage(float HP) {
         if (SoundFX.music_enabled) {
