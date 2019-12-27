@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -8,6 +9,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 public class Fortress {
 
@@ -17,6 +19,7 @@ public class Fortress {
     private ArrayList<Bomb> bombs;
     private long lastFire;
     private FortressType fortressType;
+    private int delay;
 
     public Fortress(float x, float y, FortressType type) {
         this.fortressType = type;
@@ -26,6 +29,7 @@ public class Fortress {
         this.lastFire = System.currentTimeMillis();
         this.area = new Rectangle(this.position.x-this.fortressType.getW()/2, this.position.y-this.fortressType.getH()/2,
                 this.fortressType.getW(), this.fortressType.getH());
+        this.delay = type.getDelay();
     }
 
 
@@ -38,16 +42,27 @@ public class Fortress {
         }
 
 
+
     public void attack(FireTruck target) {
         if (IsTruckInRange(target)) {
-            if (this.lastFire + this.fortressType.getDelay() < System.currentTimeMillis()) {
+            if (this.lastFire + this.delay < System.currentTimeMillis()) {
+                Gdx.app.log("getBombTarget", String.valueOf(target));
                 this.lastFire = System.currentTimeMillis();
-                this.bombs.add(new Bomb(this, target));
+                Vector2 bombtarget = getBombTarget(target);
+                this.bombs.add(new Bomb(this, target, bombtarget));
                 if (SoundFX.music_enabled) {
                     SoundFX.sfx_fortress_attack.play();
                 }
             }
         }
+    }
+
+    public Vector2 getBombTarget(FireTruck target){
+
+        float xCoord = (int)(Math.random() * (((target.getPosition().x+1) - (target.getPosition().x - 1) + 1)));
+        float yCoord = (int)(Math.random() * (((target.getPosition().y+1) - (target.getPosition().y - 1) + 1)));
+        Vector2 guessCoord = new Vector2(target.getX() - 1 + xCoord, target.getY() - 1 + yCoord);
+        return new Random().nextBoolean() ? guessCoord : target.getPosition();
     }
 
     public Vector2 getPosition() {
