@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.GL20;
 public class SplashScreen implements Screen {
 
     private final Kroy game;
-    private Texture backgroundLogo;
+    private final Texture backgroundLogo;
     private long startTime;
 
     public SplashScreen(Kroy game) {

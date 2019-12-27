@@ -17,7 +17,7 @@ public class FireStation {
     private final Vector2 bayTile2;
     private final Texture texture;
 
-    private ArrayList<FireTruck> trucks;
+    private final ArrayList<FireTruck> trucks;
 
     public FireStation(GameScreen gameScreen, int x, int y) {
         this.gameScreen = gameScreen;
@@ -64,8 +64,7 @@ public class FireStation {
 
     public void checkForCollisions() {
         for (FireTruck truck : trucks) {
-            for (int i = 0; i < trucks.size(); i++) {
-                FireTruck truck2 = trucks.get(i);
+            for (FireTruck truck2 : trucks) {
                 if (!(truck.equals(truck2))) {
                     if (!truck.trailPath.isEmpty() && !truck.getPosition().equals(spawnTile)) {
                         if (!truck2.trailPath.isEmpty() && truck.trailPath.first().equals(truck2.trailPath.first())) {
@@ -74,9 +73,9 @@ public class FireStation {
                             resetTrucks(truck, truck2, true);
                         } else if (truck.trailPath.first().equals(truck2.getPosition())) {
                             resetTrucks(truck, truck2, false);
-                        } else if (truck.trailPath.first().equals(new Vector2(Math.round(truck2.getPosition().x),Math.round(truck2.getPosition().y)))){
+                        } else if (truck.trailPath.first().equals(new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y)))) {
                             resetTrucks(truck, truck2, false);
-                        } else if (truck.trailPath.first().equals(new Vector2((float)Math.floor(truck2.getPosition().x),(float)Math.floor(truck2.getPosition().y)))){
+                        } else if (truck.trailPath.first().equals(new Vector2((float) Math.floor(truck2.getPosition().x), (float) Math.floor(truck2.getPosition().y)))) {
                             resetTrucks(truck, truck2, false);
                         }
                     }

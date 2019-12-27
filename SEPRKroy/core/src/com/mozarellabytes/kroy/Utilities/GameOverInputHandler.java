@@ -5,7 +5,7 @@ import com.mozarellabytes.kroy.Screens.GameOverScreen;
 
 public class GameOverInputHandler implements InputProcessor {
 
-    private GameOverScreen gameOver;
+    private final GameOverScreen gameOver;
 
     public GameOverInputHandler(GameOverScreen gameOver) {
         this.gameOver = gameOver;

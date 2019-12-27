@@ -6,17 +6,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Particle {
 
-    private Color colour;
+    private final Color colour;
     private Vector2 position;
     private Vector2 targetPosition;
-    private Vector2 originalPosition;
-    private Fortress target;
-    private float size;
+    private final Vector2 originalPosition;
+    private final Fortress target;
+    private final float size;
 
     public Particle(FireTruck truck, Fortress target) {
         Color[] colors = new Color[] { Color.CYAN, Color.NAVY, Color.BLUE, Color.PURPLE, Color.SKY, Color.TEAL};
-        Color randomColor = colors[(int)( Math.random() * 4)];
-        this.colour = randomColor;
+        this.colour = colors[(int)( Math.random() * 4)];
         this.position = new Vector2(truck.getPosition().x + 0.5f, truck.getPosition().y + 0.5f);
         this.originalPosition = this.position;
         this.targetPosition = target.getPosition();

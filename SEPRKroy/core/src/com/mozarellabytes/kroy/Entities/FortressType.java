@@ -9,12 +9,15 @@ public enum FortressType {
     Walmgate ("Walmgate Bar", 3000, 7, 150, 15, 5, 5, new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png"))),
     Clifford ("Clifford's Tower", 700, 4, 150, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png")));
 
-    private String name;
-    private int delay;
-    private float range, maxHP, AP;
+    private final String name;
+    private final int delay;
+    private final float range;
+    private final float maxHP;
+    private final float AP;
 
-    private int w, h;
-    private Texture texture;
+    private final int w;
+    private final int h;
+    private final Texture texture;
 
     FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture texture) {
         this.name = name;
