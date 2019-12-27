@@ -15,13 +15,13 @@ import java.util.ArrayList;
 
 public class FireTruck extends Sprite {
 
-    private GameScreen gameScreen;
+    private final GameScreen gameScreen;
 
-    public FireTruckType type;
+    public final FireTruckType type;
     private float HP, reserve;
     private float x, y;
-    public Queue<Vector2> path;
-    public Queue<Vector2> trailPath;
+    public final Queue<Vector2> path;
+    public final Queue<Vector2> trailPath;
     private boolean moving;
     private boolean attacking;
     private boolean inCollision;
@@ -30,10 +30,10 @@ public class FireTruck extends Sprite {
     private long timeOfLastAttack;
     private ArrayList<WaterParticle> spray;
 
-    private Texture lookLeft;
-    private Texture lookRight;
-    private Texture lookUp;
-    private Texture lookDown;
+    private final Texture lookLeft;
+    private final Texture lookRight;
+    private final Texture lookUp;
+    private final Texture lookDown;
 
     public FireTruck(GameScreen gameScreen, float x, float y, FireTruckType type) {
         super(new Texture(Gdx.files.internal("sprites/firetruck/down.png")));
@@ -114,14 +114,10 @@ public class FireTruck extends Sprite {
         if (coordinate.y < 24) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
                 if (this.path.isEmpty()) {
-                    if ((this.getPosition().equals(coordinate))) {
-                        return true;
-                    }
+                    return (this.getPosition().equals(coordinate));
                 } else {
                     if (!this.path.last().equals(coordinate)) {
-                        if ((int)Math.abs(this.path.last().x - coordinate.x) + (int)Math.abs(this.path.last().y - coordinate.y) <= 1) {
-                            return true;
-                        }
+                        return (int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) <= 1;
                     }
                 }
             }
@@ -239,7 +235,7 @@ public class FireTruck extends Sprite {
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.6f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
         shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.BLUE, Color.BLUE, Color.BLUE, Color.BLUE);
-        shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, (float) this.getReserve() / (float) this.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
+        shapeMapRenderer.rect(this.getPosition().x + 0.266f, this.getPosition().y + 1.4f, 0.2f, this.getReserve() / this.type.getMaxReserve() * 0.6f, Color.CYAN, Color.CYAN, Color.CYAN, Color.CYAN);
         shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, 0.6f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
         shapeMapRenderer.rect(this.getPosition().x + 0.533f, this.getPosition().y + 1.4f, 0.2f, (float) this.getHP() / (float) this.type.getMaxHP() * 0.6f, Color.RED, Color.RED, Color.RED, Color.RED);
         for (WaterParticle particle : this.getSpray()) {

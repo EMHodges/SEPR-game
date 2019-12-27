@@ -17,19 +17,19 @@ public class ControlsScreen implements Screen {
     private final Kroy game;
 
     private Texture backgroundImage;
-    private Texture trailImage;
-    private Texture trailEndImage;
-    private Texture truckRight;
-    private Texture truckLeft;
-    private Texture fortress;
+    private final Texture trailImage;
+    private final Texture trailEndImage;
+    private final Texture truckRight;
+    private final Texture truckLeft;
+    private final Texture fortress;
 
-    public OrthographicCamera camera;
+    public final OrthographicCamera camera;
 
-    private Rectangle exitButton;
+    private final Rectangle exitButton;
 
     private int HP;
     private int count;
-    private String screen;
+    private final String screen;
 
     private final Screen parent;
 
@@ -42,9 +42,9 @@ public class ControlsScreen implements Screen {
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
         Gdx.input.setInputProcessor(new ControlScreenInputHandler(this));
-        if (screen == "menu"){
+        if (screen == null ? "menu" == null : screen.equals("menu")){
             backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
-        } else if (screen == "game"){
+        } else if (screen == null ? "game" == null : screen.equals("game")){
             backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
         }
 
@@ -195,26 +195,27 @@ public class ControlsScreen implements Screen {
         truckLeft.dispose();
     }
 
-    public int damageHP() {
+    public void damageHP() {
         if (HP == 0) {
             HP = 200;
-            return HP;
         } else {
-            return HP -= 1;
+            HP -= 1;
         }
     }
 
     public void changeScreen() {
-        if (this.screen == "game") {
+        if (this.screen.equals("game")) {
             GUI gui = new GUI(game, (GameScreen) parent);
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent, gui));
             this.game.setScreen(parent);
-        } else if (this.screen == "menu"){
+        } else if (this.screen.equals("menu")){
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
             this.game.setScreen(parent);
         }
     }
 
-    public Rectangle getExitButton(){  return this.exitButton; }
+    public Rectangle getExitButton() {
+        return this.exitButton;
+    }
 
 }

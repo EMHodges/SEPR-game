@@ -10,7 +10,7 @@ import com.mozarellabytes.kroy.Screens.ControlsScreen;
 public class ControlScreenInputHandler implements InputProcessor {
 
 
-    private ControlsScreen controlsScreen;
+    private final ControlsScreen controlsScreen;
 
 
     public ControlScreenInputHandler(ControlsScreen controlsScreen) {
@@ -22,10 +22,9 @@ public class ControlScreenInputHandler implements InputProcessor {
     public boolean keyDown(int keycode) {
         switch (keycode) {
             case Input.Keys.ESCAPE:
-                controlsScreen.changeScreen();
-                break;
             case Input.Keys.C:
                 controlsScreen.changeScreen();
+                break;
         }
         return true;
     }

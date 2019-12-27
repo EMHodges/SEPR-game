@@ -10,14 +10,14 @@ import java.util.Random;
 
 public class Bomb extends Sprite {
 
-    private FireTruck truck;
+    private final FireTruck truck;
 
-    private Vector2 truckPosition;
-    private Vector2 startPosition;
+    private final Vector2 truckPosition;
+    private final Vector2 startPosition;
     private Vector2 currentPosition;
-    private Vector2 targetPosition;
+    private final Vector2 targetPosition;
 
-    private float damage;
+    private final float damage;
 
     public Bomb(Fortress fortress, FireTruck truck) {
 
@@ -49,18 +49,17 @@ public class Bomb extends Sprite {
 
     public void damageTruck() { this.truck.fortressDamage(this.damage); }
 
-    public Vector2 getTargetPos(){ return this.targetPosition; }
+    public Vector2 getTargetPos() {
+        return this.targetPosition;
+    }
 
-
-    //**
-    public Vector2 generateBombTarget(){
+    public Vector2 generateBombTarget() {
         // Generates a Vector2 of a tile near to (and sometimes including) the truck's position
         float xCoord = (int)(Math.random() * (((truckPosition.x+1) - (truckPosition.x - 1) + 1)));
         float yCoord = (int)(Math.random() * (((truckPosition.y+1) - (truckPosition.y - 1) + 1)));
         Vector2 positionNearTruck = new Vector2(truckPosition.x - 1 + xCoord, truckPosition.y - 1 + yCoord);
         // Randomly selects whether the bombTarget will be the truck or a position near to the truck
-        Vector2 bombTarget = new Random().nextBoolean() ? truckPosition : positionNearTruck;
-        return bombTarget;
+        return new Random().nextBoolean() ? truckPosition : positionNearTruck;
     }
 
     public void drawBomb(ShapeRenderer shapeMapRenderer) {

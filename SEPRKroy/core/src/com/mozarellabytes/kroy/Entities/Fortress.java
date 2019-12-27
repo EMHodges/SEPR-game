@@ -13,27 +13,26 @@ import java.util.ArrayList;
 public class Fortress {
 
     private float HP;
-    private Vector2  position;
-    private Rectangle area;
-    private ArrayList<Bomb> bombs;
-    private FortressType fortressType;
+    private final Vector2  position;
+    private final Rectangle area;
+    private final ArrayList<Bomb> bombs;
+    private long lastFire;
+    private final FortressType fortressType;
 
     public Fortress(float x, float y, FortressType type) {
         this.fortressType = type;
         this.position = new Vector2(x, y);
         this.HP = type.getMaxHP();
         this.bombs = new ArrayList<Bomb>();
-        this.area = new Rectangle(this.position.x-this.fortressType.getW()/2, this.position.y-this.fortressType.getH()/2,
+        this.lastFire = System.currentTimeMillis();
+        this.area = new Rectangle(this.position.x - (float) this.fortressType.getW()/2, this.position.y - (float) this.fortressType.getH()/2,
                 this.fortressType.getW(), this.fortressType.getH());
     }
 
     public boolean truckInRange(FireTruck target) {
         Vector2 targetPos = target.getPosition();
-        if (targetPos.dst(this.position) <= fortressType.getRange()) {
-            return true;
-            }
-        return false;
-        }
+        return targetPos.dst(this.position) <= fortressType.getRange();
+    }
 
     public void attack(FireTruck target) {
         if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()){

@@ -9,7 +9,7 @@ import com.mozarellabytes.kroy.Screens.MenuScreen;
 
 public class MenuInputHandler implements InputProcessor {
 
-    private MenuScreen menu;
+    private final MenuScreen menu;
 
     public MenuInputHandler(MenuScreen menu) {
         this.menu = menu;

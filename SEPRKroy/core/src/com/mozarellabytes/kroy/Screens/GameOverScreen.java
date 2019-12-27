@@ -13,17 +13,14 @@ public class GameOverScreen implements Screen {
 
     private final Kroy game;
 
-    private Texture backgroundLogo;
-    private OrthographicCamera camera;
+    private final Texture backgroundLogo;
+    private final OrthographicCamera camera;
 
-    private boolean won;
-
-    private GlyphLayout layout;
+    private final GlyphLayout layout;
     private String text;
 
     public GameOverScreen(Kroy game, boolean won) {
         this.game = game;
-        this.won = won;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
@@ -34,7 +31,7 @@ public class GameOverScreen implements Screen {
         Gdx.input.setInputProcessor(new GameOverInputHandler(game));
 
         layout = new GlyphLayout();
-        if (this.won) {
+        if (won) {
             this.text = "We did it! Good job little guy.";
         } else {
             this.text = "Mission Failed. We'll get 'em next time.";

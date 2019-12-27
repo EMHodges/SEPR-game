@@ -13,27 +13,25 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 public class MenuScreen implements Screen {
 
     private final Kroy game;
-    public OrthographicCamera camera;
-    private Texture backgroundImage;
+    public final OrthographicCamera camera;
+    private final Texture backgroundImage;
 
-    private Rectangle playButton;
-    private Texture playIdleTexture;
-    private Texture playClickedTexture;
+    private final Rectangle playButton;
+    private final Texture playIdleTexture;
+    private final Texture playClickedTexture;
     private Texture currentPlayTexture;
 
-    private Rectangle controlsButton;
-    private Texture controlsIdleTexture;
-    private Texture controlsClickedTexture;
+    private final Rectangle controlsButton;
+    private final Texture controlsIdleTexture;
+    private final Texture controlsClickedTexture;
     private Texture currentControlsTexture;
 
-    private Rectangle soundButton;
-    private Texture soundOnIdleTexture;
-    private Texture soundOffIdleTexture;
-    private Texture soundOnClickedTexture;
-    private Texture soundOffClickedTexture;
+    private final Rectangle soundButton;
+    private final Texture soundOnIdleTexture;
+    private final Texture soundOffIdleTexture;
+    private final Texture soundOnClickedTexture;
+    private final Texture soundOffClickedTexture;
     private Texture currentSoundTexture;
-
-    private MenuInputHandler ih;
 
     public MenuScreen(final Kroy game) {
         this.game = game;
@@ -63,21 +61,18 @@ public class MenuScreen implements Screen {
         soundOffClickedTexture = new Texture(Gdx.files.internal("ui/sound_off_clicked.png"), true);
         soundOffClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        ih = new MenuInputHandler(this);
+        MenuInputHandler ih = new MenuInputHandler(this);
 
         if (SoundFX.music_enabled) {
             SoundFX.sfx_menu.setLooping(true);
             SoundFX.sfx_menu.play();
-        }
-
-        currentPlayTexture = playIdleTexture;
-        currentControlsTexture = controlsIdleTexture;
-
-        if (SoundFX.music_enabled) {
             currentSoundTexture = soundOffIdleTexture;
         } else {
             currentSoundTexture = soundOnIdleTexture;
         }
+
+        currentPlayTexture = playIdleTexture;
+        currentControlsTexture = controlsIdleTexture;
 
         playButton = new Rectangle();
         playButton.width = (float) (currentPlayTexture.getWidth()*0.75);

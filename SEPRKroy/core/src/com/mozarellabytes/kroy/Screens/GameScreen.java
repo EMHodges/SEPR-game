@@ -13,26 +13,25 @@ import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
-import com.mozarellabytes.kroy.Entities.FireTruckType;
 
 import java.util.ArrayList;
 
 public class GameScreen implements Screen {
 
     private final Kroy game;
-    private OrthogonalTiledMapRenderer mapRenderer;
-    private OrthographicCamera camera;
-    private ShapeRenderer shapeMapRenderer;
+    private final OrthogonalTiledMapRenderer mapRenderer;
+    private final OrthographicCamera camera;
+    private final ShapeRenderer shapeMapRenderer;
     private final MapLayers mapLayers;
     private final int[] structureLayersIndices, backgroundLayerIndex;
     private final Batch mapBatch;
-    private CameraShake camShake;
+    private final CameraShake camShake;
     private State state;
-    private GUI gui;
-    public GameState gameState;
+    private final GUI gui;
+    public final GameState gameState;
 
-    private ArrayList<Fortress> fortresses;
-    private FireStation station;
+    private final ArrayList<Fortress> fortresses;
+    private final FireStation station;
 
     public FireTruck selectedTruck;
     public Object selectedEntity;
@@ -165,7 +164,7 @@ public class GameScreen implements Screen {
         //   END SHAPE RENDERERS
         // =======================
 
-        gui.render(selectedEntity);
+        gui.renderSelectedEntity(selectedEntity);
 
         switch (state) {
             case PLAY:
@@ -257,10 +256,13 @@ public class GameScreen implements Screen {
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);
 
-        gui.render(selectedEntity);
+        gui.renderSelectedEntity(selectedEntity);
     }
 
-    // this function checks whether the coordinates given are on a road
+    public enum State {
+        PLAY, PAUSE
+    }
+
     public boolean isRoad(int x, int y) {
         return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
     }
@@ -279,19 +281,6 @@ public class GameScreen implements Screen {
         return false;
     }
 
-    public ArrayList<Fortress> getFortresses() {
-        return this.fortresses;
-    }
-
-    public FireStation getStation() {
-        return this.station;
-    }
-
-    public OrthographicCamera getCamera() {
-        return this.camera;
-    }
-
-    // this function is used to see whether the player clicks on the last tile of a path, so that they can extend it
     public boolean checkTrailClick(Vector2 position) {
         // for each truck, but in reverse order
         // so that you can click on the top trail the player can see
