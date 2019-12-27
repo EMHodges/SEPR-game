@@ -36,6 +36,24 @@ public class GameScreen implements Screen {
     public FireTruck selectedTruck;
     public Object selectedEntity;
 
+
+    public enum State {
+        PLAY, PAUSE
+    }
+
+    public State getState() {
+        return this.state;
+    }
+
+    public void changeState() {
+        if (this.state.equals(State.PLAY)){
+            this.state = State.PAUSE;
+        } else {
+            this.state = State.PLAY;
+        }
+    }
+
+
     public GameScreen(Kroy game) {
         this.game = game;
 
@@ -104,41 +122,26 @@ public class GameScreen implements Screen {
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        // update camera
         camera.update();
 
-        // renders the background layer of the map
         mapRenderer.render(backgroundLayerIndex);
-
-        // =======================
-        //  START BATCH RENDERER
 
         mapBatch.begin();
 
-        // render trucks
         for (FireTruck truck : station.getTrucks()) {
             truck.drawPath(mapBatch);
             truck.drawSprite(mapBatch);
         }
 
-        // render station
         station.draw(mapBatch);
 
-        // render fortresses
         for (Fortress fortress : this.fortresses) {
             fortress.draw(mapBatch);
         }
 
         mapBatch.end();
 
-        //   END BATCH RENDERER
-        // =======================
-
-        // render structures
         mapRenderer.render(structureLayersIndices);
-
-        // =======================
-        //  START SHAPE RENDERERS
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
         for (Fortress fortress : fortresses) {
@@ -161,9 +164,6 @@ public class GameScreen implements Screen {
 
         shapeMapRenderer.end();
 
-        //   END SHAPE RENDERERS
-        // =======================
-
         gui.renderSelectedEntity(selectedEntity);
 
         switch (state) {
@@ -179,7 +179,6 @@ public class GameScreen implements Screen {
                 shapeMapRenderer.end();
                 gui.renderPauseScreenText();
         }
-
         gui.renderButtons();
     }
 
@@ -202,10 +201,16 @@ public class GameScreen implements Screen {
 
             truck.updateSpray(delta);
 
+            for (int j = 0; j < truck.getSpray().size(); j++) {
+                WaterParticle particle = truck.getSpray().get(j);
+                if (particle.isHit()) {
+                    truck.damage(particle);
+                    truck.removeParticle(particle);
+                }
+            }
         }
 
         for (int i = 0; i < fortresses.size(); i++) {
-
             for (int j = 0; j < fortresses.get(i).getBombs().size(); j++) {
                 Bomb bomb = fortresses.get(i).getBombs().get(j);
                 bomb.newUpdatePosition();
@@ -223,98 +228,6 @@ public class GameScreen implements Screen {
         shapeMapRenderer.setColor(Color.WHITE);
 
         gui.renderSelectedEntity(selectedEntity);
-    }
-
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        mapRenderer.dispose();
-        shapeMapRenderer.dispose();
-        mapBatch.dispose();
-        SoundFX.sfx_soundtrack.stop();
-    }
-
-
-    public enum State {
-        PLAY, PAUSE
-    }
-
-    public boolean isRoad(int x, int y) {
-        return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
-    }
-
-    public boolean checkClick(Vector2 position) {
-        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
-        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
-            FireTruck selectedTruck = this.station.getTruck(i);
-            Vector2 truckTile = new Vector2((float) Math.round((selectedTruck.getX())), (float) Math.round(selectedTruck.getY()));
-            if (squareClicked.equals(truckTile)) {
-                this.selectedTruck = this.station.getTruck(i);
-                this.selectedEntity = this.station.getTruck(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean checkTrailClick(Vector2 position) {
-        // for each truck, but in reverse order
-        // so that you can click on the top trail the player can see
-        for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
-
-            // if the truck has a path
-            if (!this.station.getTruck(i).path.isEmpty()) {
-
-                // if player clicks on the last tile of a path
-                if (position.equals(this.station.getTruck(i).path.last())) {
-
-                    // makes that truck the selected truck again
-                    this.selectedTruck = this.station.getTruck(i);
-                    this.selectedEntity = this.station.getTruck(i);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public void toControlScreen() { ScreenHandler.ToControls(game, this, "game"); }
-
-    public void toHomeScreen() {
-        ScreenHandler.ToMenu(game);
-        SoundFX.sfx_soundtrack.dispose();
-    }
-
-    public void changeState() {
-        if (this.state.equals(State.PLAY)){
-            this.state = State.PAUSE;
-        } else {
-            this.state = State.PLAY;
-        }
-    }
-
-    public State getState() {
-        return this.state;
     }
 
     private void entitiesAttack() {
@@ -357,6 +270,52 @@ public class GameScreen implements Screen {
         }
     }
 
+    public boolean checkClick(Vector2 position) {
+        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
+        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
+            FireTruck selectedTruck = this.station.getTruck(i);
+            Vector2 truckTile = new Vector2((float) Math.round((selectedTruck.getX())), (float) Math.round(selectedTruck.getY()));
+            if (squareClicked.equals(truckTile)) {
+                this.selectedTruck = this.station.getTruck(i);
+                this.selectedEntity = this.station.getTruck(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean checkTrailClick(Vector2 position) {
+        // for each truck, but in reverse order
+        // so that you can click on the top trail the player can see
+        for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
+
+            // if the truck has a path
+            if (!this.station.getTruck(i).path.isEmpty()) {
+
+                // if player clicks on the last tile of a path
+                if (position.equals(this.station.getTruck(i).path.last())) {
+
+                    // makes that truck the selected truck again
+                    this.selectedTruck = this.station.getTruck(i);
+                    this.selectedEntity = this.station.getTruck(i);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isRoad(int x, int y) {
+        return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
+    }
+
+    public void toControlScreen() { ScreenHandler.ToControls(game, this, "game"); }
+
+    public void toHomeScreen() {
+        ScreenHandler.ToMenu(game);
+        SoundFX.sfx_soundtrack.dispose();
+    }
+
     public FireStation getStation(){
         return this.station;
     }
@@ -368,5 +327,34 @@ public class GameScreen implements Screen {
     public ArrayList<Fortress> getFortresses(){
         return this.fortresses;
     }
+
+    @Override
+    public void resize(int width, int height) {
+
+    }
+
+    @Override
+    public void pause() {
+
+    }
+
+    @Override
+    public void resume() {
+
+    }
+
+    @Override
+    public void hide() {
+
+    }
+
+    @Override
+    public void dispose() {
+        mapRenderer.dispose();
+        shapeMapRenderer.dispose();
+        mapBatch.dispose();
+        SoundFX.sfx_soundtrack.stop();
+    }
+
 }
 

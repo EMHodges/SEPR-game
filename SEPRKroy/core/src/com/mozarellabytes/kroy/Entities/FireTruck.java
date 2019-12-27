@@ -182,14 +182,6 @@ public class FireTruck extends Sprite {
     public void attack(Fortress fortress) {
         if (this.attacking && this.reserve > 0){
             this.spray.add(new WaterParticle(this, fortress));
-
-            for (int j = 0; j < spray.size(); j++) {
-                WaterParticle particle = spray.get(j);
-                if (particle.isHit()) {
-                    this.damage(fortress);
-                    this.removeParticle(particle);
-                }
-            }
             this.reserve -= Math.min(this.reserve, this.type.getAP());
         }
     }
@@ -218,9 +210,7 @@ public class FireTruck extends Sprite {
         this.spray.remove(particle);
     }
 
-    public void damage(Fortress fortress) {
-        fortress.damage(this.type.getAP());
-    }
+    public void damage(WaterParticle particle) { particle.getTarget().damage(this.type.getAP()); }
 
     public void fortressDamage(float HP) {
         if (SoundFX.music_enabled) {
