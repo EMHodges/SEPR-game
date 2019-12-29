@@ -12,13 +12,44 @@ import java.util.ArrayList;
 
 public class Fortress {
 
+    /**
+     * Fortress health, destroyed on zero
+     */
     private float HP;
-    private final Vector2  position;
+
+    /**
+     * Position of the Fortress
+     */
+    private final Vector2 position;
+
+    /**
+     * Where the Fortress lies on the map
+     */
     private final Rectangle area;
+
+    /**
+     * List of bombs that are active
+     */
     private final ArrayList<Bomb> bombs;
+
+    /**
+     * Timestamp when the last bomb was shot
+     */
     private long lastFire;
+
+    /**
+     * Gives Fortress certain stats
+     */
     private final FortressType fortressType;
 
+    /**
+     * Constructs Fortress at certain position and
+     * of a certain type
+     *
+     * @param x     x coordinate of Fortress (lower left point)
+     * @param y     y coordinate of Fortress (lower left point)
+     * @param type  Type of Fortress to give certain stats
+     */
     public Fortress(float x, float y, FortressType type) {
         this.fortressType = type;
         this.position = new Vector2(x, y);
@@ -29,11 +60,23 @@ public class Fortress {
                 this.fortressType.getW(), this.fortressType.getH());
     }
 
-    public boolean truckInRange(FireTruck target) {
-        Vector2 targetPos = target.getPosition();
+    /**
+     * Checks if the truck's position is
+     * within range of being attacked
+     *
+     * @param targetPos the truck position being checked
+     * @return          <bb>true</bb> if truck within range
+     *                  <bb>false</bb> otherwise
+     */
+    public boolean withinRange(Vector2 targetPos) {
         return targetPos.dst(this.position) <= fortressType.getRange();
     }
 
+    /**
+     * Attacks the FireTruck
+     *
+     * @param target The FireTruck being attacked
+     */
     public void attack(FireTruck target) {
         if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()){
             this.bombs.add(new Bomb(this, target));
@@ -42,6 +85,46 @@ public class Fortress {
                 SoundFX.sfx_fortress_attack.play();
             }
         }
+    }
+
+    /**
+     * Removes Bomb from bomb list. This
+     * occurs when the bomb hits or misses
+     *
+     * @param bomb bomb being removed
+     */
+    public void removeBomb(Bomb bomb) {
+        this.bombs.remove(bomb);
+    }
+
+    /**
+     * Draws the circle around the Fortress
+     * to shows the user the attack range
+     *
+     * @param shapeMapRenderer  The renderer to be drawn to
+     */
+    public void drawRange(ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.setColor(Color.WHITE);
+        shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, this.fortressType.getRange());
+    }
+
+    /**
+     * Draws the health above the Fortress
+     *
+     * @param shapeMapRenderer  The renderer to be drawn to
+     */
+    public void drawStats(ShapeRenderer shapeMapRenderer) {
+        shapeMapRenderer.rect(this.getPosition().x - 0.26f, this.getPosition().y + 1.4f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
+        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, this.getHP() / this.fortressType.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
+    }
+
+    /**
+     * Draws the Fortress on the map
+     * @param mapBatch
+     */
+    public void draw(Batch mapBatch) {
+        mapBatch.draw(this.getFortressType().getTexture(), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
     }
 
     public Vector2 getPosition() {
@@ -60,31 +143,12 @@ public class Fortress {
         return this.area;
     }
 
-    public ArrayList<Bomb> getBombs() {
-        return this.bombs;
-    }
-
-    public void removeBomb(Bomb bomb) {
-        this.bombs.remove(bomb);
-    }
-
-    public void drawRange(ShapeRenderer shapeMapRenderer) {
-        shapeMapRenderer.setColor(Color.WHITE);
-        shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, this.fortressType.getRange());
-    }
-
-    public void drawStats(ShapeRenderer shapeMapRenderer) {
-        shapeMapRenderer.rect(this.getPosition().x - 0.26f, this.getPosition().y + 1.4f, 0.6f, 1.2f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
-        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, 1f, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        shapeMapRenderer.rect(this.getPosition().x - 0.13f, this.getPosition().y + 1.5f, 0.36f, this.getHP() / this.fortressType.getMaxHP() * 1f, Color.RED, Color.RED, Color.RED, Color.RED);
-    }
-
     public FortressType getFortressType() {
         return this.fortressType;
     }
 
-    public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getFortressType().getTexture(), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);
+    public ArrayList<Bomb> getBombs() {
+        return this.bombs;
     }
 }
 

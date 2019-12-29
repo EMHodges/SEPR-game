@@ -237,7 +237,7 @@ public class GameScreen implements Screen {
             FireTruck truck = station.getTruck(i);
 
             for (Fortress fortress : this.fortresses) {
-                if (fortress.truckInRange(truck)) {
+                if (fortress.withinRange(truck.getPosition())) {
                     fortress.attack(truck);
                 }
                 if (truck.fortressInRange(fortress)) {
