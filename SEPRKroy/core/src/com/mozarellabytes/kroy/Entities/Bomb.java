@@ -48,8 +48,9 @@ public class Bomb extends Sprite {
 
     /**
      * Constructs a bomb with the given source and target
-     * @param fortress
-     * @param target
+     *
+     * @param fortress  Fortress that the bomb came from
+     * @param target    FireTruck being targeted
      */
     public Bomb(Fortress fortress, FireTruck target) {
         this.target = target;
@@ -63,8 +64,9 @@ public class Bomb extends Sprite {
     }
 
     /**
+     * Getter for current position of the bomb
      *
-     * @return the position of the Bomb
+     * @return position of the Bomb
      */
     public Vector2 getPosition() {
         return this.currentPosition;
@@ -72,6 +74,7 @@ public class Bomb extends Sprite {
 
     /**
      * Checks whether the bomb has hit the target truck
+     *
      * @return  <code>true</code> if bomb position is in
      *          same position as target truck's position
      *          <code>false</code> otherwise.
@@ -116,6 +119,7 @@ public class Bomb extends Sprite {
     /**
      * Generates a Vector2 of a tile near to (and
      * sometimes including) the truck's position
+     *
      * @return  Target either truck or position
      *          near truck
      */
@@ -128,6 +132,7 @@ public class Bomb extends Sprite {
 
     /**
      * Draws a red circle at the bomb's position
+     * 
      * @param shapeMapRenderer The ShapeRenderer that is drawn to
      */
     public void drawBomb(ShapeRenderer shapeMapRenderer) {
