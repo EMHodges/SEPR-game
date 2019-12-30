@@ -1,26 +1,26 @@
 package com.mozarellabytes.kroy.Entities;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
-import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.mockito.Mock;
+import org.mockito.junit.MockitoJUnit;
+import org.mockito.junit.MockitoRule;
 
 import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
 import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
-public class FireTruckTest extends Sprite {
+public class FireTruckTest {
 
-    private float x;
-    private float y;
-   private GameScreen gameScreen;
-//    public FireTruckTest(Kroy game) {
-//        super(game);
-//    }
+    @Mock
+    GameScreen gameScreenMock;
 
-
+    @Rule
+    public MockitoRule mockitoRule = MockitoJUnit.rule();
 
 
     @Test
@@ -108,7 +108,7 @@ public class FireTruckTest extends Sprite {
 //
     @Test
     public void TestRefill() {
-        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, 10, 10, Speed);
         float reserveBefore = fireTruck.getReserve();
         fireTruck.refill(reserveBefore);
         float reserveAfter = fireTruck.getReserve();
