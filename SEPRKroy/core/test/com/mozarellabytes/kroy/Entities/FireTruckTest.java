@@ -1,6 +1,7 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
@@ -10,17 +11,15 @@ import org.junit.Test;
 import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
 import static org.junit.Assert.*;
 
-public class FireTruckTest extends GameScreen {
-
+public class FireTruckTest extends Sprite {
 
     private float x;
     private float y;
-    private GameScreen gameScreen;
+   private GameScreen gameScreen;
+//    public FireTruckTest(Kroy game) {
+//        super(game);
+//    }
 
-
-    public FireTruckTest(Kroy game) {
-        super(game);
-    }
 
 
 
@@ -102,7 +101,7 @@ public class FireTruckTest extends GameScreen {
 //    public void testRepair() {
 //        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
 //        float HPBefore = fireTruck.getHP();
-//        fireTruck.repair();
+//        repair(HPBefore);
 //        float HPAfter = fireTruck.getHP();
 //        assertTrue(HPBefore<HPAfter);
 //    }
@@ -111,11 +110,15 @@ public class FireTruckTest extends GameScreen {
     public void TestRefill() {
         FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
         float reserveBefore = fireTruck.getReserve();
-        fireTruck.refill();
+        fireTruck.refill(reserveBefore);
         float reserveAfter = fireTruck.getReserve();
         assertTrue(reserveBefore<reserveAfter);
     }
+////    @Test
+//    public void TestRefill() {
+//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
 //
+//    }
 //    @Test
 //    public void testGetHP() {
 //        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
