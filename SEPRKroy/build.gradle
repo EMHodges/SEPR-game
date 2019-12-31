@@ -53,22 +53,38 @@ project(":desktop") {
 project(":core") {
     apply plugin: "java"
 
+    sourceSets.main.java.srcDirs = [ "src/" ]
+    sourceSets.main.resources.srcDirs = [ "assets/" ]
+
     dependencies {
         compile "com.badlogicgames.gdx:gdx:$gdxVersion"
         compile "com.badlogicgames.gdx:gdx-freetype:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
+        testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
+    }
+
+
+}
+
+project(":tests") {
+    apply plugin: "java"
+
+    sourceSets.test.java.srcDirs = ["src/"]
+
+    dependencies {
+
+        compile project(":core")
+
+        compile "junit:junit:4.12"
+        compile "org.mockito:mockito-core:2.7.22"
+        compile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
+        compile "com.badlogicgames.gdx:gdx:$gdxVersion"
+
         testCompile "junit:junit:4.12"
         testCompile "org.mockito:mockito-core:2.7.22"
         testCompile "com.badlogicgames.gdx:gdx-backend-headless:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx:$gdxVersion"
         testCompile "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
     }
-
-    sourceSets.main.java.srcDirs = [ "src/" ]
-    sourceSets.test.java.srcDirs = [ "test/" ]
-    sourceSets.main.resources.srcDirs = [ "assets/" ]
-
-}
-
-tasks.eclipse.doLast {
-    delete ".project"
 }
