@@ -201,7 +201,7 @@ public class FireTruck extends Sprite {
     public void updateSpray(float delta) {
         if (this.spray != null) {
             for (WaterParticle particle : this.spray) {
-                particle.updatePosition(delta);
+                particle.updatePosition();
             }
         }
     }
