@@ -1,7 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.mozarellabytes.kroy.Entities.FireTruckTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2019-12-31T11:45:36" hostname="MacBook.local" time="0.123">
-  <properties/>
-  <testcase name="TestRefill" classname="com.mozarellabytes.kroy.Entities.FireTruckTest" time="0.123"/>
-  <system-out><![CDATA[]]></system-out>
-  <system-err><![CDATA[]]></system-err>
-</testsuite>

@@ -3,3 +3,11 @@
 docs/.DS_Store
 
 .DS_Store
+
+SEPRKroy/.idea/
+
+SEPRKroy/tests/build/test-results/test/binary/
+
+SEPRKroy/tests/build/reports/tests/test/packages/com.mozarellabytes.kroy.Entities.html
+
+SEPRKroy/tests/build/test-results/test/TEST-com.mozarellabytes.kroy.Entities.FireTruckTest.xml
