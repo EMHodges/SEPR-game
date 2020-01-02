@@ -186,7 +186,7 @@ public class GameScreen implements Screen {
     public void update(float delta) {
 
         gameState.hasGameEnded(game);
-        camShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
+        CameraShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         station.restoreTrucks();
         entitiesAttack();
@@ -200,7 +200,7 @@ public class GameScreen implements Screen {
             station.checkForCollisions();
             truck.move();
 
-            truck.updateSpray(delta);
+            truck.updateSpray();
 
             for (int j = 0; j < truck.getSpray().size(); j++) {
                 WaterParticle particle = truck.getSpray().get(j);
@@ -240,7 +240,7 @@ public class GameScreen implements Screen {
                 if (fortress.withinRange(truck.getPosition())) {
                     fortress.attack(truck);
                 }
-                if (truck.fortressInRange(fortress)) {
+                if (truck.fortressInRange(fortress.getPosition())) {
                     truck.attack(fortress);
                 }
             }
@@ -275,14 +275,18 @@ public class GameScreen implements Screen {
         Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
         for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
             FireTruck selectedTruck = this.station.getTruck(i);
-            Vector2 truckTile = new Vector2((float) Math.round((selectedTruck.getX())), (float) Math.round(selectedTruck.getY()));
+            Vector2 truckTile = getTile(selectedTruck.getPosition());
             if (squareClicked.equals(truckTile)) {
-                this.selectedTruck = this.station.getTruck(i);
-                this.selectedEntity = this.station.getTruck(i);
+                this.selectedTruck = selectedTruck;
+                this.selectedEntity = selectedTruck;
                 return true;
             }
         }
         return false;
+    }
+
+    private Vector2 getTile(Vector2 position) {
+        return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
     }
 
     public boolean checkTrailClick(Vector2 position) {
@@ -310,7 +314,9 @@ public class GameScreen implements Screen {
         return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
     }
 
-    public void toControlScreen() { ScreenHandler.ToControls(game, this, "game"); }
+    public void toControlScreen() {
+        ScreenHandler.ToControls(game, this, "game");
+    }
 
     public void toHomeScreen() {
         ScreenHandler.ToMenu(game);

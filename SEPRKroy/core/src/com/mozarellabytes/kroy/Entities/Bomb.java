@@ -12,7 +12,7 @@ import java.util.Random;
  * Bomb is a class created when a FireTruck is within
  * a Fortress' range, and timer has passed. It will travel
  * towards either the truck or a tile near the truck.
- * If the bomb hits the truck, it will deal damage
+ * If the bomb hits the truck, it will deal damage.
  */
 public class Bomb extends Sprite {
 

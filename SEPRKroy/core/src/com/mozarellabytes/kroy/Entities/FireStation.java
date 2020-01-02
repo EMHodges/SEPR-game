@@ -11,7 +11,7 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 public class FireStation {
     private final GameScreen gameScreen;
 
-    private final int x,y;
+    private final Vector2 position;
     private final Vector2 spawnTile;
     private final Vector2 bayTile1;
     private final Vector2 bayTile2;
@@ -21,18 +21,17 @@ public class FireStation {
 
     public FireStation(GameScreen gameScreen, int x, int y) {
         this.gameScreen = gameScreen;
-        this.x = x;
-        this.y = y;
-        this.spawnTile = new Vector2(this.x + 2, this.y);
-        this.bayTile1 = new Vector2(this.x, this.y);
-        this.bayTile2 = new Vector2(this.x + 1, this.y);
+        this.position = new Vector2(x, y);
+        this.spawnTile = new Vector2(x+2, y);
+        this.bayTile1 = new Vector2(x, y);
+        this.bayTile2 = new Vector2(x+1, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
     }
 
     public void spawn(FireTruckType type) {
         SoundFX.sfx_truck_spawn.play();
-        this.trucks.add(new FireTruck(gameScreen, this.spawnTile.x, this.spawnTile.y, type ));
+        this.trucks.add(new FireTruck(gameScreen, this.spawnTile, type));
         gameScreen.gameState.addFireTruck();
     }
 
@@ -111,7 +110,7 @@ public class FireStation {
     }
 
     public Vector2 getPosition() {
-        return new Vector2(this.x, this.y);
+        return this.position;
     }
 
     public FireTruck getTruck(int i) {
