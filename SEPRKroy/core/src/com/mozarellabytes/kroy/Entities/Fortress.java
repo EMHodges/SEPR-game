@@ -12,34 +12,22 @@ import java.util.ArrayList;
 
 public class Fortress {
 
-    /**
-     * Fortress health, destroyed on zero
-     */
+    /*** Fortress health, destroyed on zero */
     private float HP;
 
-    /**
-     * Position of the Fortress
-     */
+    /*** Position of the Fortress */
     private final Vector2 position;
 
-    /**
-     * Where the Fortress lies on the map
-     */
+    /*** Where the Fortress lies on the map */
     private final Rectangle area;
 
-    /**
-     * List of bombs that are active
-     */
+    /*** List of bombs that are active */
     private final ArrayList<Bomb> bombs;
 
-    /**
-     * Timestamp when the last bomb was shot
-     */
+    /*** Timestamp when the last bomb was shot */
     private long lastFire;
 
-    /**
-     * Gives Fortress certain stats
-     */
+    /*** Gives Fortress certain stats */
     private final FortressType fortressType;
 
     /**
@@ -55,17 +43,15 @@ public class Fortress {
         this.position = new Vector2(x, y);
         this.HP = type.getMaxHP();
         this.bombs = new ArrayList<Bomb>();
-        this.lastFire = System.currentTimeMillis();
         this.area = new Rectangle(this.position.x - (float) this.fortressType.getW()/2, this.position.y - (float) this.fortressType.getH()/2,
                 this.fortressType.getW(), this.fortressType.getH());
     }
 
     /**
-     * Checks if the truck's position is
-     * within range of being attacked
+     * Checks if the truck's position is within the attack range of the fortress
      *
      * @param targetPos the truck position being checked
-     * @return          <bb>true</bb> if truck within range
+     * @return          <bb>true</bb> if truck within range of fortress
      *                  <bb>false</bb> otherwise
      */
     public boolean withinRange(Vector2 targetPos) {
@@ -73,7 +59,7 @@ public class Fortress {
     }
 
     /**
-     * Attacks the FireTruck
+     * Generates bombs to attack the FireTruck with
      *
      * @param target The FireTruck being attacked
      */
@@ -98,8 +84,7 @@ public class Fortress {
     }
 
     /**
-     * Draws the circle around the Fortress
-     * to shows the user the attack range
+     * Draws the circle around the Fortress to shows the user the attack range
      *
      * @param shapeMapRenderer  The renderer to be drawn to
      */
@@ -109,7 +94,7 @@ public class Fortress {
     }
 
     /**
-     * Draws the health above the Fortress
+     * Draws the health bars above the Fortress
      *
      * @param shapeMapRenderer  The renderer to be drawn to
      */
@@ -121,6 +106,7 @@ public class Fortress {
 
     /**
      * Draws the Fortress on the map
+     *
      * @param mapBatch
      */
     public void draw(Batch mapBatch) {
@@ -150,5 +136,5 @@ public class Fortress {
     public ArrayList<Bomb> getBombs() {
         return this.bombs;
     }
-}
 
+}

@@ -13,23 +13,26 @@ import com.badlogic.gdx.math.Vector2;
  */
 public class WaterParticle {
 
-    /**
-     * Fortress that WaterParticle is firing at
-     */
+    /** Fortress that WaterParticle is firing at */
     private final Fortress target;
 
-    /**
-     * Random colour of Rectangle
-     */
+    /** Random colour of Rectangle */
     private final Color colour;
 
-    /**
-     * Random size of the Rectangle
-     */
+    /** Random size of the Rectangle */
     private final float size;
 
+    /** The position where the water particle starts from (the position
+     * of the truck)
+     */
     private Vector2 startPosition;
+
+    /** The current position of the water particle */
     private Vector2 currentPosition;
+
+    /** The end position of the water particle (the fortress the truck
+     * is attacking)
+     */
     private Vector2 targetPosition;
 
     /**
@@ -73,7 +76,7 @@ public class WaterParticle {
     }
 
     /**
-     * Check if the WaterParticle has
+     * Checks if the WaterParticle has
      * reached the the Fortress
      *
      * @return  <code>true</code> if WaterParticle hit Fortress
@@ -101,3 +104,4 @@ public class WaterParticle {
     }
 
 }
+

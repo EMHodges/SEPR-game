@@ -12,38 +12,26 @@ import java.util.Random;
  * Bomb is a class created when a FireTruck is within
  * a Fortress' range, and timer has passed. It will travel
  * towards either the truck or a tile near the truck.
- * If the bomb hits the truck, it will deal damage.
+ * If the bomb hits the truck, it will deal damage
  */
 public class Bomb extends Sprite {
 
-    /**
-     * The target FireTruck that the bomb is heading towards
-     */
+    /** The target FireTruck that the bomb is heading towards */
     private final FireTruck target;
 
-    /**
-     * The position of the target at bomb creation
-     */
+    /** The position of the target at bomb creation */
     private final Vector2 truckPosition;
 
-    /**
-     * The start position of the bomb
-     */
+    /** The start position of the bomb */
     private final Vector2 startPosition;
 
-    /**
-     * Current position of the bomb
-     */
+    /** Current position of the bomb */
     private Vector2 currentPosition;
 
-    /**
-     * The tile where the bomb "lands"
-     */
+    /** The tile where the bomb "lands" */
     private final Vector2 targetPosition;
 
-    /**
-     * The amount of damage that is inflicted on hit
-     */
+    /** The amount of damage that is inflicted on hit */
     private final float damage;
 
     /**
@@ -64,9 +52,8 @@ public class Bomb extends Sprite {
     }
 
     /**
-     * Getter for current position of the bomb
      *
-     * @return position of the Bomb
+     * @return Position of the Bomb
      */
     public Vector2 getPosition() {
         return this.currentPosition;
@@ -75,8 +62,8 @@ public class Bomb extends Sprite {
     /**
      * Checks whether the bomb has hit the target truck
      *
-     * @return  <code>true</code> if bomb position is in
-     *          same position as target truck's position
+     * @return  <code>true</code> if the bomb and target truck's position
+     *          are in the middle of the same tile
      *          <code>false</code> otherwise.
      */
     public boolean checkHit() {
@@ -84,18 +71,19 @@ public class Bomb extends Sprite {
     }
 
     /**
-     * Updates the current truck position
-     * depending on the Interpolation function
+     * Updates the current bomb position depending on the Interpolation function.
+     *
      */
     public void newUpdatePosition() {
         this.currentPosition = this.startPosition.interpolate(this.targetPosition, 0.03f, Interpolation.pow5Out);
     }
 
     /**
-     * Helper function to return the middle
-     * of the tile when given a position
+     * Helper function to return the middle of the tile. It sets the trucks
+     * position to the middle of a tile and is needed by checkHit to see
+     * if a bomb and a truck are in the middle of the same tile
      *
-     * @param position  Exact position in the tile
+     * @param position  The whole values of the bottom left hand corner of a tile
      * @return          Position in the middle of the tile
      */
     private Vector2 getMiddleOfTile(Vector2 position) {
@@ -117,11 +105,11 @@ public class Bomb extends Sprite {
     }
 
     /**
-     * Generates a Vector2 of a tile near to (and
-     * sometimes including) the truck's position
+     * Determines and returns the position where the bomb will 'land.'
+     * This is either the truck's current position or a tile near to the truck;
+     * this is so the bomb does not always hit the truck.
      *
-     * @return  Target either truck or position
-     *          near truck
+     * @return  Target either truck or random position near truck
      */
     private Vector2 generateBombTarget() {
         float xCoord = (int) (Math.random() * (((truckPosition.x + 1) - (truckPosition.x - 1) + 1)));
@@ -131,9 +119,10 @@ public class Bomb extends Sprite {
     }
 
     /**
-     * Draws a red circle at the bomb's position
-     * 
-     * @param shapeMapRenderer The ShapeRenderer that is drawn to
+     * Draws the bomb (a red circle) at the bomb's current position
+     *
+     * @param shapeMapRenderer The ShapeRenderer from GameScreen used to draw
+     *                         the bomb
      */
     public void drawBomb(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.setColor(Color.RED);
@@ -141,3 +130,5 @@ public class Bomb extends Sprite {
         shapeMapRenderer.setColor(Color.WHITE);
     }
 }
+
+
