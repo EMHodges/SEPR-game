@@ -111,7 +111,7 @@ public class FireTruckTest {
 //
     @Test
     public void TestRefill() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, 10, 10, Speed);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
         float reserveBefore = fireTruck.getReserve();
         fireTruck.refill(50);
         float reserveAfter = fireTruck.getReserve();
