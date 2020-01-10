@@ -51,8 +51,8 @@ public class Fortress {
      * Checks if the truck's position is within the attack range of the fortress
      *
      * @param targetPos the truck position being checked
-     * @return          <bb>true</bb> if truck within range of fortress
-     *                  <bb>false</bb> otherwise
+     * @return          <code>true</code> if truck within range of fortress
+     *                  <code>false</code> otherwise
      */
     public boolean withinRange(Vector2 targetPos) {
         return targetPos.dst(this.position) <= fortressType.getRange();
@@ -91,6 +91,7 @@ public class Fortress {
     public void drawRange(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.setColor(Color.WHITE);
         shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, this.fortressType.getRange());
+        shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, 1);
     }
 
     /**

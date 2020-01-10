@@ -17,11 +17,7 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 public class FireStation {
 
-    /**
-     * X and Y co-ordinates of the FireStation's position on the game screen
-     * in tiles
-     */
-    private final Vector2 position;
+    private final int x, y;
 
     /** The tile where new FireTrucks are spawned */
     private final Vector2 spawnTile;
@@ -37,7 +33,7 @@ public class FireStation {
     /** The sprite image for the station */
     private final Texture texture;
 
-    /** List of active fire trucks */
+    /** List of active fire trucks {@link FireTruck} */
     private final ArrayList<FireTruck> trucks;
 
 
@@ -48,13 +44,13 @@ public class FireStation {
      * @param y  y coordinate of Station in tiles (lower left point)
      */
     public FireStation(int x, int y) {
-      //  this.gameScreen = gameScreen;
-        this.position = new Vector2(x, y);
-        this.spawnTile = new Vector2(x+2, y);
-        this.bayTile1 = new Vector2(x, y);
-        this.bayTile2 = new Vector2(x+1, y);
+        this.bayTile1 = new Vector2(x + 1, y);
+        this.bayTile2 = new Vector2(x + 2, y);
+        this.spawnTile = new Vector2(x + 3, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -184,15 +180,11 @@ public class FireStation {
 
     /** Draws the firetruck to the gameScreen */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getTexture(), this.getPosition().x - 1, this.getPosition().y, 5, 3);
+        mapBatch.draw(this.getTexture(), this.x, this.y, 5, 3);
     }
 
     public ArrayList<FireTruck> getTrucks() {
         return this.trucks;
-    }
-
-    public Vector2 getPosition() {
-        return this.position;
     }
 
     public FireTruck getTruck(int i) {

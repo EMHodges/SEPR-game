@@ -19,6 +19,12 @@ public class GameInputHandler implements InputProcessor {
         this.gui = gui;
     }
 
+    /** Called when a key was pressed
+     *
+     * This handles toggling music, etc
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return whether the input was processed */
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -110,6 +116,7 @@ public class GameInputHandler implements InputProcessor {
     }
 
     @Override
+
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is to prevent trucks being on the same tiles
         if (this.gameScreen.getState().equals(GameScreen.State.PLAY)) {

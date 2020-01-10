@@ -112,12 +112,16 @@ public class FireTruckTest {
     @Test
     public void TestRefill() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        for (int i=0; i<100; i++) {
+            fireTruck.attack(new Fortress(10, 10, FortressType.Walmgate));
+        }
         float reserveBefore = fireTruck.getReserve();
-        fireTruck.refill(50);
+        fireTruck.refill(2);
         float reserveAfter = fireTruck.getReserve();
         assertTrue(reserveBefore<reserveAfter);
     }
-////    @Test
+        
+//    @Test
 //    public void TestRefill() {
 //        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
 //
