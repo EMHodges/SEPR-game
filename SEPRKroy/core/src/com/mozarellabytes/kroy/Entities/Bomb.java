@@ -43,15 +43,12 @@ public class Bomb extends Sprite {
     public Bomb(Fortress fortress, FireTruck target) {
         this.target = target;
         this.truckPosition = new Vector2(getMiddleOfTile(target.getPosition()));
-      //  this.truckPosition = target.getPosition();
         this.startPosition = new Vector2(fortress.getPosition());
         this.currentPosition = this.startPosition;
         // Note: Target position is different to the truck position
         // Target position is the tile where the bomb "lands" which is not always the tile where the Truck is
         this.targetPosition = getMiddleOfTile(generateBombTarget());
-      //  this.targetPosition = generateBombTarget();
-       // this.damage = fortress.getFortressType().getAP();
-        this.damage = 0;
+        this.damage = fortress.getFortressType().getAP();
     }
 
     /**

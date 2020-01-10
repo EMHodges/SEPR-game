@@ -22,7 +22,7 @@ public class FireStation {
      * in tiles
      * @
      */
-    private final Vector2 position;
+    private final int x,y;
 
     /** The tile where new FireTrucks are spawned */
     private final Vector2 spawnTile;
@@ -50,14 +50,14 @@ public class FireStation {
      * @param y  y coordinate of Station in tiles (lower left point)
      */
     public FireStation(int x, int y) {
-        this.position = new Vector2(x, y);
-        this.spawnTile = new Vector2(x+2, y);
-        this.bayTile1 = new Vector2(x, y);
-        this.bayTile2 = new Vector2(x+1, y);
-        this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
-        this.trucks = new ArrayList<FireTruck>();
         this.x = x;
         this.y = y;
+        this.spawnTile = new Vector2(x+3, y);
+        this.bayTile1 = new Vector2(x+1, y);
+        this.bayTile2 = new Vector2(x+2, y);
+        this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
+        this.trucks = new ArrayList<FireTruck>();
+
     }
 
     /**
@@ -195,7 +195,7 @@ public class FireStation {
 
     /** Draws the firetruck to the gameScreen */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getTexture(), this.getPosition().x-1, this.getPosition().y, 5, 3);
+        mapBatch.draw(this.getTexture(), this.x, this.y, 5, 3);
     }
 
     public ArrayList<FireTruck> getTrucks() {
