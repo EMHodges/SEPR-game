@@ -97,9 +97,7 @@ public class Bomb extends Sprite {
         this.target.fortressDamage(this.damage);
     }
 
-    /**
-     * @return Position of target
-     */
+
     public Vector2 getTargetPos() {
         return this.targetPosition;
     }

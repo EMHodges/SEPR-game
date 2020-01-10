@@ -1,5 +1,6 @@
 package com.mozarellabytes.kroy;
 
+import com.badlogic.gdx.Gdx;
 import com.mozarellabytes.kroy.Utilities.ScreenHandler;
 
 public class GameState {
@@ -14,10 +15,12 @@ public class GameState {
 
     public void addFireTruck() {
         this.activeFireTrucks++;
+        Gdx.app.log("Active", String.valueOf(this.activeFireTrucks));
     }
 
     public void removeFireTruck() {
         this.activeFireTrucks--;
+        Gdx.app.log("Remove", String.valueOf(this.activeFireTrucks));
     }
 
     public void addFortress() {

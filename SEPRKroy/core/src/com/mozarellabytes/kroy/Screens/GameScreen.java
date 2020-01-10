@@ -85,10 +85,10 @@ public class GameScreen implements Screen {
                 mapLayers.getIndex("structures2"),
                 mapLayers.getIndex("transparentStructures")};
 
-        station = new FireStation(this, 4, 2);
+        station = new FireStation(4, 2);
 
-        station.spawn(FireTruckType.Ocean);
-        station.spawn(FireTruckType.Speed);
+        spawn(FireTruckType.Ocean);
+        spawn(FireTruckType.Speed);
 
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 20, FortressType.Default));
@@ -251,6 +251,7 @@ public class GameScreen implements Screen {
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
             if (truck.getHP() <= 0) {
+                gameState.removeFireTruck();
                 station.destroyTruck(truck);
                 if (truck.equals(this.selectedTruck)) {
                     this.selectedTruck = null;
@@ -333,6 +334,12 @@ public class GameScreen implements Screen {
 
     public ArrayList<Fortress> getFortresses(){
         return this.fortresses;
+    }
+
+    public void spawn(FireTruckType type) {
+        SoundFX.sfx_truck_spawn.play();
+        station.spawn(new FireTruck(this, new Vector2(6,2), type));
+        gameState.addFireTruck();
     }
 
     @Override

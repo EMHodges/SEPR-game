@@ -23,10 +23,6 @@ public class FireStation {
      */
     private final Vector2 position;
 
-    /** */
-    private final GameScreen gameScreen;
-
-
     /** The tile where new FireTrucks are spawned */
     private final Vector2 spawnTile;
 
@@ -48,12 +44,11 @@ public class FireStation {
     /**
      * Constructs the Firestation
      *
-     * @param gameScreen
      * @param x  x coordinate of Station in tiles (lower left point)
      * @param y  y coordinate of Station in tiles (lower left point)
      */
-    public FireStation(GameScreen gameScreen, int x, int y) {
-        this.gameScreen = gameScreen;
+    public FireStation(int x, int y) {
+      //  this.gameScreen = gameScreen;
         this.position = new Vector2(x, y);
         this.spawnTile = new Vector2(x+2, y);
         this.bayTile1 = new Vector2(x, y);
@@ -66,14 +61,14 @@ public class FireStation {
      * Creates a fire truck of type specified from FireTruckType. It signals to
      * the game state that a truck has been created and add the truck to the
      * arraylist this.truck so the game screen can iterate through all active trucks
-     *
-     * @param type the type of firetruck that should be spawned
      */
-    public void spawn(FireTruckType type) {
-        SoundFX.sfx_truck_spawn.play();
-        this.trucks.add(new FireTruck(gameScreen, this.spawnTile, type));
-        gameScreen.gameState.addFireTruck();
+    public void spawn(FireTruck truck) {
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_truck_spawn.play();
+        }
+        this.trucks.add(truck);
     }
+
 
     /**
      * Calls the repair and refill methods. When a truck is within the station
@@ -119,7 +114,6 @@ public class FireStation {
      */
     public void destroyTruck(FireTruck truck) {
         this.trucks.remove(truck);
-        gameScreen.gameState.removeFireTruck();
     }
 
 
@@ -154,13 +148,27 @@ public class FireStation {
         }
     }
 
+    /** Remove the truck's path meaning the truck has position to move to so will
+     * halt on it's current tile
+     * @param truck
+     */
     private void resetTruck(FireTruck truck){
         SoundFX.sfx_horn.play();
         truck.resetPath();
     }
 
+    /** Resets two trucks - is called when both trucks are moving towards each other
+     * It removes their paths so they halt on the tile of the collision. It then adds
+     * the nearest tile to their path, the trucks move to this tile so that after the
+     * collision the trucks are positioned at the centre of adjacent tiles.
+     *
+     * @param truck
+     * @param truck2
+     */
     private void resetTruck(FireTruck truck, FireTruck truck2) {
-        SoundFX.sfx_horn.play();
+        if (SoundFX.music_enabled) {
+            SoundFX.sfx_horn.play();
+        }
 
         Vector2 hold = truck.trailPath.first();
 
@@ -174,6 +182,7 @@ public class FireStation {
     }
 
 
+    /** Draws the firetruck to the gameScreen */
     public void draw(Batch mapBatch) {
         mapBatch.draw(this.getTexture(), this.getPosition().x - 1, this.getPosition().y, 5, 3);
     }
