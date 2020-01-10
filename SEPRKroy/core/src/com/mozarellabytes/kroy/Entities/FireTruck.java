@@ -290,6 +290,10 @@ public class FireTruck extends Sprite {
         }
     }
 
+    public void resetTilePath(){
+        this.trailPath.clear();
+    }
+
     /**
      * Called every tick to check if a Fortress is within
      * the range of the truck
@@ -447,6 +451,10 @@ public class FireTruck extends Sprite {
 
     public ArrayList<WaterParticle> getSpray() {
         return this.spray;
+    }
+
+    public boolean getMoving() {
+        return this.moving;
     }
 }
 

@@ -17,7 +17,12 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 public class FireStation {
 
-    private final int x, y;
+    /**
+     * X and Y co-ordinates of the FireStation's position on the game screen
+     * in tiles
+     * @
+     */
+    private final Vector2 position;
 
     /** The tile where new FireTrucks are spawned */
     private final Vector2 spawnTile;
@@ -33,7 +38,8 @@ public class FireStation {
     /** The sprite image for the station */
     private final Texture texture;
 
-    /** List of active fire trucks {@link FireTruck} */
+    /** List of active fire trucks
+     * @link FireTruck */
     private final ArrayList<FireTruck> trucks;
 
 
@@ -44,9 +50,10 @@ public class FireStation {
      * @param y  y coordinate of Station in tiles (lower left point)
      */
     public FireStation(int x, int y) {
-        this.bayTile1 = new Vector2(x + 1, y);
-        this.bayTile2 = new Vector2(x + 2, y);
-        this.spawnTile = new Vector2(x + 3, y);
+        this.position = new Vector2(x, y);
+        this.spawnTile = new Vector2(x+2, y);
+        this.bayTile1 = new Vector2(x, y);
+        this.bayTile2 = new Vector2(x+1, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
         this.x = x;
@@ -115,11 +122,11 @@ public class FireStation {
 
     /** generate pairs of trucks **/
     /** see if can do this with an arraylist */
-    public void checkForCollisions() {
+    public void checkForeCollisions() {
         for (FireTruck truck : trucks) {
             for (FireTruck truck2 : trucks) {
                 if (!(truck.equals(truck2))) {
-                    checkIfTrucksCollided(truck, truck2);
+                   // checkIfTrucksCollided(truck, truck2);
                 }
             }
         }
@@ -131,15 +138,23 @@ public class FireStation {
      * the same tile as a stationary truck. If two trucks are going to collide reset
      * trucks is called.
      */
-    private void checkIfTrucksCollided(FireTruck truck, FireTruck truck2){
-        if (!truck.trailPath.isEmpty() && !truck.getPosition().equals(spawnTile)) {
-            Vector2 truck2tile = new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y));
-            if (!truck2.trailPath.isEmpty() && truck.trailPath.first().equals(truck2.trailPath.first())) {
-                truck.setCollision();
-                truck2.setCollision();
-                resetTruck(truck, truck2);
-            } else if (truck.trailPath.first().equals(truck2tile)) {
-                resetTruck(truck);
+    public void checkForCollisions() {
+        for (FireTruck truck : trucks) {
+            for (FireTruck truck2 : trucks) {
+                if (!(truck.equals(truck2))) {
+                    if (!truck.trailPath.isEmpty() && !truck.getPosition().equals(spawnTile)) {
+                        Vector2 truck2tile = new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y));
+                        if (!truck2.trailPath.isEmpty() && truck.trailPath.first().equals(truck2.trailPath.first())) {
+                            truck.setCollision();
+                            truck2.setCollision();
+                            resetTruck(truck, truck2);
+                        } else if (truck.trailPath.first().equals(truck2tile)) {
+                            resetTruck(truck);
+                        } else if (truck.trailPath.first().equals(new Vector2((float) Math.floor(truck2.getPosition().x), (float) Math.floor(truck2.getPosition().y)))) {
+                            resetTruck(truck, truck2);
+                        }
+                    }
+                }
             }
         }
     }
@@ -180,7 +195,7 @@ public class FireStation {
 
     /** Draws the firetruck to the gameScreen */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getTexture(), this.x, this.y, 5, 3);
+        mapBatch.draw(this.getTexture(), this.getPosition().x-1, this.getPosition().y, 5, 3);
     }
 
     public ArrayList<FireTruck> getTrucks() {

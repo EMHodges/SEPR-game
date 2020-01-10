@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
+import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -51,6 +52,9 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.G:
                 SoundFX.music_enabled = true;
                 SoundFX.PlayMusic();
+                break;
+            case Input.Keys.L:
+                gameScreen.spawn(FireTruckType.Ocean);
                 break;
             case Input.Keys.P:
                 gui.clickedPauseButton();

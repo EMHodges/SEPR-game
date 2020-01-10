@@ -88,12 +88,12 @@ public class GameScreen implements Screen {
         station = new FireStation(3, 2);
 
         spawn(FireTruckType.Ocean);
-        spawn(FireTruckType.Speed);
+     //   spawn(FireTruckType.Speed);
 
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 20, FortressType.Default));
         fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16, 3.5f, FortressType.Clifford));
+        fortresses.add(new Fortress(16, 5, FortressType.Clifford));
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
@@ -192,14 +192,13 @@ public class GameScreen implements Screen {
         entitiesAttack();
         checkIfTruckDestroyed();
         checkIfFortressDestroyed();
+        station.checkForCollisions();
 
 
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
-
             FireTruck truck = station.getTruck(i);
 
-            station.checkForCollisions();
             truck.move();
 
             truck.updateSpray();
@@ -275,18 +274,37 @@ public class GameScreen implements Screen {
     }
 
     public boolean checkClick(Vector2 position) {
-        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
+        Vector2 tileClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
         for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
             FireTruck selectedTruck = this.station.getTruck(i);
             Vector2 truckTile = getTile(selectedTruck.getPosition());
-            if (squareClicked.equals(truckTile)) {
-                this.selectedTruck = selectedTruck;
-                this.selectedEntity = selectedTruck;
+            if (tileClicked.equals(truckTile) &&!selectedTruck.getMoving()) {
+                this.selectedTruck = this.station.getTruck(i);
+                this.selectedEntity = this.station.getTruck(i);
                 return true;
             }
         }
         return false;
     }
+
+    public boolean checksClick(Vector2 position) {
+        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
+        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
+            FireTruck selectedTruck = this.station.getTruck(i);
+            Vector2 truckTile = new Vector2((float) Math.round((selectedTruck.getX())), (float) Math.round(selectedTruck.getY()));
+            if (squareClicked.equals(truckTile)) {
+                this.selectedTruck = this.station.getTruck(i);
+                this.selectedEntity = this.station.getTruck(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+
+
+
+
 
     private Vector2 getTile(Vector2 position) {
         return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
