@@ -71,10 +71,20 @@ public class Bomb extends Sprite {
     }
 
     /**
+     * Checks if the bomb has reached the calculated target yet
+     *
+     * @return  <code>true</code> if bomb enters the tile that was targeted
+     *          <code>false</code> otherwise
+     */
+    public boolean hasReachedTargetTile() {
+        return (int) this.currentPosition.x == (int) this.targetPosition.x && (int) this.currentPosition.y == (int) this.targetPosition.y;
+    }
+
+    /**
      * Updates the current bomb position depending on the Interpolation function.
      *
      */
-    public void newUpdatePosition() {
+    public void updatePosition() {
         this.currentPosition = this.startPosition.interpolate(this.targetPosition, 0.03f, Interpolation.pow5Out);
     }
 
@@ -97,10 +107,6 @@ public class Bomb extends Sprite {
         this.target.fortressDamage(this.damage);
     }
 
-
-    public Vector2 getTargetPos() {
-        return this.targetPosition;
-    }
 
     /**
      * Determines and returns the position where the bomb will 'land.'

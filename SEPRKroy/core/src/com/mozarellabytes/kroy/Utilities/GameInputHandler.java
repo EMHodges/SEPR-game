@@ -65,7 +65,7 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
-        if (this.gameScreen.getState().equals(GameScreen.State.PLAY)) {
+        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (keycode == Input.Keys.A) {
                 SoundFX.sfx_truck_attack.stop();
                 for (FireTruck truck : gameScreen.getStation().getTrucks()) {
@@ -86,7 +86,7 @@ public class GameInputHandler implements InputProcessor {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
         Vector2 position2d = new Vector2((int) position.x, (int) position.y);
-        if (this.gameScreen.getState().equals(GameScreen.State.PLAY)) {
+        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
                 if (gameScreen.checkClick(position2d)) {
                     gameScreen.selectedTruck.resetPath();
@@ -108,7 +108,7 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        if (this.gameScreen.getState().equals(GameScreen.State.PLAY)) {
+        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (gameScreen.selectedTruck != null) {
                 Vector2 clickCoordinates = new Vector2(screenX, screenY);
                 Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates, 0));
@@ -123,7 +123,7 @@ public class GameInputHandler implements InputProcessor {
 
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         // this is to prevent trucks being on the same tiles
-        if (this.gameScreen.getState().equals(GameScreen.State.PLAY)) {
+        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (gameScreen.selectedTruck != null) {
                 for (FireTruck truck : gameScreen.getStation().getTrucks()) {
                     if (!truck.equals(gameScreen.selectedTruck)) {

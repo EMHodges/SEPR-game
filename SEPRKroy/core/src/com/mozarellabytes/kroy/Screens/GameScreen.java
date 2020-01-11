@@ -13,51 +13,118 @@ import com.mozarellabytes.kroy.Entities.*;
 import com.mozarellabytes.kroy.GameState;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.*;
-//
+
 import java.util.ArrayList;
 
+/**
+ * The Screen that our game is played in.
+ * Accessed from MenuScreen when the user
+ * clicks the Start button, and exits when
+ * the player wins or loses the game
+ */
 public class GameScreen implements Screen {
 
+    /**
+     * Instance of our game that allows
+     * us the change screens
+     */
     private final Kroy game;
+
+    /**
+     * Renders our tiled map
+     */
     private final OrthogonalTiledMapRenderer mapRenderer;
+
+    /**
+     * TODO write javadoc
+     */
     private final OrthographicCamera camera;
+
+    /**
+     * Renders shapes such as the health/reserve
+     * stat bars above entities
+     */
     private final ShapeRenderer shapeMapRenderer;
+
+    /**
+     * Stores the layers of our tiled map
+     */
     private final MapLayers mapLayers;
+
+    /**
+     * Stores the structures layers, stores the background layer
+     */
     private final int[] structureLayersIndices, backgroundLayerIndex;
+
+    /**
+     * Batch that has dimensions in line with the 40x25 map
+     */
     private final Batch mapBatch;
+
+    /**
+     * Used for shaking the camera when a bomb hits a truck
+     */
     private final CameraShake camShake;
-    private State state;
+
+    /**
+     * Stores whether the game is running or is paused
+     */
+    private PlayState state;
+
+    /**
+     * Deals with all the user interface on the screen
+     * that does not want to be inline with the map
+     * coordinates, e.g. big stat bars, buttons, pause
+     * screen
+     */
     private final GUI gui;
+
+    /**
+     * Stores the progress through the game. It keeps
+     * track of trucks/fortresses and will end the game
+     * once an end game condition has been met
+     */
     public final GameState gameState;
 
+    /**
+     * List of Fortresses currently active on the map
+     */
     private final ArrayList<Fortress> fortresses;
+
+    /**
+     * Where the FireEngines' spawn, refill and repair
+     */
     private final FireStation station;
 
+    /**
+     * The FireTruck that the user is currently drawing
+     * a path for
+     */
     public FireTruck selectedTruck;
+
+    /**
+     * The entity that the user has clicked on to show
+     * the large stats in the top left corner
+     */
     public Object selectedEntity;
 
-
-    public enum State {
+    /**
+     * Play when the game is being played
+     * Pause when the pause button is clicked
+     */
+    public enum PlayState {
         PLAY, PAUSE
     }
 
-    public State getState() {
-        return this.state;
-    }
-
-    public void changeState() {
-        if (this.state.equals(State.PLAY)){
-            this.state = State.PAUSE;
-        } else {
-            this.state = State.PLAY;
-        }
-    }
-
-
+    /**
+     * Constructor which has the game passed in
+     *
+     * @param game LibGdx game
+     */
     public GameScreen(Kroy game) {
         this.game = game;
 
-        state = State.PLAY;
+        state = PlayState.PLAY;
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Constants.VIEWPORT_WIDTH, Constants.VIEWPORT_HEIGHT);
@@ -74,7 +141,6 @@ public class GameScreen implements Screen {
         Gdx.input.setInputProcessor(new GameInputHandler(this, gui));
 
         gameState = new GameState();
-
         camShake = new CameraShake();
 
         //Orders renderer to start rendering the background, then the player layer, then structures
@@ -85,6 +151,7 @@ public class GameScreen implements Screen {
                 mapLayers.getIndex("structures2"),
                 mapLayers.getIndex("transparentStructures")};
 
+        // spawns entities on our map
         station = new FireStation(3, 2);
 
         spawn(FireTruckType.Ocean);
@@ -177,24 +244,23 @@ public class GameScreen implements Screen {
         gui.renderButtons();
     }
 
+    /**
+     * Manages all of the updates/checks during the game
+     *
+     * @param delta The time in seconds since the last render
+     */
     public void update(float delta) {
 
         gameState.hasGameEnded(game);
         CameraShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
         station.restoreTrucks();
-        entitiesAttack();
-        checkIfTruckDestroyed();
-        checkIfFortressDestroyed();
         station.checkForCollisions();
-
-
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
 
             truck.move();
-
             truck.updateSpray();
 
             for (int j = 0; j < truck.getSpray().size(); j++) {
@@ -204,33 +270,8 @@ public class GameScreen implements Screen {
                     truck.removeParticle(particle);
                 }
             }
-        }
 
-        for (Fortress fortress : fortresses) {
-            for (int j = 0; j < fortress.getBombs().size(); j++) {
-                Bomb bomb = fortress.getBombs().get(j);
-                bomb.newUpdatePosition();
-                if (bomb.checkHit()) {
-                    bomb.damageTruck();
-                    camShake.shakeIt(.2f);
-                    fortress.removeBomb(bomb);
-                } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
-                    fortress.removeBomb(bomb);
-                }
-            }
-        }
-
-        shapeMapRenderer.end();
-        shapeMapRenderer.setColor(Color.WHITE);
-
-        gui.renderSelectedEntity(selectedEntity);
-    }
-
-    private void entitiesAttack() {
-        for (int i = 0; i < station.getTrucks().size(); i++) {
-
-            FireTruck truck = station.getTruck(i);
-
+            // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
                 if (fortress.withinRange(truck.getVisualPosition())) {
                     fortress.attack(truck);
@@ -239,12 +280,8 @@ public class GameScreen implements Screen {
                     truck.attack(fortress);
                 }
             }
-        }
-    }
 
-    private void checkIfTruckDestroyed(){
-        for (int i = 0; i < station.getTrucks().size(); i++) {
-            FireTruck truck = station.getTruck(i);
+            // check if truck is destroyed
             if (truck.getHP() <= 0) {
                 gameState.removeFireTruck();
                 station.destroyTruck(truck);
@@ -253,107 +290,38 @@ public class GameScreen implements Screen {
                 }
             }
         }
-    }
 
-    private void checkIfFortressDestroyed() {
-        for (int i = 0; i < fortresses.size(); i++) {
-            if (fortresses.get(i).getHP() <= 0) {
+        for (int i = 0; i < this.fortresses.size(); i++) {
+            Fortress fortress = this.fortresses.get(i);
+
+            // update bombs
+            for (int j = 0; j < fortress.getBombs().size(); j++) {
+                Bomb bomb = fortress.getBombs().get(j);
+                bomb.updatePosition();
+                if (bomb.checkHit()) {
+                    bomb.damageTruck();
+                    fortress.removeBomb(bomb);
+                    camShake.shakeIt(.2f);
+                } else if (bomb.hasReachedTargetTile()) {
+                    fortress.removeBomb(bomb);
+                }
+            }
+
+            // check if fortress is destroyed
+            if (fortress.getHP() <= 0) {
                 gameState.addFortress();
-                fortresses.remove(fortresses.get(i));
+                this.fortresses.remove(fortress);
                 if (SoundFX.music_enabled) {
                     SoundFX.sfx_fortress_destroyed.play();
                 }
             }
+
         }
-    }
 
-    public boolean checkClick(Vector2 position) {
-        Vector2 tileClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
-        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
-            FireTruck selectedTruck = this.station.getTruck(i);
-            Vector2 truckTile = getTile(selectedTruck.getPosition());
-            if (tileClicked.equals(truckTile) &&!selectedTruck.getMoving()) {
-                this.selectedTruck = this.station.getTruck(i);
-                this.selectedEntity = this.station.getTruck(i);
-                return true;
-            }
-        }
-        return false;
-    }
+        shapeMapRenderer.end();
+        shapeMapRenderer.setColor(Color.WHITE);
 
-    public boolean checksClick(Vector2 position) {
-        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
-        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
-            FireTruck selectedTruck = this.station.getTruck(i);
-            Vector2 truckTile = new Vector2((float) Math.round((selectedTruck.getX())), (float) Math.round(selectedTruck.getY()));
-            if (squareClicked.equals(truckTile)) {
-                this.selectedTruck = this.station.getTruck(i);
-                this.selectedEntity = this.station.getTruck(i);
-                return true;
-            }
-        }
-        return false;
-    }
-
-
-
-
-
-
-    private Vector2 getTile(Vector2 position) {
-        return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
-    }
-
-    public boolean checkTrailClick(Vector2 position) {
-        // for each truck, but in reverse order
-        // so that you can click on the top trail the player can see
-        for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
-
-            // if the truck has a path
-            if (!this.station.getTruck(i).path.isEmpty()) {
-
-                // if player clicks on the last tile of a path
-                if (position.equals(this.station.getTruck(i).path.last())) {
-
-                    // makes that truck the selected truck again
-                    this.selectedTruck = this.station.getTruck(i);
-                    this.selectedEntity = this.station.getTruck(i);
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    public boolean isRoad(int x, int y) {
-        return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
-    }
-
-    public void toControlScreen() {
-        ScreenHandler.ToControls(game, this, "game");
-    }
-
-    public void toHomeScreen() {
-        ScreenHandler.ToMenu(game);
-        SoundFX.sfx_soundtrack.dispose();
-    }
-
-    public FireStation getStation(){
-        return this.station;
-    }
-
-    public OrthographicCamera getCamera() {
-        return this.camera;
-    }
-
-    public ArrayList<Fortress> getFortresses(){
-        return this.fortresses;
-    }
-
-    public void spawn(FireTruckType type) {
-        SoundFX.sfx_truck_spawn.play();
-        station.spawn(new FireTruck(this, new Vector2(6,2), type));
-        gameState.addFireTruck();
+        gui.renderSelectedEntity(selectedEntity);
     }
 
     @Override
@@ -382,6 +350,135 @@ public class GameScreen implements Screen {
         shapeMapRenderer.dispose();
         mapBatch.dispose();
         SoundFX.sfx_soundtrack.stop();
+    }
+
+    /**
+     * Checks whether the player has clicked on a truck
+     * and sets that truck to selected truck and entity
+     *
+     * @param position  coordinates of where the user
+     *                  clicked
+     * @return          <code>true</code> if player
+     *                  clicks on a truck
+     *                  <code>false</code> otherwise
+     */
+    public boolean checkClick(Vector2 position) {
+        Vector2 tileClicked = new Vector2((int) position.x, (int) position.y);
+        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
+            FireTruck selectedTruck = this.station.getTruck(i);
+            Vector2 truckTile = getTile(selectedTruck.getPosition());
+            if (tileClicked.equals(truckTile) &&!selectedTruck.getMoving()) {
+                this.selectedTruck = this.station.getTruck(i);
+                this.selectedEntity = this.station.getTruck(i);
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Gets the coordinates of the tile that the
+     * truck is closest to
+     *
+     * @param position  coordinates of truck
+     * @return          coordinates of closest tile
+     */
+    private Vector2 getTile(Vector2 position) {
+        // TODO check why we use Math.round instead of casting to an int here
+        return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
+    }
+
+    /**
+     * Checks whether the user has clicked on a the
+     * last tile in a truck's trail path and selects
+     * the truck as active truck and entity
+     *
+     * @param position  the coordinates where the user
+     *                  clicked
+     * @return          <code>true</code> if player clicks
+     *                  on the last tile in a truck's path
+     *                  <code>false</code> otherwise
+     */
+    public boolean checkTrailClick(Vector2 position) {
+        for (int i=this.station.getTrucks().size()-1; i>=0; i--) {
+            if (!this.station.getTruck(i).path.isEmpty()) {
+                if (position.equals(this.station.getTruck(i).path.last())) {
+                    this.selectedTruck = this.station.getTruck(i);
+                    this.selectedEntity = this.station.getTruck(i);
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Checks whether the tile that the user is trying to
+     * add to the truck's path is on the road. This uses
+     * the custom "road" boolean property in the
+     * collisions layer within the tiled map
+     *
+     * @param x x coordinate of tile
+     * @param y y coordinate of tile
+     * @return  <code>true</code> if the tile is a road
+     *          <code>false</code> otherwise
+     */
+    public boolean isRoad(int x, int y) {
+        return ((TiledMapTileLayer) mapLayers.get("collisions")).getCell(x, y).getTile().getProperties().get("road").equals(true);
+    }
+
+    /**
+     * TODO decide whether we want to use ScreenHandler or if it makes things more complicated
+     */
+    public void toControlScreen() {
+        ScreenHandler.ToControls(game, this, "game");
+    }
+
+    /**
+     *
+     */
+    public void toHomeScreen() {
+        ScreenHandler.ToMenu(game);
+        SoundFX.sfx_soundtrack.dispose();
+    }
+
+    /**
+     * Creates a new FireEngine, plays a sound
+     * and adds it gameState to track
+     * @param type
+     */
+    public void spawn(FireTruckType type) {
+        SoundFX.sfx_truck_spawn.play();
+        station.spawn(new FireTruck(this, new Vector2(6,2), type));
+        gameState.addFireTruck();
+    }
+
+    /**
+     * Toggles between Play and Pause state when
+     * the Pause button is clicked
+     */
+    public void changeState() {
+        if (this.state.equals(PlayState.PLAY)) {
+            this.state = PlayState.PAUSE;
+        } else {
+            this.state = PlayState.PLAY;
+        }
+    }
+
+    public FireStation getStation() {
+        return this.station;
+    }
+
+    public OrthographicCamera getCamera() {
+        return this.camera;
+    }
+
+    public ArrayList<Fortress> getFortresses() {
+        return this.fortresses;
+    }
+
+    public PlayState getState() {
+        return this.state;
     }
 
 }

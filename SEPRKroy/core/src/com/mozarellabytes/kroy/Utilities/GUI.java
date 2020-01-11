@@ -187,7 +187,7 @@ public class GUI {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_button_clicked.play();
         }
-        if (gameScreen.getState().equals(GameScreen.State.PLAY)) {
+        if (gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             currentPauseTexture = pauseButtonClicked;
         } else {
             currentPauseTexture = pauseButtonIdle;
