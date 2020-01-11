@@ -93,7 +93,7 @@ public class GameScreen implements Screen {
         fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(12, 20, FortressType.Default));
         fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
-        fortresses.add(new Fortress(16, 5, FortressType.Clifford));
+        fortresses.add(new Fortress(16, 3.5f, FortressType.Clifford));
 
         // sets the origin point to which all of the polygon's local vertices are relative to.
         for (FireTruck truck : station.getTrucks()) {
@@ -143,12 +143,6 @@ public class GameScreen implements Screen {
         mapBatch.end();
 
         mapRenderer.render(structureLayersIndices);
-
-        shapeMapRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for (Fortress fortress : fortresses) {
-            fortress.drawRange(shapeMapRenderer);
-        }
-        shapeMapRenderer.end();
 
         shapeMapRenderer.begin(ShapeRenderer.ShapeType.Filled);
 
@@ -212,16 +206,16 @@ public class GameScreen implements Screen {
             }
         }
 
-        for (int i = 0; i < fortresses.size(); i++) {
-            for (int j = 0; j < fortresses.get(i).getBombs().size(); j++) {
-                Bomb bomb = fortresses.get(i).getBombs().get(j);
+        for (Fortress fortress : fortresses) {
+            for (int j = 0; j < fortress.getBombs().size(); j++) {
+                Bomb bomb = fortress.getBombs().get(j);
                 bomb.newUpdatePosition();
                 if (bomb.checkHit()) {
                     bomb.damageTruck();
                     camShake.shakeIt(.2f);
-                    fortresses.get(i).removeBomb(bomb);
+                    fortress.removeBomb(bomb);
                 } else if ((int) bomb.getPosition().x == (int) bomb.getTargetPos().x && (int) bomb.getPosition().y == (int) bomb.getTargetPos().y) {
-                    fortresses.get(i).removeBomb(bomb);
+                    fortress.removeBomb(bomb);
                 }
             }
         }
@@ -238,7 +232,7 @@ public class GameScreen implements Screen {
             FireTruck truck = station.getTruck(i);
 
             for (Fortress fortress : this.fortresses) {
-                if (fortress.withinRange(truck.getPosition())) {
+                if (fortress.withinRange(truck.getVisualPosition())) {
                     fortress.attack(truck);
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {

@@ -84,17 +84,6 @@ public class Fortress {
     }
 
     /**
-     * Draws the circle around the Fortress to shows the user the attack range
-     *
-     * @param shapeMapRenderer  The renderer to be drawn to
-     */
-    public void drawRange(ShapeRenderer shapeMapRenderer) {
-        shapeMapRenderer.setColor(Color.WHITE);
-        shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, this.fortressType.getRange());
-        shapeMapRenderer.circle(this.getPosition().x, this.getPosition().y, 1);
-    }
-
-    /**
      * Draws the health bars above the Fortress
      *
      * @param shapeMapRenderer  The renderer to be drawn to

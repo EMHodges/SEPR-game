@@ -290,10 +290,6 @@ public class FireTruck extends Sprite {
         }
     }
 
-    public void resetTilePath(){
-        this.trailPath.clear();
-    }
-
     /**
      * Called every tick to check if a Fortress is within
      * the range of the truck
@@ -304,7 +300,7 @@ public class FireTruck extends Sprite {
      *                  <code>false </code> otherwise
      */
     public boolean fortressInRange(Vector2 fortress) {
-        return this.getPosition().dst(fortress) <= this.type.getRange();
+        return this.getVisualPosition().dst(fortress) <= this.type.getRange();
     }
 
     /**
@@ -403,6 +399,18 @@ public class FireTruck extends Sprite {
      */
     public void drawSprite(Batch mapBatch) {
         mapBatch.draw(this, this.position.x, this.position.y, 1, 1);
+    }
+
+    /**
+     * Helper method that returns where the truck
+     * is visually to the player. This is used when
+     * checking the range when attacking the Fortress
+     * and getting attacked by the Fortress
+     *
+     * @return a vector where the truck is visually
+     */
+    public Vector2 getVisualPosition() {
+        return new Vector2(this.position.x + 0.5f, this.position.y + 0.5f);
     }
 
     /**
