@@ -44,7 +44,8 @@ public class FireStation {
 
 
     /**
-     * Constructs the Firestation
+     * Constructs the Firestation with at a given position with locations
+     * for the repair & refill tiles and the spawn tiles
      *
      * @param x  x coordinate of Station in tiles (lower left point)
      * @param y  y coordinate of Station in tiles (lower left point)
@@ -57,7 +58,6 @@ public class FireStation {
         this.bayTile2 = new Vector2(x+2, y);
         this.texture = new Texture(Gdx.files.internal("sprites/station/station.png"));
         this.trucks = new ArrayList<FireTruck>();
-
     }
 
     /**
@@ -120,18 +120,6 @@ public class FireStation {
     }
 
 
-    /** generate pairs of trucks **/
-    /** see if can do this with an arraylist */
-    public void checkForeCollisions() {
-        for (FireTruck truck : trucks) {
-            for (FireTruck truck2 : trucks) {
-                if (!(truck.equals(truck2))) {
-                   // checkIfTrucksCollided(truck, truck2);
-                }
-            }
-        }
-    }
-
     /**
      * Checks that no more than one truck occupies a tile at a time by checking trucks
      * are not moving towards each other and that a moving truck is not going to go onto
@@ -144,13 +132,14 @@ public class FireStation {
                 if (!(truck.equals(truck2))) {
                     if (!truck.trailPath.isEmpty() && !truck.getPosition().equals(spawnTile)) {
                         Vector2 truck2tile = new Vector2(Math.round(truck2.getPosition().x), Math.round(truck2.getPosition().y));
+                        Vector2 truckstile = new Vector2((float)Math.floor(truck2.getPosition().x),(float) Math.floor(truck2.getPosition().y));
                         if (!truck2.trailPath.isEmpty() && truck.trailPath.first().equals(truck2.trailPath.first())) {
                             truck.setCollision();
                             truck2.setCollision();
                             resetTruck(truck, truck2);
                         } else if (truck.trailPath.first().equals(truck2tile)) {
                             resetTruck(truck);
-                        } else if (truck.trailPath.first().equals(new Vector2((float) Math.floor(truck2.getPosition().x), (float) Math.floor(truck2.getPosition().y)))) {
+                        } else if (truck.trailPath.first().equals(truckstile)) {
                             resetTruck(truck, truck2);
                         }
                     }

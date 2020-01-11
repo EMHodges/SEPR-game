@@ -6,7 +6,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Entities.FireTruck;
-import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Entities.Fortress;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
@@ -53,9 +52,6 @@ public class GameInputHandler implements InputProcessor {
                 SoundFX.music_enabled = true;
                 SoundFX.PlayMusic();
                 break;
-            case Input.Keys.L:
-                gameScreen.spawn(FireTruckType.Ocean);
-                break;
             case Input.Keys.P:
                 gui.clickedPauseButton();
                 gameScreen.changeState();
@@ -87,7 +83,7 @@ public class GameInputHandler implements InputProcessor {
         Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
         Vector2 position2d = new Vector2((int) position.x, (int) position.y);
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
-            if (gameScreen.isRoad((int) position2d.x, (int) position2d.y)) {
+            if (gameScreen.isRoad((int)position2d.x, (int)position2d.y)){
                 if (gameScreen.checkClick(position2d)) {
                     gameScreen.selectedTruck.resetPath();
                     gameScreen.selectedTruck.addTileToPath(position2d);
@@ -97,7 +93,7 @@ public class GameInputHandler implements InputProcessor {
                         gameScreen.selectedEntity = null;
                     }
                 }
-            } else { //
+            } else {
                 checkFortressClick(position2d);
             }
         }
@@ -169,22 +165,20 @@ public class GameInputHandler implements InputProcessor {
         return true;
     }
 
+
     private boolean checkFortressClick(Vector2 position2d) {
-        boolean selected = false;
         for (Fortress fortress : gameScreen.getFortresses()) {
             if (fortress.getArea().contains(position2d)) {
                 gameScreen.selectedEntity = fortress;
-                selected = true;
+                return true;
             }
         }
-        if (selected) {
-            return true;
-        } else {
-            gameScreen.selectedTruck = null;
-            gameScreen.selectedEntity = null;
-            return false;
-        }
+        gameScreen.selectedTruck = null;
+        gameScreen.selectedEntity = null;
+        return false;
     }
+
+
 
     private boolean checkButtonUnclick(int screenX, int screenY){
         Vector2 clickCoordinates = new Vector2(screenX, screenY);

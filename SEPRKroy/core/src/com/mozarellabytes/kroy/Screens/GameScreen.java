@@ -363,11 +363,10 @@ public class GameScreen implements Screen {
      *                  <code>false</code> otherwise
      */
     public boolean checkClick(Vector2 position) {
-        Vector2 tileClicked = new Vector2((int) position.x, (int) position.y);
         for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
             FireTruck selectedTruck = this.station.getTruck(i);
             Vector2 truckTile = getTile(selectedTruck.getPosition());
-            if (tileClicked.equals(truckTile) &&!selectedTruck.getMoving()) {
+            if (position.equals(truckTile) &&!selectedTruck.getMoving()) {
                 this.selectedTruck = this.station.getTruck(i);
                 this.selectedEntity = this.station.getTruck(i);
                 return true;
@@ -384,8 +383,7 @@ public class GameScreen implements Screen {
      * @return          coordinates of closest tile
      */
     private Vector2 getTile(Vector2 position) {
-        // TODO check why we use Math.round instead of casting to an int here
-        return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
+        return new Vector2((int)position.x,(int)position.y);
     }
 
     /**

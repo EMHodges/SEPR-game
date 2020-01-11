@@ -122,7 +122,8 @@ public class FireTruck extends Sprite {
     private final Texture lookDown;
 
     /**
-     * Constructs a new FireTruck a position and type passed in
+     * Constructs a new FireTruck at a position and of a certain type
+     * which have been passed in
      *
      * @param gameScreen    used to access functions in GameScreen
      * @param position      initial location of the truck
