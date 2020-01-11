@@ -97,7 +97,7 @@ public class GameInputHandler implements InputProcessor {
                         gameScreen.selectedEntity = null;
                     }
                 }
-            } else {
+            } else { //
                 checkFortressClick(position2d);
             }
         }
