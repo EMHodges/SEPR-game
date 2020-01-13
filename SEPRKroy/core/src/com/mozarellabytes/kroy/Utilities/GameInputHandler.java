@@ -21,7 +21,9 @@ public class GameInputHandler implements InputProcessor {
 
     /** Called when a key was pressed
      *
-     * This handles toggling music, etc
+     * This handles toggling sound, the control screen, the pause
+     * screen and makes the fire trucks attack a fortress that is
+     * within it's range
      *
      * @param keycode one of the constants in {@link Input.Keys}
      * @return whether the input was processed */

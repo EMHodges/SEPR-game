@@ -9,19 +9,34 @@ import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.GameOverInputHandler;
 
+/** This screen is shown after the game has ended.
+ * It tells the player if they have won or lost.
+ */
+
 public class GameOverScreen implements Screen {
 
+    /** The game - to be able to use the fonts from game */
     private final Kroy game;
 
+    /** The texture that makes up the background screen */
     private final Texture backgroundLogo;
+
+    /** Camera to set the projection for the screen */
     private final OrthographicCamera camera;
 
+    /** The format that the text will be displayed in */
     private final GlyphLayout layout;
+
+    /** The text that will be displayed to the screen */
     private String text;
 
+    /** Constructor for the game screen
+     * @param game
+     * @param won <code> true </code> if the game was won
+     *            <code> false </code> if th game was lost
+     */
     public GameOverScreen(Kroy game, boolean won) {
         this.game = game;
-
         camera = new OrthographicCamera();
         camera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
 
@@ -45,6 +60,9 @@ public class GameOverScreen implements Screen {
 
     }
 
+    /** Renders the game over screen
+     *
+     *  @param delta The time in seconds since the last render. */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1f);
@@ -78,6 +96,7 @@ public class GameOverScreen implements Screen {
 
     }
 
+    /** Called when this screen should release all resources. */
     @Override
     public void dispose() {
         backgroundLogo.dispose();

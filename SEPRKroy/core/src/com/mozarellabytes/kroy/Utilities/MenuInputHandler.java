@@ -11,10 +11,19 @@ public class MenuInputHandler implements InputProcessor {
 
     private final MenuScreen menu;
 
+    /** Constructs the MenuInputHandler
+     *
+     * @param menu the menu screen that this input handler is controlling
+     */
     public MenuInputHandler(MenuScreen menu) {
         this.menu = menu;
     }
 
+    /** Exits the game if 'ESCAPE' key is pressed, goes to control
+     * screen if 'C' is pressed, toggles the sound if 'S' is pressed
+     *
+     * @param keycode one of the constants in {@link Input.Keys}
+     * @return whether the input was processed */
     @Override
     public boolean keyDown(int keycode) {
         switch (keycode) {
@@ -43,12 +52,20 @@ public class MenuInputHandler implements InputProcessor {
         return false;
     }
 
+    /** Checks if the user clicks on the start, controls or sound button.
+     * It starts the game, shows the controls screen or toggles the sound
+     * respectively.
+     * @param screenX The x coordinate, origin is in the upper left corner
+     * @param screenY The y coordinate, origin is in the upper left corner
+     * @param pointer the pointer for the event.
+     * @param button the button
+     * @return whether the input was processed */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = menu.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (menu.getPlayButton().contains(position.x, position.y)) {
-            menu.clickedPlayButton();
+        if (menu.getStartButton().contains(position.x, position.y)) {
+            menu.clickedStartButton();
         } else if (menu.getControlsButton().contains(position.x, position.y)) {
             menu.clickedControlsButton();
         } else if (menu.getSoundButton().contains(position.x, position.y)) {
@@ -61,14 +78,14 @@ public class MenuInputHandler implements InputProcessor {
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = menu.camera.unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        if (menu.getPlayButton().contains(position.x, position.y)) {
+        if (menu.getStartButton().contains(position.x, position.y)) {
             menu.toGameScreen();
         } else if (menu.getControlsButton().contains(position.x, position.y)) {
             menu.toControlScreen();
         } else if (menu.getSoundButton().contains(position.x, position.y)){
             menu.changeSound();
         } else {
-            menu.idlePlayButton();
+            menu.idleStartButton();
             menu.idleControlsButton();
             menu.idleSoundButton();
         }

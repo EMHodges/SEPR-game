@@ -48,7 +48,8 @@ public class Kroy extends Game {
 		parameter.color = Color.FIREBRICK;
 		font33Red = generator.generateFont(parameter);
 
-		this.setScreen(new GameScreen(this));
+	//	this.setScreen(new GameScreen(this));
+		this.setScreen(new MenuScreen(this));
 	}
 
 	@Override

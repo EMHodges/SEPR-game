@@ -3,9 +3,12 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.utils.Align;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Entities.Fortress;
@@ -35,6 +38,8 @@ public class GUI {
     private final Texture soundOnClickedTexture;
     private final Texture soundOffClickedTexture;
     private Texture currentSoundTexture;
+
+    private final OrthographicCamera pauseCamera;
 
     public GUI(Kroy game, GameScreen gameScreen) {
         this.game = game;
@@ -75,6 +80,9 @@ public class GUI {
         homeButton = new Rectangle(Gdx.graphics.getWidth() - 33, Gdx.graphics.getHeight() - 33, 30, 30);
         soundButton = new Rectangle(Gdx.graphics.getWidth() - 70, Gdx.graphics.getHeight() - 33, 30, 30);
         pauseButton = new Rectangle(Gdx.graphics.getWidth() - 107, Gdx.graphics.getHeight() - 33, 30, 30);
+
+        pauseCamera = new OrthographicCamera();
+        pauseCamera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
     }
 
     public void renderSelectedEntity(Object entity) {
@@ -233,10 +241,16 @@ public class GUI {
     }
 
     public void renderPauseScreenText() {
+        GlyphLayout layout = new GlyphLayout();
+        String pauseText1 =  "Game paused \n";
+        String pauseText2 =  "Press 'P' or the Pause button \n To return to game";
+        layout.setText(game.font26, pauseText1);
+        layout.setText(game.font26, pauseText2);
+
+        game.batch.setProjectionMatrix(pauseCamera.combined);
         game.batch.begin();
-        game.font60.draw(game.batch, "GAME PAUSED", this.selectedX + 427, this.selectedY - 60);
-        game.font26.draw(game.batch, "Press 'P' or the Pause button", this.selectedX + 417, this.selectedY - 140);
-        game.font26.draw(game.batch, "to return to game", this.selectedX + 500, this.selectedY - 170);
+        game.font50.draw(game.batch, pauseText1, pauseCamera.viewportWidth/2 - layout.width/2.7f, pauseCamera.viewportHeight/1.8f - layout.height/2);
+        game.font26.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, pauseCamera.viewportHeight/2.3f - layout.height/2);
         game.batch.end();
     }
 

@@ -87,21 +87,13 @@ public class WaterParticle {
                 ((int) this.targetPosition.y == (int) this.currentPosition.y));
     }
 
-    public Fortress getTarget() {
-        return this.target;
-    }
+    public Fortress getTarget() { return this.target; }
 
-    public float getSize() {
-        return this.size;
-    }
+    public float getSize() { return this.size; }
 
-    public Color getColour() {
-        return this.colour;
-    }
+    public Color getColour() { return this.colour; }
 
-    public Vector2 getPosition() {
-        return this.currentPosition;
-    }
+    public Vector2 getPosition() { return this.currentPosition; }
 
 }
 

@@ -10,29 +10,67 @@ import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
 import com.mozarellabytes.kroy.Utilities.ScreenHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
+/** This screen is shown after the splash screen and is
+ * where the player can choose to start the game or view
+ * the control screen */
 public class MenuScreen implements Screen {
 
+    /** The game */
     private final Kroy game;
     public final OrthographicCamera camera;
+
+    /** The menu screen image - see ui/menuscreen_blank_2 */
     private final Texture backgroundImage;
 
-    private final Rectangle playButton;
-    private final Texture playIdleTexture;
-    private final Texture playClickedTexture;
-    private Texture currentPlayTexture;
+    /** Rectangle containing the position of the play button */
+    private final Rectangle startButton;
 
+    /** Texture of the start button when it has not been clicked */
+    private final Texture startIdleTexture;
+
+    /** Texture of the start button when has been clicked */
+    private final Texture startClickedTexture;
+
+    /** Contains the current state of the start button:
+     * startIdleTexture if the start button is not being pressed,
+     * startClickedTexture if the start button has been pressed */
+    private Texture currentStartTexture;
+
+
+    /** Rectangle containing the position of the control button */
     private final Rectangle controlsButton;
+
+    /** Texture of the control button when it has not been clicked */
     private final Texture controlsIdleTexture;
+
+    /** Texture of the control button when has been clicked */
     private final Texture controlsClickedTexture;
+
+    /** Contains the current state of the control button:
+     * controlsIdleTexture if the control button is not being pressed,
+     * controlsClickedTexture if the control button has been pressed */
     private Texture currentControlsTexture;
 
+    /** Rectangle containing the position of the sound button */
     private final Rectangle soundButton;
+
+    /** Texture of the sound on button when it has not been clicked */
     private final Texture soundOnIdleTexture;
+
+    /** Texture of the sound off button when it has not been clicked */
     private final Texture soundOffIdleTexture;
+
+    /** Texture of the sound on button when it has been clicked */
     private final Texture soundOnClickedTexture;
+
+    /** Texture of the sound off button when it has been clicked */
     private final Texture soundOffClickedTexture;
     private Texture currentSoundTexture;
 
+    /** Constructs the MenuScreen
+     *
+     * @param game
+     */
     public MenuScreen(final Kroy game) {
         this.game = game;
 
@@ -42,10 +80,10 @@ public class MenuScreen implements Screen {
         backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
         backgroundImage.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
-        playIdleTexture = new Texture(Gdx.files.internal("ui/start_idle.png"), true);
-        playIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
-        playClickedTexture = new Texture(Gdx.files.internal("ui/start_clicked.png"), true);
-        playClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        startIdleTexture = new Texture(Gdx.files.internal("ui/start_idle.png"), true);
+        startIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        startClickedTexture = new Texture(Gdx.files.internal("ui/start_clicked.png"), true);
+        startClickedTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
         controlsIdleTexture = new Texture(Gdx.files.internal("ui/controls_idle.png"), true);
         controlsIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
@@ -71,14 +109,14 @@ public class MenuScreen implements Screen {
             currentSoundTexture = soundOnIdleTexture;
         }
 
-        currentPlayTexture = playIdleTexture;
+        currentStartTexture = startIdleTexture;
         currentControlsTexture = controlsIdleTexture;
 
-        playButton = new Rectangle();
-        playButton.width = (float) (currentPlayTexture.getWidth()*0.75);
-        playButton.height = (float) (currentPlayTexture.getHeight()*0.75);
-        playButton.x = (int) (camera.viewportWidth/2 - playButton.width/2);
-        playButton.y = (int) ((camera.viewportHeight/2 - playButton.height/2) * 0.8);
+        startButton = new Rectangle();
+        startButton.width = (float) (currentStartTexture.getWidth()*0.75);
+        startButton.height = (float) (currentStartTexture.getHeight()*0.75);
+        startButton.x = (int) (camera.viewportWidth/2 - startButton.width/2);
+        startButton.y = (int) ((camera.viewportHeight/2 - startButton.height/2) * 0.8);
 
         controlsButton = new Rectangle();
         controlsButton.width = (float) (currentControlsTexture.getWidth()*0.75);
@@ -101,6 +139,10 @@ public class MenuScreen implements Screen {
 
     }
 
+    /** Renders the menu screen consisting of the background and the start, controls and sound buttons.
+     *
+     * @param delta The time in seconds since the last render.
+     */
     @Override
     public void render(float delta) {
         Gdx.gl.glClearColor(51/255f, 34/255f, 99/255f, 1);
@@ -112,7 +154,7 @@ public class MenuScreen implements Screen {
 
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
-        game.batch.draw(currentPlayTexture, playButton.x, playButton.y, playButton.width, playButton.height);
+        game.batch.draw(currentStartTexture, startButton.x, startButton.y, startButton.width, startButton.height);
         game.batch.draw(currentControlsTexture, controlsButton.x, controlsButton.y, controlsButton.width, controlsButton.height);
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.end();
@@ -139,12 +181,13 @@ public class MenuScreen implements Screen {
 
     }
 
+    /** Called when this screen should release all resources. */
     @Override
     public void dispose() {
         backgroundImage.dispose();
-        currentPlayTexture.dispose();
-        playClickedTexture.dispose();
-        playIdleTexture.dispose();
+        currentStartTexture.dispose();
+        startClickedTexture.dispose();
+        startIdleTexture.dispose();
         currentControlsTexture.dispose();
         controlsClickedTexture.dispose();
         controlsIdleTexture.dispose();
@@ -156,28 +199,21 @@ public class MenuScreen implements Screen {
         SoundFX.sfx_menu.stop();
     }
 
+    /** Changes the screen from menu screen to game screen */
     public void toGameScreen() {
         game.setScreen(new GameScreen(game));
         this.dispose();
     }
 
-    public Rectangle getPlayButton() {
-        return playButton;
-    }
-
-    public Rectangle getControlsButton() {
-        return controlsButton;
-    }
-
-    public Rectangle getSoundButton() {return soundButton; }
-
-    public void clickedPlayButton() {
+    /** Changes the texture of the start button when it has been clicked on */
+    public void clickedStartButton() {
         if (SoundFX.music_enabled){
             SoundFX.sfx_button_clicked.play();
         }
-        currentPlayTexture = playClickedTexture;
+        currentStartTexture = startClickedTexture;
     }
 
+    /** Changes the texture of the controls button when it has been clicked on */
     public void clickedControlsButton() {
         if (SoundFX.music_enabled){
             SoundFX.sfx_button_clicked.play();
@@ -185,6 +221,7 @@ public class MenuScreen implements Screen {
         currentControlsTexture = controlsClickedTexture;
     }
 
+    /** Changes the texture of the sound button when it has been clicked on */
     public void clickedSoundButton() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffClickedTexture;
@@ -193,6 +230,9 @@ public class MenuScreen implements Screen {
         }
     }
 
+    /** Turns the sound on and off and changes the sound icon accordingly,
+     * turns the sound off in the sound was on and turns the sound on if the
+     * sound was off */
     public void changeSound() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOnIdleTexture;
@@ -203,14 +243,17 @@ public class MenuScreen implements Screen {
         }
     }
 
-    public void idlePlayButton() {
-        currentPlayTexture = playIdleTexture;
+    /** The texture of the start button when it has not been clicked on */
+    public void idleStartButton() {
+        currentStartTexture = startIdleTexture;
     }
 
+    /** The texture of the control button when it has not been clicked on */
     public void idleControlsButton() {
         currentControlsTexture = controlsIdleTexture;
     }
 
+    /** The texture of the sound button when it has not been clicked on */
     public void idleSoundButton() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffIdleTexture;
@@ -219,5 +262,12 @@ public class MenuScreen implements Screen {
         }
     }
 
+    /** Changes the screen from the menu screen to the control screen */
     public void toControlScreen(){ ScreenHandler.ToControls(game, this, "menu"); }
+
+    public Rectangle getStartButton() { return startButton; }
+
+    public Rectangle getControlsButton() { return controlsButton; }
+
+    public Rectangle getSoundButton() {return soundButton; }
 }

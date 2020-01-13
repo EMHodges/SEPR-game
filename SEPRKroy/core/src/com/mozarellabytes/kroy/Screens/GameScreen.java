@@ -24,51 +24,32 @@ import java.util.ArrayList;
  */
 public class GameScreen implements Screen {
 
-    /**
-     * Instance of our game that allows
-     * us the change screens
-     */
+    /** Instance of our game that allows us the change screens */
     private final Kroy game;
 
-    /**
-     * Renders our tiled map
-     */
+    /** Renders our tiled map */
     private final OrthogonalTiledMapRenderer mapRenderer;
 
-    /**
-     * TODO write javadoc
-     */
+    /** Camera to set the projection for the screen */
     private final OrthographicCamera camera;
 
-    /**
-     * Renders shapes such as the health/reserve
-     * stat bars above entities
-     */
+    /** Renders shapes such as the health/reserve
+     * stat bars above entities */
     private final ShapeRenderer shapeMapRenderer;
 
-    /**
-     * Stores the layers of our tiled map
-     */
+    /** Stores the layers of our tiled map */
     private final MapLayers mapLayers;
 
-    /**
-     * Stores the structures layers, stores the background layer
-     */
+    /** Stores the structures layers, stores the background layer */
     private final int[] structureLayersIndices, backgroundLayerIndex;
 
-    /**
-     * Batch that has dimensions in line with the 40x25 map
-     */
+    /** Batch that has dimensions in line with the 40x25 map */
     private final Batch mapBatch;
 
-    /**
-     * Used for shaking the camera when a bomb hits a truck
-     */
+    /** Used for shaking the camera when a bomb hits a truck */
     private final CameraShake camShake;
 
-    /**
-     * Stores whether the game is running or is paused
-     */
+    /** Stores whether the game is running or is paused */
     private PlayState state;
 
     /**
@@ -86,32 +67,21 @@ public class GameScreen implements Screen {
      */
     public final GameState gameState;
 
-    /**
-     * List of Fortresses currently active on the map
-     */
+    /** List of Fortresses currently active on the map */
     private final ArrayList<Fortress> fortresses;
 
-    /**
-     * Where the FireEngines' spawn, refill and repair
-     */
+    /** Where the FireEngines' spawn, refill and repair */
     private final FireStation station;
 
-    /**
-     * The FireTruck that the user is currently drawing
-     * a path for
-     */
+    /** The FireTruck that the user is currently drawing a path for */
     public FireTruck selectedTruck;
 
-    /**
-     * The entity that the user has clicked on to show
-     * the large stats in the top left corner
-     */
+    /** The entity that the user has clicked on to show
+     * the large stats in the top left corner */
     public Object selectedEntity;
 
-    /**
-     * Play when the game is being played
-     * Pause when the pause button is clicked
-     */
+    /** Play when the game is being played
+     * Pause when the pause button is clicked */
     public enum PlayState {
         PLAY, PAUSE
     }
@@ -151,7 +121,6 @@ public class GameScreen implements Screen {
                 mapLayers.getIndex("structures2"),
                 mapLayers.getIndex("transparentStructures")};
 
-        // spawns entities on our map
         station = new FireStation(3, 2);
 
         spawn(FireTruckType.Ocean);
@@ -178,20 +147,14 @@ public class GameScreen implements Screen {
 
     @Override
     public void show() {
-
     }
 
     @Override
     public void render(float delta) {
 
-        // Initial rendering "options"
-        Gdx.gl.glClearColor(0.55f, 0.55f, 0.55f, 1f);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-
         camera.update();
-        mapRenderer.setView(camera);
 
+        mapRenderer.setView(camera);
         mapRenderer.render(backgroundLayerIndex);
 
         mapBatch.begin();
@@ -432,17 +395,15 @@ public class GameScreen implements Screen {
         ScreenHandler.ToControls(game, this, "game");
     }
 
-    /**
-     *
-     */
+    /** Exits the main game screen and goes to the menu, called when the home
+     * button is clicked */
     public void toHomeScreen() {
         ScreenHandler.ToMenu(game);
         SoundFX.sfx_soundtrack.dispose();
     }
 
     /**
-     * Creates a new FireEngine, plays a sound
-     * and adds it gameState to track
+     * Creates a new FireEngine, plays a sound and adds it gameState to track
      * @param type
      */
     public void spawn(FireTruckType type) {
@@ -451,10 +412,7 @@ public class GameScreen implements Screen {
         gameState.addFireTruck();
     }
 
-    /**
-     * Toggles between Play and Pause state when
-     * the Pause button is clicked
-     */
+    /** Toggles between Play and Pause state when the Pause button is clicked */
     public void changeState() {
         if (this.state.equals(PlayState.PLAY)) {
             this.state = PlayState.PAUSE;
