@@ -46,13 +46,10 @@ public class GameInputHandler implements InputProcessor {
             case Input.Keys.C:
                 gameScreen.toControlScreen();
                 break;
-            case Input.Keys.F:
-                SoundFX.music_enabled = false;
-                SoundFX.StopMusic();
-                break;
-            case Input.Keys.G:
-                SoundFX.music_enabled = true;
-                SoundFX.PlayMusic();
+            case Input.Keys.S:
+                gui.clickedSoundButton();
+                gui.changeSound();
+                gui.idleSoundButton();
                 break;
             case Input.Keys.P:
                 gui.clickedPauseButton();
@@ -81,26 +78,19 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector2 clickCoordinates = new Vector2(screenX, screenY);
-        Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        Vector2 position2d = new Vector2((int) position.x, (int) position.y);
+        Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
-            if (gameScreen.isRoad((int)position2d.x, (int)position2d.y)){
-                if (gameScreen.checkClick(position2d)) {
-                    gameScreen.selectedTruck.resetPath();
-                    gameScreen.selectedTruck.addTileToPath(position2d);
-                } else {
-                    if (!gameScreen.checkTrailClick(position2d) && !checkFortressClick(position2d)) {
-                        gameScreen.selectedTruck = null;
-                        gameScreen.selectedEntity = null;
-                    }
-                }
+            if (gameScreen.checkClick(clickCoordinates)) {
+                gameScreen.selectedTruck.resetPath();
+                gameScreen.selectedTruck.addTileToPath(clickCoordinates);
+            } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
+                gameScreen.selectedTruck = null;
+                gameScreen.selectedEntity = null;
             } else {
-                checkFortressClick(position2d);
+                checkFortressClick(clickCoordinates);
             }
         }
-        checkButtonClick(new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y));
-
+        checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
         return true;
     }
 
@@ -108,10 +98,8 @@ public class GameInputHandler implements InputProcessor {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (gameScreen.selectedTruck != null) {
-                Vector2 clickCoordinates = new Vector2(screenX, screenY);
-                Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates, 0));
-                Vector2 position2d = new Vector2((int) position.x, (int) position.y);
-                gameScreen.selectedTruck.addTileToPath(position2d);
+                Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
+                gameScreen.selectedTruck.addTileToPath(clickCoordinates);
             }
         }
         return true;
@@ -129,8 +117,12 @@ public class GameInputHandler implements InputProcessor {
                             if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
                                     || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
                                 gameScreen.selectedTruck.trailPath.removeLast();
-                                while (!gameScreen.selectedTruck.trailPath.isEmpty() && !gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
+                                Gdx.app.log("collision", "collide");
+                                Gdx.app.log("selected", String.valueOf(gameScreen.selectedTruck.getPath()));
+                                Gdx.app.log("other", String.valueOf(truck.getPath()));
+                                while (!gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
                                     gameScreen.selectedTruck.path.removeLast();
+
                                 }
                             }
                         }
@@ -146,6 +138,8 @@ public class GameInputHandler implements InputProcessor {
         return true;
     }
 
+
+
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
         return false;
@@ -155,6 +149,43 @@ public class GameInputHandler implements InputProcessor {
     public boolean scrolled(int amount) {
         return false;
     }
+
+    private void checkSameLastTile(){
+        for (FireTruck truck : gameScreen.getStation().getTrucks()) {
+            if (!truck.equals(gameScreen.selectedTruck)) {
+                if (doTrucksHaveSameLastTile(gameScreen.selectedTruck, truck)){
+                    giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
+                }
+            }
+        }
+    }
+
+    private boolean doTrucksHaveSameLastTile(FireTruck selectedTruck, FireTruck truck2) {
+        if (!truck2.getPath().isEmpty()){
+            if (truck2.trailPath.last().equals(selectedTruck.trailPath.last())){
+                return true;
+            }
+        } else if (truck2.getPosition().equals(selectedTruck.trailPath.last())) {
+            return true;
+        }
+        return false;
+    }
+
+    private void giveTrucksDifferentLastTiles(FireTruck selectedTruck){
+        selectedTruck.trailPath.removeLast();
+        while (!selectedTruck.trailPath.isEmpty() && !selectedTruck.trailPath.last().equals(selectedTruck.path.last())) {
+            selectedTruck.path.removeLast();
+        }
+    }
+
+
+    private Vector2 generateClickCoordinates(int screenX, int screenY){
+        Vector2 clickCoordinates = new Vector2(screenX, screenY);
+        Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
+        Vector2 position2d = new Vector2((int) position.x, (int) position.y);
+        return position2d;
+    }
+
 
     private boolean checkButtonClick(Vector2 position2d){
         if (gui.getHomeButton().contains(position2d)) {
