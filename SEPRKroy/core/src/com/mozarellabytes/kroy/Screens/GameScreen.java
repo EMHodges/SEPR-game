@@ -316,13 +316,11 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Checks whether the player has clicked on a truck
-     * and sets that truck to selected truck and entity
+     * Checks whether the player has clicked on a truck and sets that
+     * truck to selected truck and entity
      *
-     * @param position  coordinates of where the user
-     *                  clicked
-     * @return          <code>true</code> if player
-     *                  clicks on a truck
+     * @param position  coordinates of where the user clicked
+     * @return          <code>true</code> if player clicks on a truck
      *                  <code>false</code> otherwise
      */
     public boolean checkClick(Vector2 position) {
@@ -339,25 +337,43 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Gets the coordinates of the tile that the
-     * truck is closest to
+     * Gets the coordinates of the tile that the truck is closest to
      *
      * @param position  coordinates of truck
      * @return          coordinates of closest tile
      */
-    private Vector2 getTile(Vector2 position) {
+    private Vector2 getsTile(Vector2 position) {
         return new Vector2((int)position.x,(int)position.y);
     }
 
+    public boolean checksClick(Vector2 position) {
+        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
+        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
+            FireTruck selectedTruck = this.station.getTruck(i);
+            Vector2 truckTile = getTile(selectedTruck.getPosition());
+            if (squareClicked.equals(truckTile) ) {
+                this.selectedTruck = selectedTruck;
+                this.selectedEntity = selectedTruck;
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private Vector2 getTile(Vector2 position) {
+        return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
+    }
+
+
+
     /**
-     * Checks whether the user has clicked on a the
-     * last tile in a truck's trail path and selects
-     * the truck as active truck and entity
+     * Checks whether the user has clicked on a the last tile in a
+     * truck's trail path and selects the truck as active truck and
+     * entity
      *
-     * @param position  the coordinates where the user
-     *                  clicked
-     * @return          <code>true</code> if player clicks
-     *                  on the last tile in a truck's path
+     * @param position  the coordinates where the user clicked
+     * @return          <code>true</code> if player clicks on the
+     *                  last tile in a truck's path
      *                  <code>false</code> otherwise
      */
     public boolean checkTrailClick(Vector2 position) {
@@ -374,10 +390,9 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * Checks whether the tile that the user is trying to
-     * add to the truck's path is on the road. This uses
-     * the custom "road" boolean property in the
-     * collisions layer within the tiled map
+     * Checks whether the tile that the user is trying to add to the
+     *  truck's path is on the road. This uses the custom "road"
+     * boolean property in the collisions layer within the tiled map
      *
      * @param x x coordinate of tile
      * @param y y coordinate of tile

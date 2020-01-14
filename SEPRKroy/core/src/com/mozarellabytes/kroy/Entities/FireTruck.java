@@ -14,108 +14,68 @@ import com.mozarellabytes.kroy.Utilities.SoundFX;
 import java.util.ArrayList;
 
 /**
- * FireTruck is an entity that the player
- * controls. It navigates the map on the
- * roads defined in the Tiled Map by
- * following a path that the user draws.
+ * FireTruck is an entity that the player controls. It navigates the map on the
+ * roads defined in the Tiled Map by following a path that the user draws.
  *
- * Having 'A' held when within range of a
- * Fortress will deal damage to it.
+ * Having 'A' held when within range of a  Fortress will deal damage to it.
  */
 public class FireTruck extends Sprite {
 
-    /**
-     * enables access to functions in GameScreen
-     */
+    /** Enables access to functions in GameScreen */
     private final GameScreen gameScreen;
 
-    /**
-     * defines set of pre-defined attributes
-     */
+    /** Defines set of pre-defined attributes */
     public final FireTruckType type;
 
-    /**
-     * Health points
-     */
+    /** Health points */
     private float HP;
 
-    /**
-     * Water Reserve
-     */
+    /** Water Reserve */
     private float reserve;
 
-    /**
-     * Position of FireTruck
-     */
+    /** Position of FireTruck in tiles */
     private Vector2 position;
 
-    /**
-     * Actual path the truck follows
-     * Determines speed too:
-     *  The fewer items in the path,
-     *  the slower the truck will go
-     */
+    /** Actual path the truck follows; the fewer item in
+     * the path the slower the truck will go */
     public final Queue<Vector2> path;
 
-    /**
-     * The visual colourful path that
-     * users can see when drawing the
-     * path
-     */
+    /** The visual path that users can see when drawing
+     * a firetruck's path */
     public final Queue<Vector2> trailPath;
 
-    /**
-     * Whether the truck is moving or
-     * not, this determines whether the
+    /** If the truck is currently moving, determines whether the
      * truck's position should be updated
      *
-     * <code>true</code> once the player
-     * has drawn a path and has let go of
-     * the mouse click
-     * <code>false</code> once the truck
-     * has got to the end of the path
-     */
+     * <code>true</code> once the player has drawn a
+     * path and has let go of the mouse click
+     * <code>false</code> once the truck has got to
+     * the end of the path */
     private boolean moving;
 
-    /**
-     * Whether the truck is attacking
-     * a Fortress, when the A key is
-     * being pressed
+    /** If the truck is attacking a Fortress
      *
      * <code>true</code> 'A' key is pressed
-     * <code>false</code> 'A' key is not presses
-     */
+     * <code>false</code> 'A' key is not pressed */
     private boolean attacking;
 
-    /**
-     * Whether the truck has collided
-     * with another truck
-     */
+    /** Whether the truck has an unresolved collision
+     * with another truck */
     private boolean inCollision;
 
-    /**
-     * Used to check if the truck's
-     * image should be changed to match
-     * the direction that it is facing
-     */
+    /** Used to check if the truck's image should be
+     * changed to match the direction it is facing */
     private Vector2 previousTile;
 
-    /**
-     * Time of the last time the truck
-     * was attacked by a Fortress
-     */
+    /** Time since fortress has attacked the truck */
     private long timeOfLastAttack;
 
-    /**
-     * List of particles that the truck
-     * uses to attack a Fortress with
-     */
+    /** List of particles that the truck uses to attack
+     * a Fortress */
     private ArrayList<WaterParticle> spray;
 
-    /**
-     * Texture for each direction the
-     * truck is facing
-     */
+    /** Texture for each direction the
+     * truck is facing */
     private final Texture lookLeft;
     private final Texture lookRight;
     private final Texture lookUp;
@@ -151,8 +111,7 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Called every tick and updates the paths
-     * to simulate the truck moving along the
+     * Called every tick and updates the paths to simulate the truck moving along the
      * path
      */
     public void move() {
@@ -197,13 +156,11 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Called when the player drags mouse on GameScreen
-     * Coordinate is checked to see whether it is a valid
-     * tile to draw to, then adds it to the paths
+     * Called when the player drags mouse on GameScreen Coordinate is checked to see
+     * whether it is a valid tile to draw to, then adds it to the paths
      *
-     * @param coordinate    Position on the screen
-     *                      that the user's mouse is
-     *                      being dragged over
+     * @param coordinate    Position on the screen that the user's mouse is being
+     *                      dragged over
      */
     public void addTileToPath(Vector2 coordinate) {
         if (isValidDraw(coordinate)) {
@@ -220,16 +177,12 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Used when drawing the path to check whether
-     * the next tile to be added to the path is
+     * Used when drawing the path to check whether the next tile to be added to the path is
      * valid
      *
-     * @param coordinate    Position on the screen
-     *                      that the user's mouse is
-     *                      being dragged over
-     * @return              <code>true</code> if the
-     *                      coordinate is a valid tile
-     *                      to be added to the paths
+     * @param coordinate    Position on the screen that the user's mouse is being dragged over
+     * @return              <code>true</code> if the coordinate is a valid tile to be added to
+     *                      the paths
      *                      <code>false</code> otherwise
      */
     private boolean isValidDraw(Vector2 coordinate) {
@@ -248,13 +201,9 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Changes the direction of the truck
-     * depending on the previous tile and
-     * the next tile
+     * Changes the direction of the truck depending on the previous tile and the next tile
      *
-     * @param nextTile  first tile in the
-     *                  queue (next to be
-     *                  followed)
+     * @param nextTile  first tile in the queue (next to be followed)
      */
     private void changeSprite(Vector2 nextTile) {
         if (previousTile != null) {
@@ -279,8 +228,8 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Deals damage to Fortress by generating
-     * a WaterParticle and adding it to the spray
+     * Deals damage to Fortress by generating a WaterParticle and adding
+     * it to the spray
      *
      * @param fortress Fortress being attacked
      */
@@ -292,12 +241,11 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Called every tick to check if a Fortress is within
-     * the range of the truck
+     * Called every tick to check if a Fortress is within the range of
+     *  the truck
      *
      * @param fortress  Fortress' position being checked
-     * @return          <code>true</code> if Fortress is
-     *                  within range
+     * @return          <code>true</code> if Fortress is within range
      *                  <code>false </code> otherwise
      */
     public boolean fortressInRange(Vector2 fortress) {
@@ -316,8 +264,7 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Remove the WaterParticle from the spray when
-     * it hits the Fortress
+     * Remove the WaterParticle from the spray when it hits the Fortress
      *
      * @param particle
      */
@@ -326,8 +273,7 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Damages the Fortress depending on the truck's
-     * attack points
+     * Damages the Fortress depending on the truck's AP
      *
      * @param particle
      */
@@ -336,14 +282,11 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * When a Fortress attacks and damages
-     * this truck, it plays a sound and
-     * decreases the health
+     * Damage inflicted on truck by a fortress, called when a bomb hits a truck it plays
+     * a sound and decreases the fire trucks HP by the amount of the fortresses AP
      *
-     * @param HP    amount of HP being
-     *              taken away dependant
-     *              on the AP of the
-     *              attacking Fortress
+     * @param HP    amount of HP being taken away dependant
+     *              on the AP of the attacking Fortress
      */
     public void fortressDamage(float HP) {
         if (SoundFX.music_enabled) {
@@ -353,12 +296,9 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     *  Draws the visual, colourful path
-     *  that the truck will follow
+     *  Draws the visual, colourful path that the truck will follow
      *
-     * @param mapBatch  Batch that the path
-     *                  is being drawn to
-     *                  (map dependant)
+     * @param mapBatch  Batch that the path is being drawn to (map dependant)
      */
     public void drawPath(Batch mapBatch) {
         if (!this.trailPath.isEmpty()) {
@@ -374,12 +314,9 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Draws the mini health/reserve
-     * indicators relative to the truck
+     * Draws the mini health/reserve indicators relative to the truck
      *
-     * @param shapeMapRenderer  Renderer that the stats
-     *                          are being drawn to (map
-     *                          dependant)
+     * @param shapeMapRenderer  Renderer that the stats are being drawn to (map  dependant)
      */
     public void drawStats(ShapeRenderer shapeMapRenderer) {
         shapeMapRenderer.rect(this.getPosition().x + 0.2f, this.getPosition().y + 1.3f, 0.6f, 0.8f, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE);
@@ -403,10 +340,8 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Helper method that returns where the truck
-     * is visually to the player. This is used when
-     * checking the range when attacking the Fortress
-     * and getting attacked by the Fortress
+     * Helper method that returns where the truck is visually to the player. This is used when
+     * checking the range when attacking the Fortress and getting attacked by the Fortress
      *
      * @return a vector where the truck is visually
      */
@@ -415,8 +350,7 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Sets the timeOfLastAttack to the current system time
-     * as a Unix Timestamp
+     * Sets the timeOfLastAttack to the current system time as a Unix Timestamp
      */
     public void resetTimeOfLastAttack() {
         this.timeOfLastAttack = System.currentTimeMillis();

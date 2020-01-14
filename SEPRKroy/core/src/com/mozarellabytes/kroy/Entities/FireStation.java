@@ -31,8 +31,7 @@ public class FireStation {
     private final Vector2 bayTile1;
 
     /** A second tile inside the station where a truck can be repaired and
-     * refilled
-     * */
+     * refilled */
     private final Vector2 bayTile2;
 
     /** The sprite image for the station */

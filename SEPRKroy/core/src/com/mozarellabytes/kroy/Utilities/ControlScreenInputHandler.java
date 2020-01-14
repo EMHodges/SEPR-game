@@ -6,12 +6,16 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.mozarellabytes.kroy.Screens.ControlsScreen;
 
-/** This class controls the input for the Control screen */
+/**
+ * This class controls the input for the Control screen
+ * */
 public class ControlScreenInputHandler implements InputProcessor {
 
     private final ControlsScreen controlsScreen;
 
-    /** Constructs the control screen input handler
+    /**
+     *  Constructs the control screen input handler
+     *
      * @param controlsScreen the control screen that this input handler controls
      */
     public ControlScreenInputHandler(ControlsScreen controlsScreen) {
