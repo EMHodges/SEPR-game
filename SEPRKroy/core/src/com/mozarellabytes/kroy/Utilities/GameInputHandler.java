@@ -176,6 +176,16 @@ public class GameInputHandler implements InputProcessor {
                 }
             }
         }
+    }
+
+    private boolean doTrucksHaveSameLastTile(FireTruck selectedTruck, FireTruck truck2) {
+        if (!truck2.getTrailPath().isEmpty()){
+            if (truck2.trailPath.last().equals(selectedTruck.trailPath.last())){
+                return true;
+            }
+        } else if (truck2.getPosition().equals(selectedTruck.trailPath.last())) {
+            return true;
+        }
         return false;
     }
 
