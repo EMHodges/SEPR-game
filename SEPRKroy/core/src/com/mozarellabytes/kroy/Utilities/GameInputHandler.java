@@ -78,21 +78,24 @@ public class GameInputHandler implements InputProcessor {
 
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-        Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
-        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
-            if (gameScreen.checkClick(clickCoordinates)) {
-                gameScreen.selectedTruck.resetPath();
-                gameScreen.selectedTruck.addTileToPath(clickCoordinates);
-            } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
-                gameScreen.selectedTruck = null;
-                gameScreen.selectedEntity = null;
-            } else {
-                checkFortressClick(clickCoordinates);
+            Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
+            if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
+                if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
+                    if (gameScreen.checkClick(clickCoordinates)) {
+                        gameScreen.selectedTruck.resetPath();
+                        gameScreen.selectedTruck.addTileToPath(clickCoordinates);
+                    } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
+                        gameScreen.selectedTruck = null;
+                        gameScreen.selectedEntity = null;
+                    }
+                } else {
+                    checkFortressClick(clickCoordinates);
+                }
             }
+            checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
+            return true;
         }
-        checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
-        return true;
-    }
+
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
