@@ -15,10 +15,22 @@ import com.mozarellabytes.kroy.Entities.FortressType;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
+import javax.jnlp.FileContents;
+
+/**
+ * This Class is responsible for displaying the majority of the GUI that the
+ * user can see and interact with that are apart from the main function of
+ * the game i.e. drawing the FireTruck's path. The GUI renders the buttons
+ * visible in the top right corner whilst playing the game, along with
+ * rendering the stats area in the top left corner when an entity is selected
+ * by clicking on it on the map
+ */
 public class GUI {
 
     /** LibGdx game */
     private final Kroy game;
+
+    /** Coordinates and dimensions of the stats box */
     private final int selectedX, selectedY, selectedH, selectedW;
 
     /** The screen where the buttons are rendered */
@@ -64,8 +76,8 @@ public class GUI {
 
     /** Constructor for GUI
      *
-     * @param game The Kroy game
-     * @param gameScreen Screen where these methods will be rendered
+     * @param game          The Kroy game
+     * @param gameScreen    Screen where these methods will be rendered
      */
     public GUI(Kroy game, GameScreen gameScreen) {
         this.game = game;
@@ -111,6 +123,13 @@ public class GUI {
         pauseCamera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
     }
 
+    /**
+     * Renders the health and (when applicable) reserve bars
+     * along with the custom attributes that the entity
+     * possesses
+     *
+     * @param entity    The entity that has been clicked on
+     */
     public void renderSelectedEntity(Object entity) {
         if (entity != null) {
             Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
@@ -130,23 +149,46 @@ public class GUI {
         }
     }
 
+    /**
+     * Renders the dark background behind the stats area
+     */
     private void renderSelectedEntityBackground() {
         game.shapeRenderer.setColor(0, 0, 0, 0.5f);
-        game.shapeRenderer.rect(selectedX, selectedY, 275, 275);
+        game.shapeRenderer.rect(selectedX, selectedY, selectedW, selectedH);
     }
 
+    /**
+     * Calls the methods which render the attributes and
+     * health/reserve bars of a truck in the stats area
+     *
+     * @param truck the FireTruck that owns the stats
+     *              that are being displayed
+     */
     private void renderSelectedTruck(FireTruck truck) {
-        // also render text stats along left side
         renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2);
         renderSelectedEntityText(truck);
     }
 
+    /**
+     * Calls the methods which render the attributes and
+     * health bar of a fortress in the stats area
+     *
+     * @param fortress  the Fortress that owns the stats
+     *                  thta are being displayed
+     */
     private void renderSelectedFortress(Fortress fortress) {
         renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderSelectedEntityText(fortress);
     }
 
+    /**
+     * Renders the attributes in a vertical layout
+     * of the FireTruck
+     *
+     * @param truck the FireTruck that owns the stats
+     *              that are being displayed
+     */
     private void renderSelectedEntityText(FireTruck truck) {
         FireTruckType truckType = truck.getType();
         int newLine = 20;
@@ -165,6 +207,13 @@ public class GUI {
         game.batch.end();
     }
 
+    /**
+     * Renders the attributes in a vertical layout
+     * of the Fortress
+     *
+     * @param fortress  the Fortress that owns the stats
+     *                  that are being displayed
+     */
     private void renderSelectedEntityText(Fortress fortress) {
         int newLine = 20;
         FortressType fortressType = fortress.getFortressType();
@@ -179,6 +228,21 @@ public class GUI {
         game.batch.end();
     }
 
+    /**
+     * Renders the stat bars which are currently used to
+     * show the health/reserve of trucks and health of
+     * fortresses. The integers inside the method that
+     * have values set to them are customisable to get
+     * the desired layout/formatting of the bars
+     *
+     * @param value             the value towards the goal
+     * @param maxValue          the goal
+     * @param progressColour    the colour of the value bar
+     * @param backgroundColour  the colour behind the value bar
+     * @param position          the 'bar number' to allow multiple
+     *                          bars along side each other
+     *                          (1 to infinity)
+     */
     private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position) {
         int whiteW = 50;
         int outerSpacing = 10;
