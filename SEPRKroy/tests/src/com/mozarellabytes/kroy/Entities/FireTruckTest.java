@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Before;
@@ -11,6 +12,8 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+
+
 
 import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
 import static org.junit.Assert.*;
@@ -30,25 +33,28 @@ public class FireTruckTest {
     public void TestTest(){
         assertEquals(1,1);
     }
-    //@Before
-    //        GameScreen gameScreen = new GameScreen(Kroy);
-    //        FireTruck fireTruck = new FireTruck(gameScreen, float 0.0, float 0.0, FireTruckType type);
+//    @Before
+//    FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
 
-//    @Test
-//   public void getPosition() {
-//
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertTrue((fireTruck.getPosition()) instanceof Vector2);
-//    }
+    @Test
+    public void testMove(){
 
-//    @Test
-//    public void getPath() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertTrue((fireTruck.getPath()) instanceof Queue<Vector2>);
-//
-//
-//
-//    }
+    }
+
+    @Test
+   public void testGetPosition() {
+
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        assertTrue((fireTruck.getPosition()) instanceof Vector2);
+        Vector2 position=fireTruck.getPosition();
+        assertTrue(position.epsilonEquals(10,10));;
+    }
+
+    @Test
+    public void getPath() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        assertTrue((fireTruck.getPath()) != null);
+    }
 //
 //    @Test//dont know how to test
 //    public void getTrailImage() {
@@ -59,56 +65,62 @@ public class FireTruckTest {
 //    }
 //
 //    @Test
-//    public void addTileToPath() {//pseudo
-//        Queue<Vector2> trailpathBefore = trailpath
-//        path.addLast(new Vector2 (3,4))
-//
-//
+//    public void testAddTileToPath() {//how does it work?(path,interpolation etc)
+//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+//        System.out.println(fireTruck.path);
+//        Queue<Vector2> pathBefore=fireTruck.path;
+//        fireTruck.addTileToPath(new Vector2 (10,11));
+//        System.out.println(fireTruck.path);
+//        Queue<Vector2> pathAfter=fireTruck.path;
+//        //assertTrue(pathAfter== new Queue<Vector2>(new Vector2(10,10)));
 //    }
 //
 //    @Test
-//   public void resetTilePath() {
-//            Queue<Vector2> trailpathBefore= trailpath;
-//            path.resetTilePath();
-//            assertEquals(trailpathBefore,path);
+//   public void testResetPath() {
+//            FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+//            fireTruck.trailPath.addLast(new Vector2(((int) 10), ((int) 10)));
+//            fireTruck.path.addLast(new Vector2(((int) 10), ((int) 10)));
+//            fireTruck.resetPath();
+//            assertTrue(fireTruck.path.size() == 0);
+//            assertEquals(fireTruck.trailPath,[]);
 //    }
 //
 //    @Test
 //    public void testisValidMove() {
-//
-//        float x =0.0f;
-//
-//        FireTruck fireTruck = new FireTruck(gameScreen, x,y, Speed);
+//       FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
 //        Vector2 position2d = new Vector2(3,4);
-//        Gamescreen gamescreen;
-//        assertEquals(gamescreen.selectedtruck.isValidMove(position2d), true);
+//        assertEquals(fireTruck.isValidDraw(position2d), true);
 //    }
 //
 //    @Test
 //    public void followPath() {
 //    }
 //
+    @Test
+    public void testAttack() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
+        fireTruck.setAttacking(true);
+        float reserveBefore=fireTruck.getReserve();
+        fireTruck.attack(fortress);
+        float reserveAfter=fireTruck.getReserve();
+        assertTrue(reserveBefore>reserveAfter);
+    }
+
 //    @Test
-//    public void attack() {
+//    public void damage() {//waterparticles?
 //    }
 //
-//    @Test
-//    public void damage() {
-//    }
-//
-//    @Test
-//    public void findFortressWithinRange() {
-//    }
-//
-//    @Test
-//    public void testRepair() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        float HPBefore = fireTruck.getHP();
-//        repair(HPBefore);
-//        float HPAfter = fireTruck.getHP();
-//        assertTrue(HPBefore<HPAfter);
-//    }
-//
+
+    @Test
+    public void testRepair() {
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        float HPBefore = fireTruck.getHP();
+        fireTruck.repair(2);
+        float HPAfter = fireTruck.getHP();
+        assertTrue(HPBefore==HPAfter-2);
+    }
+
     @Test
     public void TestRefill() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
@@ -120,27 +132,19 @@ public class FireTruckTest {
         float reserveAfter = fireTruck.getReserve();
         assertTrue(reserveBefore<reserveAfter);
     }
-        
-//    @Test
-//    public void TestRefill() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//
-//    }
+
 //    @Test
 //    public void testGetHP() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertTrue((fireTruck.getHP()) instanceof float);
+//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+//        assertTrue(fireTruck.getHP() instanceof float);
 //    }
 //
 //    @Test
-//    public void testGetReserve() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertTrue((fireTruck.getReserve()) instanceof float);
+//    public void testGetReserve() {what to test?
+//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+//        assertTrue((fireTruck.getReserve()) != null);
 //    }
 //
-//    @Test
-//    public void fortressDamage() {
-//    }
 //
 //    @Test
 //    public void getMaxHP() {
@@ -149,13 +153,14 @@ public class FireTruckTest {
 //    }
 //
 //    @Test
-//    public void testGetMaxReserve() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertEquals(fireTruck.getMaxReserve(),100);
+//    public void testGetMaxReserve() {//firetrucktype how to get maxreserve? assertequals double double is deprecated?
+//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+//        System.out.println(Speed.getMaxReserve());
+//        assertEquals(Speed.getMaxReserve(),100);
 //    }
 //
 //    @Test
-//    public void getName() {
+//    public void getName() {//how
 //        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
 //        assertEquals(fireTruck.getName(),"Speed Truck");
 //    }
