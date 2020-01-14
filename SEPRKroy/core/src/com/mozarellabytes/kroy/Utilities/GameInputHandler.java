@@ -164,7 +164,7 @@ public class GameInputHandler implements InputProcessor {
      * @return <code> true </code> If more than one truck has the same end tile
      *      * <code> false </code> Otherwise
      */
-    private boolean doTrucksHaveSameLastTile(){
+    private boolean doTrucksHaveSameLastTile() {
         for (FireTruck truck : gameScreen.getStation().getTrucks()) {
             if (!truck.equals(gameScreen.selectedTruck)) {
                 if (!truck.getPath().isEmpty()){
@@ -176,6 +176,7 @@ public class GameInputHandler implements InputProcessor {
                 }
             }
         }
+        return false;
     }
 
     private boolean doTrucksHaveSameLastTile(FireTruck selectedTruck, FireTruck truck2) {
