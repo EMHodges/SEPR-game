@@ -106,38 +106,18 @@ public class GameInputHandler implements InputProcessor {
     }
 
     @Override
-
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        // this is to prevent trucks being on the same tiles
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (gameScreen.selectedTruck != null) {
-                for (FireTruck truck : gameScreen.getStation().getTrucks()) {
-                    if (!truck.equals(gameScreen.selectedTruck)) {
-                        if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
-                            if (!truck.getPath().isEmpty() && truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())
-                                    || truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
-                                gameScreen.selectedTruck.trailPath.removeLast();
-                                Gdx.app.log("collision", "collide");
-                                Gdx.app.log("selected", String.valueOf(gameScreen.selectedTruck.getPath()));
-                                Gdx.app.log("other", String.valueOf(truck.getPath()));
-                                while (!gameScreen.selectedTruck.trailPath.last().equals(gameScreen.selectedTruck.path.last())) {
-                                    gameScreen.selectedTruck.path.removeLast();
-
-                                }
-                            }
-                        }
-                    }
+                if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
+                    checkSameLastTile();
                 }
                 gameScreen.selectedTruck.setMoving(true);
-            } else {
-                checkButtonUnclick(screenX, screenY);
             }
-        } else {
-            checkButtonUnclick(screenX, screenY);
         }
+        checkButtonUnclick(screenX, screenY);
         return true;
     }
-
 
 
     @Override
@@ -198,7 +178,6 @@ public class GameInputHandler implements InputProcessor {
         return true;
     }
 
-
     private boolean checkFortressClick(Vector2 position2d) {
         for (Fortress fortress : gameScreen.getFortresses()) {
             if (fortress.getArea().contains(position2d)) {
@@ -212,10 +191,8 @@ public class GameInputHandler implements InputProcessor {
     }
 
 
-
     private boolean checkButtonUnclick(int screenX, int screenY){
-        Vector2 clickCoordinates = new Vector2(screenX, screenY);
-        Vector2 screenCoords = new Vector2(clickCoordinates.x, Gdx.graphics.getHeight() - clickCoordinates.y);
+        Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 
         if (gui.getHomeButton().contains(screenCoords)) {
             gameScreen.toHomeScreen();
