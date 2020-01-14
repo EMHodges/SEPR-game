@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Align;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Entities.Fortress;
@@ -18,29 +17,56 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 
 public class GUI {
 
+    /** LibGdx game */
     private final Kroy game;
     private final int selectedX, selectedY, selectedH, selectedW;
+
+    /** The screen where the buttons are rendered */
     private final GameScreen gameScreen;
 
+    /** Rectangle containing the homeButton's coordinates, height and width */
     private final Rectangle homeButton;
+    /** Texture of the homeButton when it is not being clicked on */
     private final Texture homeButtonIdle;
+    /** Texture of the homeButton when it's being clicked */
     private final Texture homeButtonClicked;
+    /** Texture of the homeButton that is rendered to the screen */
     private Texture currentHomeTexture;
 
+    /** Rectangle containing the pauseButton's coordinates, height and width */
     private final Rectangle pauseButton;
+    /** Texture of the pausebutton when it is not being clicked on */
     private final Texture pauseButtonIdle;
+    /** Texture of the pauseButton when it's being clicked */
     private final Texture pauseButtonClicked;
+    /** Texture of the pauseButton that is rendered to the screen */
     private Texture currentPauseTexture;
 
+    /** Rectangle containing the soundButton's coordinates, height and width */
     private final Rectangle soundButton;
+    /** Texture of the soundButton when music is off to turn the music on
+     * when it is not being clicked */
     private final Texture soundOnIdleTexture;
+    /** Texture of the soundButton when music is on to turn the music off
+     * when it is not being clicked */
     private final Texture soundOffIdleTexture;
+    /** Texture of the soundButton when music is off and the soundButton is
+     * being clicked to turn the sound on*/
     private final Texture soundOnClickedTexture;
+    /** Texture of the soundButton when music is on and the soundButton is
+     * being clicked to turn the sound off */
     private final Texture soundOffClickedTexture;
+    /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
 
+    /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
 
+    /** Constructor for GUI
+     *
+     * @param game The Kroy game
+     * @param gameScreen Screen where these methods will be rendered
+     */
     public GUI(Kroy game, GameScreen gameScreen) {
         this.game = game;
         this.gameScreen = gameScreen;
@@ -93,7 +119,6 @@ public class GUI {
             renderSelectedEntityBackground();
             game.shapeRenderer.end();
             game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            // if fire truck is selected
             if (entity instanceof FireTruck) {
                 FireTruck truck = (FireTruck) entity;
                 renderSelectedTruck(truck);
@@ -168,6 +193,7 @@ public class GUI {
         game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
 
+    /** Renders the buttons to the game screen */
     public void renderButtons() {
         game.batch.begin();
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
@@ -176,6 +202,8 @@ public class GUI {
         game.batch.end();
     }
 
+    /** Sets the homeButton texture to homeButtonClicked while the homeButton
+     * is being clicked on */
     public void clickedHomeButton() {
         if (SoundFX.music_enabled){
             SoundFX.sfx_button_clicked.play();
@@ -183,6 +211,8 @@ public class GUI {
         currentHomeTexture = homeButtonClicked;
     }
 
+    /** Sets the soundButton texture to either soundOffClickedTexture or
+     * soundOnClickedTexture while the soundButton is being clicked on */
     public void clickedSoundButton() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffClickedTexture;
@@ -191,6 +221,8 @@ public class GUI {
         }
     }
 
+    /** Sets the pauseButton texture that is rendered to the screen and pauses
+     * and unpauses the game */
     public void clickedPauseButton() {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_button_clicked.play();
@@ -202,26 +234,17 @@ public class GUI {
         }
     }
 
-    public Rectangle getHomeButton() {
-        return this.homeButton;
-    }
-
-    public Rectangle getSoundButton() {
-        return this.soundButton;
-    }
-
-    public Rectangle getPauseButton() {
-        return this.pauseButton;
-    }
-
+    /** Sets the homeButton texture that is rendered to the screen */
     public void idleHomeButton() {
         currentHomeTexture = homeButtonIdle;
     }
 
+    /** Sets the pauseButton texture that is rendered to the screen */
     public void idlePauseButton() {
         currentPauseTexture = pauseButtonIdle;
     }
 
+    /** Sets the soundButton texture that is rendered to the screen */
     public void idleSoundButton() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffIdleTexture;
@@ -230,6 +253,8 @@ public class GUI {
         }
     }
 
+    /** Toggles the sound, called if 'S' key or the sound button
+     * is pressed */
     public void changeSound() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOnIdleTexture;
@@ -240,6 +265,7 @@ public class GUI {
         }
     }
 
+    /** Renders the text to the screen when the game is paused */
     public void renderPauseScreenText() {
         GlyphLayout layout = new GlyphLayout();
         String pauseText1 =  "Game paused \n";
@@ -253,5 +279,11 @@ public class GUI {
         game.font26.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, pauseCamera.viewportHeight/2.3f - layout.height/2);
         game.batch.end();
     }
+
+    public Rectangle getHomeButton() { return this.homeButton; }
+
+    public Rectangle getSoundButton() { return this.soundButton; }
+
+    public Rectangle getPauseButton() { return this.pauseButton; }
 
 }

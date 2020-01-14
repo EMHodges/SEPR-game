@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.math.Vector2;
-import com.mozarellabytes.kroy.Screens.GameScreen;
 import java.util.ArrayList;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
@@ -20,7 +19,6 @@ public class FireStation {
     /**
      * X and Y co-ordinates of the FireStation's position on the game screen
      * in tiles
-     * @
      */
     private final int x,y;
 
@@ -44,7 +42,7 @@ public class FireStation {
 
     /**
      * Constructs the Firestation with at a given position with locations
-     * for the repair & refill tiles and the spawn tiles
+     * for the repair and refill tiles and the spawn tiles.
      *
      * @param x  x coordinate of Station in tiles (lower left point)
      * @param y  y coordinate of Station in tiles (lower left point)
@@ -63,6 +61,8 @@ public class FireStation {
      * Creates a fire truck of type specified from FireTruckType. It signals to
      * the game state that a truck has been created and add the truck to the
      * arraylist this.truck so the game screen can iterate through all active trucks
+     * @param truck truck to add to the arrayList of active trucks
+     *
      */
     public void spawn(FireTruck truck) {
         if (SoundFX.music_enabled) {
@@ -89,7 +89,7 @@ public class FireStation {
     /**
      * Increments the truck's HP until the truck's HP equals the truck's maximum
      * HP
-     * @param truck
+     * @param truck truck that is being refilled
      */
     public void refill(FireTruck truck) {
         if (truck.getReserve() < truck.type.getMaxReserve()) {
@@ -100,7 +100,7 @@ public class FireStation {
     /**
      * Increments the truck's reserve until the truck's reserve equals the
      * truck's maximum reserve
-     * @param truck
+     * @param truck truck that is being repaired
      */
     public void repair(FireTruck truck) {
         if (truck.getHP() < truck.type.getMaxHP()) {
@@ -110,9 +110,9 @@ public class FireStation {
 
     /**
      * Called when a truck's HP reaches 0, it removes the truck from the
-     * array list of current trucks and the game screen.
-     * It also signals to the game state that a truck has been destroyed
-     * @param truck
+     * array list of active trucks and the game screen.
+     *
+     * @param truck truck that is being removed from the arrayList of active trucks
      */
     public void destroyTruck(FireTruck truck) {
         this.trucks.remove(truck);
@@ -137,7 +137,9 @@ public class FireStation {
                             truck2.setCollision();
                             resetTruck(truck, truck2);
                         } else if (truck.trailPath.first().equals(truck2tile)) {
-                            resetTruck(truck);
+                            resetTruck(truck, truck2);
+                            truck.trailPath.clear();
+                            truck2.trailPath.clear();
                         } else if (truck.trailPath.first().equals(truckstile)) {
                             resetTruck(truck, truck2);
                         }
@@ -147,22 +149,13 @@ public class FireStation {
         }
     }
 
-    /** Remove the truck's path meaning the truck has position to move to so will
-     * halt on it's current tile
-     * @param truck
-     */
-    private void resetTruck(FireTruck truck){
-        SoundFX.sfx_horn.play();
-        truck.resetPath();
-    }
-
     /** Resets two trucks - is called when both trucks are moving towards each other
      * It removes their paths so they halt on the tile of the collision. It then adds
      * the nearest tile to their path, the trucks move to this tile so that after the
      * collision the trucks are positioned at the centre of adjacent tiles.
      *
-     * @param truck
-     * @param truck2
+     * @param truck one truck involved in the collision
+     * @param truck2 the second truck involved in the collision
      */
     private void resetTruck(FireTruck truck, FireTruck truck2) {
         if (SoundFX.music_enabled) {
@@ -181,7 +174,8 @@ public class FireStation {
     }
 
 
-    /** Draws the firetruck to the gameScreen */
+    /** Draws the firetruck to the gameScreen
+     * @param mapBatch batch being used to render to the gameScreen */
     public void draw(Batch mapBatch) {
         mapBatch.draw(this.getTexture(), this.x, this.y, 5, 3);
     }
