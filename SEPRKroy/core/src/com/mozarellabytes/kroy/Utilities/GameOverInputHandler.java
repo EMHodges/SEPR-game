@@ -3,6 +3,7 @@ package com.mozarellabytes.kroy.Utilities;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputProcessor;
 import com.mozarellabytes.kroy.Kroy;
+import com.mozarellabytes.kroy.Screens.MenuScreen;
 
 /** This class controls the input for the game over screen, it
  * is used when the game over screen is displayed and the player
@@ -50,7 +51,7 @@ public class GameOverInputHandler implements InputProcessor {
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         SoundFX.StopGameMusic();
-        ScreenHandler.ToMenu(game);
+        game.setScreen(new MenuScreen(game));
         return true;
     }
 

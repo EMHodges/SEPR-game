@@ -68,11 +68,10 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10, 10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10, 11);
-        Queue<Vector2> pathBefore=fireTruck.path;
         fireTruck.addTileToPath(new Vector2(10,10));
         fireTruck.addTileToPath(new Vector2(10,11));
         Queue<Vector2> expectedQueue = new Queue<Vector2>();
-        for (float i = 0; i < 1.1; i+=Speed.getSpeed()) {
+        for (float i = 0; i < 1.1; i+=0.1f) {
             expectedQueue.addLast(new Vector2(10, 10 + i));
         }
         assertEquals(expectedQueue, fireTruck.getPath());

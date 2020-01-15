@@ -167,7 +167,7 @@ public class FireTruck extends Sprite {
             if (this.path.size > 0) {
                 Vector2 previous = this.path.last();
                 int interpolation = (int) (20/type.getSpeed());
-                for (int i=0; i<interpolation; i++) {
+                for (int i=1; i<interpolation; i++) {
                     this.path.addLast(new Vector2((((previous.x - coordinate.x)*-1)/interpolation)*i + previous.x, (((previous.y - coordinate.y)*-1)/interpolation)*i + previous.y));
                 }
             }

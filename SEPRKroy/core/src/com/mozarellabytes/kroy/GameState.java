@@ -1,6 +1,6 @@
 package com.mozarellabytes.kroy;
 
-import com.mozarellabytes.kroy.Utilities.ScreenHandler;
+import com.mozarellabytes.kroy.Screens.GameOverScreen;
 
 /** This class is used to keep track of the player's progress within
  * the game. It keeps track of how many active fire trucks the user
@@ -62,9 +62,9 @@ public class GameState {
      */
     public void endGame(Boolean playerWon, Kroy game){
         if (playerWon) {
-            ScreenHandler.ToGameOverScreen(game, true);
+            game.setScreen(new GameOverScreen(game, true));
         } else {
-            ScreenHandler.ToGameOverScreen(game, false);
+            game.setScreen(new GameOverScreen(game, false));
         }
     }
 
