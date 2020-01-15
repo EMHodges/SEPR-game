@@ -15,8 +15,7 @@ import com.mozarellabytes.kroy.Entities.FortressType;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
-import javax.jnlp.FileContents;
-
+//
 /**
  * This Class is responsible for displaying the majority of the GUI that the
  * user can see and interact with that are apart from the main function of
