@@ -44,6 +44,9 @@ public class ControlScreenInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.A) {
+            SoundFX.sfx_truck_attack.stop();
+        }
         return false;
     }
 

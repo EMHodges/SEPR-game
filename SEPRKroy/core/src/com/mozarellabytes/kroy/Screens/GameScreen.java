@@ -2,6 +2,7 @@ package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -219,6 +220,7 @@ public class GameScreen implements Screen {
 
         station.restoreTrucks();
         station.checkForCollisions();
+        gameState.trucksInAttackRange = 0;
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
@@ -234,13 +236,19 @@ public class GameScreen implements Screen {
                 }
             }
 
+
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
                 if (fortress.withinRange(truck.getVisualPosition())) {
                     fortress.attack(truck);
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
+                    gameState.trucksInAttackRange++;
                     truck.attack(fortress);
+                    break;
+                }
+                else if (gameState.trucksInAttackRange < 0) {
+                    SoundFX.sfx_truck_attack.stop();
                 }
             }
 
@@ -419,7 +427,7 @@ public class GameScreen implements Screen {
 
     /**
      * Creates a new FireEngine, plays a sound and adds it gameState to track
-     * @param type
+     * @param type Type of truck to be spawned (Ocean, Speed)
      */
     public void spawn(FireTruckType type) {
         SoundFX.sfx_truck_spawn.play();

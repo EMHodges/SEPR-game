@@ -7,6 +7,7 @@ public class GameState {
 
     private int activeFireTrucks;
     private int fortressesDestroyed;
+    public int trucksInAttackRange;
 
     public GameState() {
         this.activeFireTrucks = 0;

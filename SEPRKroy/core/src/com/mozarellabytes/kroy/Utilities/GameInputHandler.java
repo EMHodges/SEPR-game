@@ -35,7 +35,7 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.A:
-                if (SoundFX.music_enabled) {
+                if (SoundFX.music_enabled && gameScreen.gameState.trucksInAttackRange > 0) {
                     SoundFX.sfx_truck_attack.loop();
                     SoundFX.sfx_truck_attack.play();
                 }

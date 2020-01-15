@@ -26,6 +26,9 @@ public class GameOverInputHandler implements InputProcessor {
 
     @Override
     public boolean keyUp(int keycode) {
+        if (keycode == Input.Keys.A) {
+            SoundFX.sfx_truck_attack.stop();
+        }
         return false;
     }
 
@@ -39,7 +42,7 @@ public class GameOverInputHandler implements InputProcessor {
         return false;
     }
 
-     /** It stops the game music from playing and returns to the menu screen
+     /** Stops the game music from playing and returns to the menu screen
      *
      * @param pointer the pointer for the event.
      * @param button the button
