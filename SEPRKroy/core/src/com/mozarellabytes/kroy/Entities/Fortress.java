@@ -71,8 +71,8 @@ public class Fortress {
         Clock constantClock = Clock.fixed(Instant.ofEpochSecond(System.currentTimeMillis()), ZoneId.systemDefault());
         Clock clock = Clock.offset(constantClock, Duration.ofSeconds(10));
         System.out.println(clock.millis());
-//        if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
-        if (true) {
+        if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
+//        if (true) {
             this.bombs.add(new Bomb(this, target));
             target.resetTimeOfLastAttack();
             if (SoundFX.music_enabled) {
