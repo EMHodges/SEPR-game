@@ -52,8 +52,6 @@ public class ControlScreenInputHandler implements InputProcessor {
         return false;
     }
 
-
-
     /** Called when the screen was touched or a mouse button was pressed.
      *
      * Goes back to the screen where the menu screen was called from when the
