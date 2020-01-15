@@ -407,13 +407,13 @@ public class GameScreen implements Screen {
      * TODO decide whether we want to use ScreenHandler or if it makes things more complicated
      */
     public void toControlScreen() {
-        ScreenHandler.ToControls(game, this, "game");
+        game.setScreen(new ControlsScreen(game, this, "game"));
     }
 
     /** Exits the main game screen and goes to the menu, called when the home
      * button is clicked */
     public void toHomeScreen() {
-        ScreenHandler.ToMenu(game);
+        game.setScreen(new MenuScreen(game));
         SoundFX.sfx_soundtrack.dispose();
     }
 

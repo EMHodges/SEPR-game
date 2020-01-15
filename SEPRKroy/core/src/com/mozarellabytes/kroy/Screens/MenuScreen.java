@@ -7,7 +7,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Rectangle;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Utilities.MenuInputHandler;
-import com.mozarellabytes.kroy.Utilities.ScreenHandler;
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
 /** This screen is shown after the splash screen and is
@@ -263,7 +262,7 @@ public class MenuScreen implements Screen {
     }
 
     /** Changes the screen from the menu screen to the control screen */
-    public void toControlScreen(){ ScreenHandler.ToControls(game, this, "menu"); }
+    public void toControlScreen(){ game.setScreen(new ControlsScreen(game, this, "menu")); }
 
     public Rectangle getStartButton() { return startButton; }
 
