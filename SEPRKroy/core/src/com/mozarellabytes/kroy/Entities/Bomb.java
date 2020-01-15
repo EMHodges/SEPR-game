@@ -133,6 +133,10 @@ public class Bomb extends Sprite {
         shapeMapRenderer.circle(this.currentPosition.x, this.currentPosition.y, 0.2f, 40);
         shapeMapRenderer.setColor(Color.WHITE);
     }
+
+    public Vector2 getTargetPosition() {
+        return this.targetPosition;
+    }
 }
 
 
