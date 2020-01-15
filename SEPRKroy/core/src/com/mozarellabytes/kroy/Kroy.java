@@ -53,7 +53,7 @@ public class Kroy extends Game {
 		parameter.size = 33;
 		parameter.color = Color.FIREBRICK;
 		font33Red = generator.generateFont(parameter);
-		;
+
 		this.setScreen(new SplashScreen(this));
 	}
 
