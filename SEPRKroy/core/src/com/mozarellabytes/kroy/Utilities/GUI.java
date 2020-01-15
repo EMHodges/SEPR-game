@@ -288,13 +288,17 @@ public class GUI {
     /** Sets the pauseButton texture that is rendered to the screen and pauses
      * and unpauses the game */
     public void clickedPauseButton() {
-        if (SoundFX.music_enabled) {
-            SoundFX.sfx_button_clicked.play();
-        }
+
         if (gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             currentPauseTexture = pauseButtonClicked;
+            if (SoundFX.music_enabled) {
+                SoundFX.sfx_pause.play();
+            }
         } else {
             currentPauseTexture = pauseButtonIdle;
+            if (SoundFX.music_enabled) {
+                SoundFX.sfx_unpause.play();
+            }
         }
     }
 
@@ -325,7 +329,7 @@ public class GUI {
             SoundFX.StopMusic();
         } else {
             currentSoundTexture = soundOffIdleTexture;
-            SoundFX.PlayMusic();
+            SoundFX.PlayGameMusic();
         }
     }
 

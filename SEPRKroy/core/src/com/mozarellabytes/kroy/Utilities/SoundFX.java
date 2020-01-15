@@ -25,24 +25,23 @@ public class SoundFX {
     public static final Sound sfx_horn = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/horn.mp3"));
     public static final Sound sfx_button_clicked = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/button_clicked.wav"));
 
-    public static void StopMusic() {
-        sfx_soundtrack.stop();
-        sfx_menu.stop();
-        music_enabled = false;
-    }
-
-    public static void PlayMusic() {
+    /** Plays game music */
+    public static void PlayGameMusic() {
         sfx_soundtrack.play();
         music_enabled = true;
     }
 
+    /** Plays menu music */
     public static void PlayMenuMusic() {
         sfx_menu.play();
         music_enabled = true;
     }
 
-    public static void StopGameMusic(){
+    /** Stops both menu music and game music */
+    public static void StopMusic() {
         sfx_soundtrack.stop();
+        sfx_menu.stop();
+        music_enabled = false;
     }
 
 }

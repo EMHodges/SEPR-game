@@ -23,8 +23,7 @@ public class GameState {
         this.fortressesDestroyed = 0;
     }
 
-    /** Adds one to activeFireTrucks, called when a firetruck is
-     * spawned */
+    /** Adds one to activeFireTrucks, called when a firetruck is spawned */
     public void addFireTruck() {
         this.activeFireTrucks++;
     }
