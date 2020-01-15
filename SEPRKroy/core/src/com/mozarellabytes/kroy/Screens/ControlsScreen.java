@@ -79,9 +79,9 @@ public class ControlsScreen implements Screen {
         screenHeight = camera.viewportHeight;
 
         Gdx.input.setInputProcessor(new ControlScreenInputHandler(this));
-        if (screen == null ? "menu" == null : screen.equals("menu")){
+        if (screen == "menu" ){
             backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
-        } else if (screen == null ? "game" == null : screen.equals("game")){
+        } else if (screen == "game"){
             backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
         }
 
@@ -134,11 +134,11 @@ public class ControlsScreen implements Screen {
         game.font25.draw(game.batch, "follow the path", screenWidth / 7.692f,camera.viewportHeight * 0.34375f);
 
         game.batch.setColor(Color.CYAN);
-        game.batch.draw(trailImage, screenWidth * 0.15f,screenHeight / 2.2857f);
-        game.batch.draw(trailImage, screenWidth * 0.192f, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, screenWidth * 0.233f, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, screenWidth * 0.275f, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, screenWidth * 0.317f, screenHeight / 2.2857f);
+        game.batch.draw(trailImage, 180,screenHeight / 2.2857f);
+        game.batch.draw(trailImage, 230, screenHeight / 2.2857f);
+        game.batch.draw(trailImage, 280, screenHeight / 2.2857f);
+        game.batch.draw(trailImage, 330, screenHeight / 2.2857f);
+        game.batch.draw(trailImage, 380, screenHeight / 2.2857f);
         game.batch.draw(trailImage, 430, screenHeight / 2.2857f);
         game.batch.draw(trailImage, 480, screenHeight / 2.2857f);
         game.batch.draw(trailEndImage, 480, screenHeight / 2.2857f);
