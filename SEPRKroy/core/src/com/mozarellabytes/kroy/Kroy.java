@@ -9,6 +9,12 @@ import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.mozarellabytes.kroy.Screens.*;
 
+/**
+ * Our main class where everything starts from. It contains
+ * a number of heavy objects which are shared and accessed by
+ * different screens so that each screen doesn't need to
+ * create their own heavy objects.
+ */
 public class Kroy extends Game {
 
 	public SpriteBatch batch;
@@ -47,9 +53,8 @@ public class Kroy extends Game {
 		parameter.size = 33;
 		parameter.color = Color.FIREBRICK;
 		font33Red = generator.generateFont(parameter);
-
-	//	this.setScreen(new GameScreen(this));
-		this.setScreen(new MenuScreen(this));
+		;
+		this.setScreen(new SplashScreen(this));
 	}
 
 	@Override

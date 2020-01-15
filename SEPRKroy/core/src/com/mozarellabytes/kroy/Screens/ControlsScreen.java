@@ -282,7 +282,4 @@ public class ControlsScreen implements Screen {
         return this.exitButton;
     }
 
-
-
-
 }
