@@ -24,15 +24,16 @@ public class FortressTest {
     public MockitoRule mockitoRule = MockitoJUnit.rule();
 
     @Test
-    public void dealSpecificDamageToTruckTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Ocean);
+    public void bombDamageTruckFromWalmgateFortressTest() {
+        Fortress fortress = new Fortress(11, 11, FortressType.Walmgate);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(11, 11), FireTruckType.Speed);
         float truckHealthBefore = fireTruck.getHP();
-        fortress.attack(fireTruck);
+        Bomb bomb = new Bomb(fortress, fireTruck);
+        if (bomb.checkHit()) {
+            bomb.damageTruck();
+        }
         float truckHealthAfter = fireTruck.getHP();
-        System.out.println(truckHealthBefore);
-        System.out.println(truckHealthAfter);
-        assertTrue(truckHealthBefore - fortress.getFortressType().getAP() == truckHealthAfter);
+        assertEquals(truckHealthBefore - 15, truckHealthAfter, 0.0);
     }
 
     @Test
