@@ -214,7 +214,6 @@ public class GameScreen implements Screen {
      * @param delta The time in seconds since the last render
      */
     public void update(float delta) {
-
         gameState.hasGameEnded(game);
         CameraShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 

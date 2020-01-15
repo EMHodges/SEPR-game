@@ -5,16 +5,27 @@ import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
 /**
- * Allows for Camera Shaking
+ * Allows for Camera Shaking by calling this update() method every frame in the game screen
+ * and checking if shakeDuration is > 0, in which case the camera will "shake" for this duration.
  */
 public class CameraShake {
+
+    /** Array of floating point values used for X and Y axis offsetting. */
     private static float[] samples;
+
+    /** Keeps track of time inside the update() method */
     private static float internalTimer = 0;
+
+    /** Duration of camera shake in approximate seconds */
     private static float shakeDuration = 0;
 
-    private static final int duration = 5;
+    /** Used to calculate sampleCount */
+    private static final int amount = 5;
+
+    /** Used to calculate sampleCount and affect the smoothing of the camera shake */
     private static final int frequency = 35;
 
+    /** Determines the size of "samples" */
     private static int sampleCount;
 
     /**
@@ -22,7 +33,7 @@ public class CameraShake {
      * to calculate new camera positions.
      */
     public CameraShake(){
-        sampleCount = duration * frequency;
+        sampleCount = amount * frequency;
         samples = new float[sampleCount];
 
         for (int i =0; i < sampleCount; i++){
@@ -33,19 +44,20 @@ public class CameraShake {
 
     /**
      * Calculates new camera positions using randomly generated samples (in the constructor)
-     * and rapidly offsets the camera by using those positions. The method calls itself until
-     * shakeDuration reaches 0.
+     * and rapidly offsets the camera by using those positions. The method is called every frame
+     * until shakeDuration reaches 0.
      *
      * Must be called every frame in the screen where camera shakes are supposed to happen.
      *
-     * @param delta Current Time (In-Game)
+     * @param delta Time since last render
      * @param camera Camera Object (To change its position)
      * @param center Center of camera to allow it to return to its original position
      */
     public static void update(float delta, Camera camera, Vector2 center){
         internalTimer += delta;
-        if (internalTimer > duration) {
-            internalTimer -= duration;
+
+        if (internalTimer > amount) {
+            internalTimer -= amount;
         }
 
         if (shakeDuration > 0){
@@ -67,7 +79,8 @@ public class CameraShake {
     }
 
     /**
-     * Called in-game whenever a Camera Shake happens.
+     * Called in-game whenever a Camera Shake happens. Since duration > 0, the update()
+     * method begins shaking the camera
      *
      * @param seconds Duration of the Camera Shake
      */
