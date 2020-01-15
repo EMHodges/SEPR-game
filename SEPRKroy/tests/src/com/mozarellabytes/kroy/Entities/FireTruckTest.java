@@ -1,23 +1,22 @@
 package com.mozarellabytes.kroy.Entities;
 
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
 
 
+import java.util.ArrayList;
 
 import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
 import static org.junit.Assert.*;
-import static org.mockito.Mockito.*;
 
 @RunWith(GdxTestRunner.class)
 public class FireTruckTest {
@@ -53,7 +52,7 @@ public class FireTruckTest {
     @Test
     public void getPath() {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-        assertTrue((fireTruck.getPath()) != null);
+        assertTrue((fireTruck.getTrailPath()) != null);
     }
 //
 //    @Test//dont know how to test
@@ -64,16 +63,20 @@ public class FireTruckTest {
 //    public void getTrailImageEnd() {
 //    }
 //
-//    @Test
-//    public void testAddTileToPath() {//how does it work?(path,interpolation etc)
-//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-//        System.out.println(fireTruck.path);
-//        Queue<Vector2> pathBefore=fireTruck.path;
-//        fireTruck.addTileToPath(new Vector2 (10,11));
-//        System.out.println(fireTruck.path);
-//        Queue<Vector2> pathAfter=fireTruck.path;
-//        //assertTrue(pathAfter== new Queue<Vector2>(new Vector2(10,10)));
-//    }
+    @Test
+    public void testAddTileToPath() {//how does it work?(path,interpolation etc)
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        Mockito.doReturn(true).when(gameScreenMock).isRoad(10, 10);
+        Mockito.doReturn(true).when(gameScreenMock).isRoad(10, 11);
+        Queue<Vector2> pathBefore=fireTruck.path;
+        fireTruck.addTileToPath(new Vector2(10,10));
+        fireTruck.addTileToPath(new Vector2(10,11));
+        Queue<Vector2> expectedQueue = new Queue<Vector2>();
+        for (float i = 0; i < 1.1; i+=Speed.getSpeed()) {
+            expectedQueue.addLast(new Vector2(10, 10 + i));
+        }
+        assertEquals(expectedQueue, fireTruck.getPath());
+    }
 //
 //    @Test
 //   public void testResetPath() {

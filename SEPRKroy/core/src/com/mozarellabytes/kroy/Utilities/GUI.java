@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.utils.Align;
 import com.mozarellabytes.kroy.Entities.FireTruck;
 import com.mozarellabytes.kroy.Entities.FireTruckType;
 import com.mozarellabytes.kroy.Entities.Fortress;
@@ -16,31 +15,70 @@ import com.mozarellabytes.kroy.Entities.FortressType;
 import com.mozarellabytes.kroy.Kroy;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 
+import javax.jnlp.FileContents;
+
+/**
+ * This Class is responsible for displaying the majority of the GUI that the
+ * user can see and interact with that are apart from the main function of
+ * the game i.e. drawing the FireTruck's path. The GUI renders the buttons
+ * visible in the top right corner whilst playing the game, along with
+ * rendering the stats area in the top left corner when an entity is selected
+ * by clicking on it on the map
+ */
 public class GUI {
 
+    /** LibGdx game */
     private final Kroy game;
+
+    /** Coordinates and dimensions of the stats box */
     private final int selectedX, selectedY, selectedH, selectedW;
+
+    /** The screen where the buttons are rendered */
     private final GameScreen gameScreen;
 
+    /** Rectangle containing the homeButton's coordinates, height and width */
     private final Rectangle homeButton;
+    /** Texture of the homeButton when it is not being clicked on */
     private final Texture homeButtonIdle;
+    /** Texture of the homeButton when it's being clicked */
     private final Texture homeButtonClicked;
+    /** Texture of the homeButton that is rendered to the screen */
     private Texture currentHomeTexture;
 
+    /** Rectangle containing the pauseButton's coordinates, height and width */
     private final Rectangle pauseButton;
+    /** Texture of the pausebutton when it is not being clicked on */
     private final Texture pauseButtonIdle;
+    /** Texture of the pauseButton when it's being clicked */
     private final Texture pauseButtonClicked;
+    /** Texture of the pauseButton that is rendered to the screen */
     private Texture currentPauseTexture;
 
+    /** Rectangle containing the soundButton's coordinates, height and width */
     private final Rectangle soundButton;
+    /** Texture of the soundButton when music is off to turn the music on
+     * when it is not being clicked */
     private final Texture soundOnIdleTexture;
+    /** Texture of the soundButton when music is on to turn the music off
+     * when it is not being clicked */
     private final Texture soundOffIdleTexture;
+    /** Texture of the soundButton when music is off and the soundButton is
+     * being clicked to turn the sound on*/
     private final Texture soundOnClickedTexture;
+    /** Texture of the soundButton when music is on and the soundButton is
+     * being clicked to turn the sound off */
     private final Texture soundOffClickedTexture;
+    /** Texture of the soundButton that is rendered to the screen */
     private Texture currentSoundTexture;
 
+    /** Camera to set the projection for the screen */
     private final OrthographicCamera pauseCamera;
 
+    /** Constructor for GUI
+     *
+     * @param game          The Kroy game
+     * @param gameScreen    Screen where these methods will be rendered
+     */
     public GUI(Kroy game, GameScreen gameScreen) {
         this.game = game;
         this.gameScreen = gameScreen;
@@ -85,6 +123,13 @@ public class GUI {
         pauseCamera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
     }
 
+    /**
+     * Renders the health and (when applicable) reserve bars
+     * along with the custom attributes that the entity
+     * possesses
+     *
+     * @param entity    The entity that has been clicked on
+     */
     public void renderSelectedEntity(Object entity) {
         if (entity != null) {
             Gdx.graphics.getGL20().glEnable(GL20.GL_BLEND);
@@ -93,7 +138,6 @@ public class GUI {
             renderSelectedEntityBackground();
             game.shapeRenderer.end();
             game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-            // if fire truck is selected
             if (entity instanceof FireTruck) {
                 FireTruck truck = (FireTruck) entity;
                 renderSelectedTruck(truck);
@@ -105,23 +149,46 @@ public class GUI {
         }
     }
 
+    /**
+     * Renders the dark background behind the stats area
+     */
     private void renderSelectedEntityBackground() {
         game.shapeRenderer.setColor(0, 0, 0, 0.5f);
-        game.shapeRenderer.rect(selectedX, selectedY, 275, 275);
+        game.shapeRenderer.rect(selectedX, selectedY, selectedW, selectedH);
     }
 
+    /**
+     * Calls the methods which render the attributes and
+     * health/reserve bars of a truck in the stats area
+     *
+     * @param truck the FireTruck that owns the stats
+     *              that are being displayed
+     */
     private void renderSelectedTruck(FireTruck truck) {
-        // also render text stats along left side
         renderSelectedEntityBar(truck.getHP(), truck.getType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderSelectedEntityBar(truck.getReserve(), truck.getType().getMaxReserve(), Color.CYAN, Color.BLUE, 2);
         renderSelectedEntityText(truck);
     }
 
+    /**
+     * Calls the methods which render the attributes and
+     * health bar of a fortress in the stats area
+     *
+     * @param fortress  the Fortress that owns the stats
+     *                  thta are being displayed
+     */
     private void renderSelectedFortress(Fortress fortress) {
         renderSelectedEntityBar(fortress.getHP(), fortress.getFortressType().getMaxHP(), Color.RED, Color.FIREBRICK, 1);
         renderSelectedEntityText(fortress);
     }
 
+    /**
+     * Renders the attributes in a vertical layout
+     * of the FireTruck
+     *
+     * @param truck the FireTruck that owns the stats
+     *              that are being displayed
+     */
     private void renderSelectedEntityText(FireTruck truck) {
         FireTruckType truckType = truck.getType();
         int newLine = 20;
@@ -140,6 +207,13 @@ public class GUI {
         game.batch.end();
     }
 
+    /**
+     * Renders the attributes in a vertical layout
+     * of the Fortress
+     *
+     * @param fortress  the Fortress that owns the stats
+     *                  that are being displayed
+     */
     private void renderSelectedEntityText(Fortress fortress) {
         int newLine = 20;
         FortressType fortressType = fortress.getFortressType();
@@ -154,6 +228,21 @@ public class GUI {
         game.batch.end();
     }
 
+    /**
+     * Renders the stat bars which are currently used to
+     * show the health/reserve of trucks and health of
+     * fortresses. The integers inside the method that
+     * have values set to them are customisable to get
+     * the desired layout/formatting of the bars
+     *
+     * @param value             the value towards the goal
+     * @param maxValue          the goal
+     * @param progressColour    the colour of the value bar
+     * @param backgroundColour  the colour behind the value bar
+     * @param position          the 'bar number' to allow multiple
+     *                          bars along side each other
+     *                          (1 to infinity)
+     */
     private void renderSelectedEntityBar(float value, float maxValue, Color progressColour, Color backgroundColour, int position) {
         int whiteW = 50;
         int outerSpacing = 10;
@@ -168,6 +257,7 @@ public class GUI {
         game.shapeRenderer.rect(this.selectedX + this.selectedW - positionSpacer - outerSpacing + innerSpacing - barSpacer, this.selectedY + outerSpacing + innerSpacing, whiteW - innerSpacing*2, value/maxValue*barHeight, progressColour, progressColour, progressColour, progressColour);
     }
 
+    /** Renders the buttons to the game screen */
     public void renderButtons() {
         game.batch.begin();
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
@@ -176,6 +266,8 @@ public class GUI {
         game.batch.end();
     }
 
+    /** Sets the homeButton texture to homeButtonClicked while the homeButton
+     * is being clicked on */
     public void clickedHomeButton() {
         if (SoundFX.music_enabled){
             SoundFX.sfx_button_clicked.play();
@@ -183,6 +275,8 @@ public class GUI {
         currentHomeTexture = homeButtonClicked;
     }
 
+    /** Sets the soundButton texture to either soundOffClickedTexture or
+     * soundOnClickedTexture while the soundButton is being clicked on */
     public void clickedSoundButton() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffClickedTexture;
@@ -191,6 +285,8 @@ public class GUI {
         }
     }
 
+    /** Sets the pauseButton texture that is rendered to the screen and pauses
+     * and unpauses the game */
     public void clickedPauseButton() {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_button_clicked.play();
@@ -202,26 +298,17 @@ public class GUI {
         }
     }
 
-    public Rectangle getHomeButton() {
-        return this.homeButton;
-    }
-
-    public Rectangle getSoundButton() {
-        return this.soundButton;
-    }
-
-    public Rectangle getPauseButton() {
-        return this.pauseButton;
-    }
-
+    /** Sets the homeButton texture that is rendered to the screen */
     public void idleHomeButton() {
         currentHomeTexture = homeButtonIdle;
     }
 
+    /** Sets the pauseButton texture that is rendered to the screen */
     public void idlePauseButton() {
         currentPauseTexture = pauseButtonIdle;
     }
 
+    /** Sets the soundButton texture that is rendered to the screen */
     public void idleSoundButton() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOffIdleTexture;
@@ -230,6 +317,8 @@ public class GUI {
         }
     }
 
+    /** Toggles the sound, called if 'S' key or the sound button
+     * is pressed */
     public void changeSound() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOnIdleTexture;
@@ -240,6 +329,7 @@ public class GUI {
         }
     }
 
+    /** Renders the text to the screen when the game is paused */
     public void renderPauseScreenText() {
         GlyphLayout layout = new GlyphLayout();
         String pauseText1 =  "Game paused \n";
@@ -253,5 +343,11 @@ public class GUI {
         game.font26.draw(game.batch, pauseText2, pauseCamera.viewportWidth/2 - layout.width/2, pauseCamera.viewportHeight/2.3f - layout.height/2);
         game.batch.end();
     }
+
+    public Rectangle getHomeButton() { return this.homeButton; }
+
+    public Rectangle getSoundButton() { return this.soundButton; }
+
+    public Rectangle getPauseButton() { return this.pauseButton; }
 
 }

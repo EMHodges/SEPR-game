@@ -59,9 +59,9 @@ public class WaterParticle {
     /**
      * Creates the random coordinate within the fortress
      *
-     * @param fortress
+     * @param fortress the fortress whose target position is being created
      */
-    public void createTargetPosition(Fortress fortress) {
+    private void createTargetPosition(Fortress fortress) {
         float xCoord = (float)(Math.random()-0.5+fortress.getPosition().x);
         float yCoord = (float)(Math.random()-0.5+fortress.getPosition().y);
         this.targetPosition = new Vector2(xCoord, yCoord);

@@ -189,7 +189,7 @@ public class FireTruck extends Sprite {
         if (coordinate.y < 24) {
             if (gameScreen.isRoad((Math.round(coordinate.x)), (Math.round(coordinate.y)))) {
                 if (this.path.isEmpty()) {
-                    return (this.getPosition().equals(coordinate));
+                    return this.getPosition().equals(coordinate);
                 } else {
                     if (!this.path.last().equals(coordinate)) {
                         return (int) Math.abs(this.path.last().x - coordinate.x) + (int) Math.abs(this.path.last().y - coordinate.y) <= 1;
@@ -388,8 +388,12 @@ public class FireTruck extends Sprite {
         return this.position;
     }
 
-    public Queue<Vector2> getPath() {
+    public Queue<Vector2> getTrailPath() {
         return this.trailPath;
+    }
+
+    public Queue<Vector2> getPath() {
+        return this.path;
     }
 
     public ArrayList<WaterParticle> getSpray() {

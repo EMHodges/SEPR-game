@@ -11,9 +11,17 @@ import com.mozarellabytes.kroy.Screens.GameScreen;
 
 public class GameInputHandler implements InputProcessor {
 
+    /** The game screen that this input handler controls */
     private final GameScreen gameScreen;
+
+    /** The graphical user interface - contains the buttons */
     private final GUI gui;
 
+    /** Constructs the GameInputHandler
+     *
+     * @param gameScreen The game screen that this input handler controls
+     * @param gui The graphical user interface - contains the buttons
+     */
     public GameInputHandler(GameScreen gameScreen, GUI gui) {
         this.gameScreen = gameScreen;
         this.gui = gui;
@@ -76,27 +84,37 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
+    /** Checks whether the user clicks on a firetruck, fortress, button or the end
+     * of a firetrucks path
+     * @param screenX The x coordinate, origin is in the upper left corner
+     * @param screenY The y coordinate, origin is in the upper left corner
+     * @param pointer the pointer for the event.
+     * @param button the button
+     * @return whether the input was processed */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
-            Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
-            if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
-                if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
-                    if (gameScreen.checkClick(clickCoordinates)) {
-                        gameScreen.selectedTruck.resetPath();
-                        gameScreen.selectedTruck.addTileToPath(clickCoordinates);
-                    } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
-                        gameScreen.selectedTruck = null;
-                        gameScreen.selectedEntity = null;
-                    }
-                } else {
-                    checkFortressClick(clickCoordinates);
+        Vector2 clickCoordinates = generateClickCoordinates(screenX, screenY);
+        if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
+            if (gameScreen.isRoad((int) clickCoordinates.x, (int) clickCoordinates.y)) {
+                if (gameScreen.checkClick(clickCoordinates)) {
+                    gameScreen.selectedTruck.resetPath();
+                    gameScreen.selectedTruck.addTileToPath(clickCoordinates);
+                } else if (!gameScreen.checkTrailClick(clickCoordinates) && !checkFortressClick(clickCoordinates)) {
+                    gameScreen.selectedTruck = null;
+                    gameScreen.selectedEntity = null;
                 }
+            } else {
+                checkFortressClick(clickCoordinates);
             }
-            checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
-            return true;
         }
+        checkButtonClick(new Vector2(screenX, Gdx.graphics.getHeight() - screenY));
+        return true;
+    }
 
-
+    /** The user draws a path for the fire truck, if the path is valid the coordinate
+     * positions are added to the trucks path
+     * @param pointer the pointer for the event.
+     * @return whether the input was processed */
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
@@ -108,12 +126,20 @@ public class GameInputHandler implements InputProcessor {
         return true;
     }
 
+    /** Check if a user clicks up on a button or if the user draws multiple
+     * trucks to end on the same tile
+     *
+     * @param pointer the pointer for the event.
+     * @param button the button
+     * @return whether the input was processed */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (gameScreen.selectedTruck != null) {
                 if (!gameScreen.selectedTruck.trailPath.isEmpty()) {
-                    checkSameLastTile();
+                    if (doTrucksHaveSameLastTile()){
+                        giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
+                    }
                 }
                 gameScreen.selectedTruck.setMoving(true);
             }
@@ -133,18 +159,28 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
-    private void checkSameLastTile(){
+    /** Checks if the user has drawn more than one truck to the same end tile.
+     *
+     * @return <code> true </code> If more than one truck has the same end tile
+     *      * <code> false </code> Otherwise
+     */
+    private boolean doTrucksHaveSameLastTile() {
         for (FireTruck truck : gameScreen.getStation().getTrucks()) {
             if (!truck.equals(gameScreen.selectedTruck)) {
-                if (doTrucksHaveSameLastTile(gameScreen.selectedTruck, truck)){
-                    giveTrucksDifferentLastTiles(gameScreen.selectedTruck);
+                if (!truck.getPath().isEmpty()){
+                    if (truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())){
+                        return true;
+                    }
+                } else if (truck.getPosition().equals(gameScreen.selectedTruck.trailPath.last())) {
+                    return true;
                 }
             }
         }
+        return false;
     }
 
     private boolean doTrucksHaveSameLastTile(FireTruck selectedTruck, FireTruck truck2) {
-        if (!truck2.getPath().isEmpty()){
+        if (!truck2.getTrailPath().isEmpty()){
             if (truck2.trailPath.last().equals(selectedTruck.trailPath.last())){
                 return true;
             }
@@ -154,6 +190,11 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
+    /** The method for giving trucks that have the same end tiles adjacent end tiles
+     * so that they do not end up on the same tile
+     * @param selectedTruck the truck that has to be moved so the two trucks end up
+     *                      on different tiles
+     */
     private void giveTrucksDifferentLastTiles(FireTruck selectedTruck){
         selectedTruck.trailPath.removeLast();
         while (!selectedTruck.trailPath.isEmpty() && !selectedTruck.trailPath.last().equals(selectedTruck.path.last())) {
@@ -161,7 +202,12 @@ public class GameInputHandler implements InputProcessor {
         }
     }
 
-
+    /** Maps the position of where the user clicked on the screen to the tile that they clicked on
+     *
+     * @param screenX The x coordinate, origin is in the upper left corner
+     * @param screenY The y coordinate, origin is in the upper left corner
+     * @return a Vector2 containing the tile that the user clicked on
+     */
     private Vector2 generateClickCoordinates(int screenX, int screenY){
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
@@ -170,6 +216,12 @@ public class GameInputHandler implements InputProcessor {
     }
 
 
+    /** Checks if the user clicked on the home, pause or sound button
+     * and changes the sprite accordingly
+     * @param position2d The tile that was clicked
+     * @return <code> true </code> If a button has been clicked
+     *         <code> false </code> Otherwise
+     */
     private boolean checkButtonClick(Vector2 position2d){
         if (gui.getHomeButton().contains(position2d)) {
             gui.clickedHomeButton();
@@ -181,6 +233,13 @@ public class GameInputHandler implements InputProcessor {
         return true;
     }
 
+    /** Checks if user clicked on a fortress, if it did this fortress
+     * becomes the selected entity meaning its stats will be rendered
+     * in the top right hand corner
+     * @param position2d the tile that was clicked
+     * @return <code> true </code> If a fortress has been clicked on
+     *         <code> false </code> Otherwise
+     */
     private boolean checkFortressClick(Vector2 position2d) {
         for (Fortress fortress : gameScreen.getFortresses()) {
             if (fortress.getArea().contains(position2d)) {
@@ -193,7 +252,13 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
-
+    /** Checks if the user has lifted the mouse over a button and triggers the
+     * appropriate action
+     * @param screenX The x coordinate, origin is in the upper left corner
+     * @param screenY The y coordinate, origin is in the upper left corner
+     * @return <code> true </code> If the user has clicked up over a button
+     *         <code> false </code> Otherwise
+     */
     private boolean checkButtonUnclick(int screenX, int screenY){
         Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 

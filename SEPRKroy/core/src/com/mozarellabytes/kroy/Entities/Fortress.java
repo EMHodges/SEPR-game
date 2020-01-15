@@ -126,5 +126,4 @@ public class Fortress {
     public ArrayList<Bomb> getBombs() {
         return this.bombs;
     }
-
 }
