@@ -37,8 +37,25 @@ public class FireTruckTest {
 
     @Test
     public void testMove(){
-
+        FireTruck fireTruck=new FireTruck(gameScreenMock,new Vector2(10,10),Speed);
+        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
+        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
+        fireTruck.setMoving(true);
+        Queue<Vector2> pathBefore=fireTruck.path;
+        fireTruck.addTileToPath(new Vector2(10,10));
+        fireTruck.addTileToPath(new Vector2(10,11));
+        Queue<Vector2> expectedQueue=new Queue<Vector2>();
+        fireTruck.move();
+        fireTruck.move();
+        fireTruck.move();
+        for(float i=0;i< 1.1;i+=0.1){
+            expectedQueue.addLast(new Vector2(10,10+i));
+        }
+        System.out.println(fireTruck.getPosition());
+        assertEquals(expectedQueue, fireTruck.getPath());
     }
+
+
 
     @Test
    public void testGetPosition() {
@@ -49,51 +66,33 @@ public class FireTruckTest {
         assertTrue(position.epsilonEquals(10,10));;
     }
 
+    
     @Test
-    public void getPath() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-        assertTrue((fireTruck.getTrailPath()) != null);
-    }
-//
-//    @Test//dont know how to test
-//    public void getTrailImage() {
-//    }
-//
-//    @Test
-//    public void getTrailImageEnd() {
-//    }
-//
-    @Test
-    public void testAddTileToPath() {//how does it work?(path,interpolation etc)
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10, 10);
-        Mockito.doReturn(true).when(gameScreenMock).isRoad(10, 11);
+    public void testAddTileToPath(){//how does it work?(path,interpolation etc)
+        FireTruck fireTruck=new FireTruck(gameScreenMock,new Vector2(10,10),Speed);
+        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
+        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
+        Queue<Vector2> pathBefore=fireTruck.path;
         fireTruck.addTileToPath(new Vector2(10,10));
         fireTruck.addTileToPath(new Vector2(10,11));
-        Queue<Vector2> expectedQueue = new Queue<Vector2>();
-        for (float i = 0; i < 1.1; i+=0.1f) {
-            expectedQueue.addLast(new Vector2(10, 10 + i));
+        Queue<Vector2> expectedQueue=new Queue<Vector2>();
+        for(float i=0;i< 1.1;i+=0.1){
+            expectedQueue.addLast(new Vector2(10,10+i));
         }
+
         assertEquals(expectedQueue, fireTruck.getPath());
+        }
+//
+    @Test
+   public void testResetPath() {
+            FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+            Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
+            fireTruck.addTileToPath(new Vector2(10,10));
+            fireTruck.resetPath();
+            assertTrue((fireTruck.path).isEmpty());
     }
-//
-//    @Test
-//   public void testResetPath() {
-//            FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-//            fireTruck.trailPath.addLast(new Vector2(((int) 10), ((int) 10)));
-//            fireTruck.path.addLast(new Vector2(((int) 10), ((int) 10)));
-//            fireTruck.resetPath();
-//            assertTrue(fireTruck.path.size() == 0);
-//            assertEquals(fireTruck.trailPath,[]);
-//    }
-//
-//    @Test
-//    public void testisValidMove() {
-//       FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-//        Vector2 position2d = new Vector2(3,4);
-//        assertEquals(fireTruck.isValidDraw(position2d), true);
-//    }
-//
+
+
 //    @Test
 //    public void followPath() {
 //    }
@@ -135,61 +134,9 @@ public class FireTruckTest {
         assertTrue(reserveBefore<reserveAfter);
     }
 
-//    @Test
-//    public void testGetHP() {
-//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-//        assertTrue(fireTruck.getHP() instanceof float);
-//    }
-//
-//    @Test
-//    public void testGetReserve() {what to test?
-//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-//        assertTrue((fireTruck.getReserve()) != null);
-//    }
-//
-//
-//    @Test
-//    public void getMaxHP() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertEquals(fireTruck.getMaxHP(),100);
-//    }
-//
-//    @Test
-//    public void testGetMaxReserve() {//firetrucktype how to get maxreserve? assertequals double double is deprecated?
-//        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-//        System.out.println(Speed.getMaxReserve());
-//        assertEquals(Speed.getMaxReserve(),100);
-//    }
-//
-//    @Test
-//    public void getName() {//how
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertEquals(fireTruck.getName(),"Speed Truck");
-//    }
-//
-//    @Test
-//    public void testGetSpeed() {
-//        Kroy kroy= new Kroy();
-//        GameScreen gameScreen= new GameScreen(kroy);
-//        this.x=0.0f;
-//        this.y=0.0f;
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertEquals(fireTruck.getSpeed(),2);
-//    }
-//
-//    @Test
-//    public void testGetAP() {
-//        Kroy kroy= new Kroy();
-//        GameScreen gameScreen= new GameScreen(kroy);
-//        this.x=0.0f;
-//        this.y=0.0f;
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertEquals(fireTruck.getAP(),0.08f);
-//    }
-//
-//    @Test
-//    public void testGetRange() {
-//        FireTruck fireTruck = new FireTruck(gameScreen, x, y, Speed);
-//        assertEquals(fireTruck.getRange(),5);
-//    }
+
+
+
+
+
 }
