@@ -59,7 +59,6 @@ public class FireTruckTest {
 
     @Test
    public void testGetPosition() {
-
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
         assertTrue((fireTruck.getPosition()) instanceof Vector2);
         Vector2 position=fireTruck.getPosition();
