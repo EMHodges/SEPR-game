@@ -3,7 +3,6 @@ package com.mozarellabytes.kroy.Screens;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -63,6 +62,7 @@ public class ControlsScreen implements Screen {
      * to return to after the control screen has been exited */
     private final Screen parent;
 
+
     /** Constructor for the Control screen
      * @param game LibGdx game
      * @param parent the screen that called the control screen
@@ -101,8 +101,8 @@ public class ControlsScreen implements Screen {
         exitButton = new Rectangle();
         exitButton.x = 1185;
         exitButton.y = (int) (camera.viewportHeight - 90);
-        exitButton.width = 30;
-        exitButton.height = 30;
+        exitButton.width = (int)(screenWidth / 1.08f);
+        exitButton.height = (int)(screenHeight / 1.126f);
     }
 
     @Override
@@ -120,47 +120,52 @@ public class ControlsScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        camera.update();
+        game.batch.setProjectionMatrix(camera.combined);
+
         drawBackgroundImage();
         drawFilledBackgroundBox();
 
         game.batch.begin();
 
         game.font50.draw(game.batch, "Control screen", screenWidth / 2.8f, screenHeight / 1.1678f);
-        game.font25.draw(game.batch, "Flood the fortresses before the fortresses destroy your fire trucks to win", screenWidth / 12f,screenHeight / 1.29f);
-        game.font33.draw(game.batch, "Moving the Fire Trucks", screenWidth / 8.33f, camera.viewportHeight * 0.6875f);
-        game.font25.draw(game.batch, "Click on a truck and drag it", screenWidth / 7.692f,camera.viewportHeight * 0.6125f);
-        game.font25.draw(game.batch, "This gives the truck a path:", screenWidth / 7.692f,camera.viewportHeight * 0.56875f);
-        game.font25.draw(game.batch, "Unclick and the truck will", screenWidth / 7.692f,camera.viewportHeight * 0.3815f);
-        game.font25.draw(game.batch, "follow the path", screenWidth / 7.692f,camera.viewportHeight * 0.34375f);
+        game.font25.draw(game.batch, "Flood the fortresses before the fortresses destroy your fire trucks to win", (screenWidth / 2) - (36 * 15),screenHeight / 1.29f);
+        game.font33.draw(game.batch, "Moving the Fire Trucks", screenWidth / 8.33f, screenHeight * 0.6875f);
+        game.font25.draw(game.batch, "Click on a truck and drag it", screenWidth / 7.692f,screenHeight * 0.6125f);
+        game.font25.draw(game.batch, "This gives the truck a path:", screenWidth / 7.692f,screenHeight * 0.56875f);
+        game.font25.draw(game.batch, "Unclick and the truck will", screenWidth / 7.692f,screenHeight * 0.3815f);
+        game.font25.draw(game.batch, "follow the path", screenWidth / 7.692f,screenHeight * 0.34375f);
 
         game.batch.setColor(Color.CYAN);
-        game.batch.draw(trailImage, 180,screenHeight / 2.2857f);
-        game.batch.draw(trailImage, 230, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, 280, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, 330, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, 380, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, 430, screenHeight / 2.2857f);
-        game.batch.draw(trailImage, 480, screenHeight / 2.2857f);
-        game.batch.draw(trailEndImage, 480, screenHeight / 2.2857f);
+        float startPos = screenWidth / 7.11f;
+        float height = screenHeight / 2.2857f;
+        game.batch.draw(trailImage, startPos,screenHeight / 2.2857f);
+        game.batch.draw(trailImage, startPos + trailImage.getWidth() + 2, height);
+        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 2 + 4, height);
+        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 3 + 6, height);
+        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 4 + 8, height);
+        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 5 + 10, height);
+        game.batch.draw(trailImage, startPos + trailImage.getWidth() * 6 + 12, height);
+        game.batch.draw(trailEndImage, startPos + trailImage.getWidth() * 6 + 12, height);
 
-        game.font25.draw(game.batch, "Or click and drag from the", 165,camera.viewportHeight - 590);
-        game.font25.draw(game.batch, "end of the trucks path", 165,camera.viewportHeight - 625);
+        game.font25.draw(game.batch, "Or click and drag from the", screenWidth / 7.76f,camera.viewportHeight - 590);
+        game.font25.draw(game.batch, "end of the trucks path", screenWidth / 7.76f,camera.viewportHeight - 625);
 
-        game.batch.draw(trailImage, 380, camera.viewportHeight - 710);
-        game.batch.draw(trailEndImage, 380, camera.viewportHeight - 710);
+        game.batch.draw(trailImage, screenWidth / 3.37f, screenHeight / 8.89f);
+        game.batch.draw(trailEndImage, screenWidth / 3.37f, screenHeight / 8.89f);
 
         game.batch.setColor(Color.RED);
-        game.batch.draw(trailImage, 270, camera.viewportHeight - 710);
-        game.batch.draw(trailEndImage, 270, camera.viewportHeight - 710);
+        game.batch.draw(trailImage, screenWidth / 4.74f, screenHeight / 8.89f);
+        game.batch.draw(trailEndImage, screenWidth / 4.74f, screenHeight / 8.89f);
 
-        game.font33.draw(game.batch, "Attacking the fortresses", 680, camera.viewportHeight - 250);
-        game.font25.draw(game.batch, "When a firetruck is within range ", 685,camera.viewportHeight - 310);
-        game.font25.draw(game.batch, "of a fortress press A to attack", 685,camera.viewportHeight - 345);
+        game.font33.draw(game.batch, "Attacking the fortresses", screenWidth / 1.88f, screenHeight * 0.6875f);
+        game.font25.draw(game.batch, "When a firetruck is within range ", screenWidth / 1.87f,screenHeight * 0.6125f);
+        game.font25.draw(game.batch, "of a fortress press A to attack", screenWidth / 1.87f,screenHeight * 0.56875f);
 
         game.batch.setColor(Color.WHITE);
-        game.batch.draw(truckRight, 172, camera.viewportHeight - 457);
-        game.batch.draw(fortress,790, camera.viewportHeight - 670);
-        game.batch.draw(truckLeft,1040, camera.viewportHeight - 610);
+        game.batch.draw(truckRight, screenWidth / 7.44f, screenHeight / 2.33f);
+        game.batch.draw(fortress,screenWidth / 1.62f, screenHeight / 6.15f);
+        game.batch.draw(truckLeft,screenWidth / 1.23f, screenHeight / 4.21f);
 
         game.batch.end();
 
@@ -223,7 +228,7 @@ public class ControlsScreen implements Screen {
 
     private void drawFilledBackgroundBox(){
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.rect(50,50, camera.viewportWidth - 100 , camera.viewportHeight - 100, Color.BLACK, Color.BLACK,Color.BLACK, Color.BLACK);
+        game.shapeRenderer.rect(screenWidth / 25.6f,screenHeight / 16, screenWidth / 1.085f , screenHeight / 1.14f, Color.BLACK, Color.BLACK,Color.BLACK, Color.BLACK);
         game.shapeRenderer.end();
     }
 
@@ -241,9 +246,9 @@ public class ControlsScreen implements Screen {
     private void drawFortressHealthBar(){
 
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.rect(870,  camera.viewportHeight - 490, 35, 60);
-        game.shapeRenderer.rect(875, camera.viewportHeight - 485, 24, 50, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        game.shapeRenderer.rect(875, camera.viewportHeight - 485, 24,  HP / 4, Color.RED, Color.RED, Color.RED, Color.RED);
+        game.shapeRenderer.rect(screenWidth / 1.4713f,  screenHeight / 2.58f, 35, 60);
+        game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24, 50, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24,  HP / 4, Color.RED, Color.RED, Color.RED, Color.RED);
         game.shapeRenderer.end();
 
         if (count <= 30) {
@@ -257,11 +262,11 @@ public class ControlsScreen implements Screen {
     /** This draws the 'A' above the fire truck */
     private void drawFireTruckAttacking(){
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        game.shapeRenderer.rect(1055, camera.viewportHeight - 540, 30, 30);
+        game.shapeRenderer.rect(screenWidth / 1.213f, screenHeight / 3.077f, 30, 30);
         game.shapeRenderer.end();
 
         game.batch.begin();
-        game.font33.draw(game.batch, "A", 1062, camera.viewportHeight - 515);
+        game.font33.draw(game.batch, "A", screenWidth / 1.205f, screenHeight /2.81f);
         game.batch.end();
     }
 
@@ -269,12 +274,12 @@ public class ControlsScreen implements Screen {
     /** Renders the exit button */
     private void renderExitButton(){
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        game.shapeRenderer.rect(1185,  camera.viewportHeight - 90, 30, 30, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        game.shapeRenderer.rect(1187,  camera.viewportHeight - 88, 26, 26, Color.RED, Color.RED, Color.RED, Color.RED);
+        game.shapeRenderer.rect(screenWidth / 1.08f,  screenHeight / 1.126f, 30, 30, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
+        game.shapeRenderer.rect(screenWidth / 1.078f,  screenHeight / 1.123f, 26, 26, Color.RED, Color.RED, Color.RED, Color.RED);
         game.shapeRenderer.end();
 
         game.batch.begin();
-        game.font33Red.draw(game.batch, "X", 1192, camera.viewportHeight - 65);
+        game.font33Red.draw(game.batch, "X", screenWidth / 1.074f, screenHeight / 1.09f);
         game.batch.end();
     }
 

@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
 import static org.junit.Assert.*;
 
+
 @RunWith(GdxTestRunner.class)
 public class FireTruckTest {
 
