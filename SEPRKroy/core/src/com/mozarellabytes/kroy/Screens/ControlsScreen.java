@@ -148,8 +148,8 @@ public class ControlsScreen implements Screen {
         game.batch.draw(trailImage, startPos + trailImage.getWidth() * 6 + 12, height);
         game.batch.draw(trailEndImage, startPos + trailImage.getWidth() * 6 + 12, height);
 
-        game.font25.draw(game.batch, "Or click and drag from the", screenWidth / 7.76f,camera.viewportHeight - 590);
-        game.font25.draw(game.batch, "end of the trucks path", screenWidth / 7.76f,camera.viewportHeight - 625);
+        game.font25.draw(game.batch, "Or click and drag from the", screenWidth / 7.76f,screenHeight / 3.81f);
+        game.font25.draw(game.batch, "end of the trucks path", screenWidth / 7.76f,screenHeight / 4.57f);
 
         game.batch.draw(trailImage, screenWidth / 3.37f, screenHeight / 8.89f);
         game.batch.draw(trailEndImage, screenWidth / 3.37f, screenHeight / 8.89f);
@@ -261,10 +261,6 @@ public class ControlsScreen implements Screen {
 
     /** This draws the 'A' above the fire truck */
     private void drawFireTruckAttacking(){
-        game.shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        game.shapeRenderer.rect(screenWidth / 1.213f, screenHeight / 3.077f, 30, 30);
-        game.shapeRenderer.end();
-
         game.batch.begin();
         game.font33.draw(game.batch, "A", screenWidth / 1.205f, screenHeight /2.81f);
         game.batch.end();
