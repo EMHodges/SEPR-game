@@ -40,14 +40,18 @@ public class Bomb extends Sprite {
      * @param fortress  Fortress that the bomb came from
      * @param target    FireTruck being targeted
      */
-    public Bomb(Fortress fortress, FireTruck target) {
+    public Bomb(Fortress fortress, FireTruck target, boolean isTest) {
         this.target = target;
         this.truckPosition = new Vector2(getMiddleOfTile(target.getPosition()));
         this.startPosition = new Vector2(fortress.getPosition());
         this.currentPosition = this.startPosition;
         // Note: Target position is different to the truck position
         // Target position is the tile where the bomb "lands" which is not always the tile where the Truck is
-        this.targetPosition = getMiddleOfTile(generateBombTarget());
+        if (isTest) {
+            this.targetPosition = getMiddleOfTile(this.truckPosition);
+        } else {
+            this.targetPosition = getMiddleOfTile(generateBombTarget());
+        }
         this.damage = fortress.getFortressType().getAP();
     }
 

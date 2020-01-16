@@ -69,7 +69,7 @@ public class Fortress {
      */
     public void attack(FireTruck target) {
         if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
-            this.bombs.add(new Bomb(this, target));
+            this.bombs.add(new Bomb(this, target, false));
             target.resetTimeOfLastAttack();
             if (SoundFX.music_enabled) {
                 SoundFX.sfx_fortress_attack.play();
