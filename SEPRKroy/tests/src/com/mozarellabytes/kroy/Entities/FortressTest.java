@@ -13,8 +13,6 @@ import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 
-import static org.junit.Assert.*;
-
 @RunWith(GdxTestRunner.class)
 public class FortressTest {
 
@@ -33,14 +31,6 @@ public class FortressTest {
     }
 
     @Test
-    public void attackTruckFromRevolutionFortressDamageTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Revs);
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
-        new Bomb(fortress, fireTruck, true).damageTruck();
-        assertEquals(90.0, fireTruck.getHP(), 0.0);
-    }
-
-    @Test
     public void attackTruckFromCliffordFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Clifford);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
@@ -49,55 +39,15 @@ public class FortressTest {
     }
 
     @Test
-    public void attackTruckFromCliffordFortressRangeTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(13, 10), FireTruckType.Speed);
-        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
-        assertTrue(withinRange);
+    public void attackTruckFromRevolutionFortressDamageTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs);
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
+        new Bomb(fortress, fireTruck, true).damageTruck();
+        assertEquals(90.0, fireTruck.getHP(), 0.0);
     }
 
     @Test
-    public void attackTruckFromCliffordFortressRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(14, 10), FireTruckType.Speed);
-        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
-        assertTrue(withinRange);
-    }
-
-    @Test
-    public void attackTruckFromCliffordFortressRangeAfterBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15, 10), FireTruckType.Speed);
-        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
-        assertFalse(withinRange);
-    }
-
-    @Test
-    public void attackTruckFromRevolutionFortressRangeTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(14, 10), FireTruckType.Speed);
-        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
-        assertTrue(withinRange);
-    }
-
-    @Test
-    public void attackTruckFromRevolutionFortressRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15, 10), FireTruckType.Speed);
-        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
-        assertTrue(withinRange);
-    }
-
-    @Test
-    public void attackTruckFromRevolutionFortressRangeAfterBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16, 10), FireTruckType.Speed);
-        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
-        assertFalse(withinRange);
-    }
-
-    @Test
-    public void attackTruckFromWalmgateFortressRangeTest() {
+    public void attackTruckFromWalmgateFortressBeforeRangeBoundaryTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 7
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
@@ -105,7 +55,7 @@ public class FortressTest {
     }
 
     @Test
-    public void attackTruckFromWalmgateFortressRangeBoundaryTest() {
+    public void attackTruckFromWalmgateFortressOnRangeBoundaryTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 7
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
@@ -113,7 +63,7 @@ public class FortressTest {
     }
 
     @Test
-    public void attackTruckFromWalmgateFortressRangeAfterBoundaryTest() {
+    public void attackTruckFromWalmgateFortressAfterRangeBoundaryTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 7
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
@@ -121,7 +71,55 @@ public class FortressTest {
     }
 
     @Test
-    public void attackTruckFromCliffordFortressDestroyPassTest() {
+    public void attackTruckFromCliffordFortressBeforeRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(13, 10), FireTruckType.Speed);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromCliffordFortressOnRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(14, 10), FireTruckType.Speed);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromCliffordFortressAfterRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Clifford); // range = 4
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15, 10), FireTruckType.Speed);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertFalse(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromRevolutionFortressBeforeRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(14, 10), FireTruckType.Speed);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromRevolutionFortressOnRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15, 10), FireTruckType.Speed);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromRevolutionFortressAfterRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16, 10), FireTruckType.Speed);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertFalse(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromCliffordFortressDestroyPassTest() { // TODO this is not actually testing our code
         ArrayList<Fortress> fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(10, 10, FortressType.Clifford));
         fortresses.get(0).damage(150);
@@ -132,7 +130,7 @@ public class FortressTest {
     }
 
     @Test
-    public void attackTruckFromCliffordFortressDestroyFailTest() {
+    public void attackTruckFromCliffordFortressDestroyFailTest() { // TODO this is not actually testing our code
         ArrayList<Fortress> fortresses = new ArrayList<Fortress>();
         fortresses.add(new Fortress(10, 10, FortressType.Clifford));
         fortresses.get(0).damage(100);

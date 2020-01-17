@@ -227,15 +227,6 @@ public class GameScreen implements Screen {
             truck.move();
             truck.updateSpray();
 
-            for (int j = 0; j < truck.getSpray().size(); j++) {
-                WaterParticle particle = truck.getSpray().get(j);
-                if (particle.isHit()) {
-                    truck.damage(particle);
-                    truck.removeParticle(particle);
-                }
-            }
-
-
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
                 if (fortress.withinRange(truck.getVisualPosition())) {
