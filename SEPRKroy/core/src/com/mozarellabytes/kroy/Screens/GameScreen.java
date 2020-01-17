@@ -219,7 +219,7 @@ public class GameScreen implements Screen {
 
         station.restoreTrucks();
         station.checkForCollisions();
-        gameState.trucksInAttackRange = 0;
+        gameState.setTrucksInAttackRange(0);
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
@@ -242,10 +242,10 @@ public class GameScreen implements Screen {
                     fortress.attack(truck);
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
-                    gameState.trucksInAttackRange++;
+                    gameState.incrementTrucksInAttackRange();
                     truck.attack(fortress);
                     break;
-                } else if (gameState.trucksInAttackRange < 0) {
+                } else if (gameState.getTrucksInAttackRange() < 0) {
                     SoundFX.sfx_truck_attack.stop();
                 }
             }

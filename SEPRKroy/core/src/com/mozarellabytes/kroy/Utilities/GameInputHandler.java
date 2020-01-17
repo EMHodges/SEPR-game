@@ -43,7 +43,7 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.A:
-                if (SoundFX.music_enabled && gameScreen.gameState.trucksInAttackRange > 0) {
+                if (SoundFX.music_enabled && gameScreen.gameState.getTrucksInAttackRange() > 0) {
                     SoundFX.sfx_truck_attack.loop();
                     SoundFX.sfx_truck_attack.play();
                 }
@@ -167,7 +167,7 @@ public class GameInputHandler implements InputProcessor {
     private boolean doTrucksHaveSameLastTile() {
         for (FireTruck truck : gameScreen.getStation().getTrucks()) {
             if (!truck.equals(gameScreen.selectedTruck)) {
-                if (!truck.getPath().isEmpty()){
+                if (!truck.getPath().isEmpty() && !truck.getTrailPath().isEmpty()){
                     if (truck.trailPath.last().equals(gameScreen.selectedTruck.trailPath.last())){
                         return true;
                     }
