@@ -63,7 +63,7 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
         assertTrue((fireTruck.getPosition()) instanceof Vector2);
         Vector2 position=fireTruck.getPosition();
-        assertTrue(position.epsilonEquals(10,10));;
+        assertTrue(position.epsilonEquals(10,10));
     }
 
     
@@ -85,11 +85,11 @@ public class FireTruckTest {
 //
     @Test
    public void testResetPath() {
-            FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-            Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
-            fireTruck.addTileToPath(new Vector2(10,10));
-            fireTruck.resetPath();
-            assertTrue((fireTruck.path).isEmpty());
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
+        Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
+        fireTruck.addTileToPath(new Vector2(10,10));
+        fireTruck.resetPath();
+        assertTrue((fireTruck.path).isEmpty());
     }
 
 
@@ -108,30 +108,28 @@ public class FireTruckTest {
         assertTrue(reserveBefore>reserveAfter);
     }
 
-//    @Test
-//    public void damage() {//waterparticles?
-//    }
-//
-
     @Test
-    public void testRepair() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-        float HPBefore = fireTruck.getHP();
-        fireTruck.repair(2);
-        float HPAfter = fireTruck.getHP();
-        assertTrue(HPBefore==HPAfter-2);
+    public void repairTest() {
+        FireStation station = new FireStation(10, 10);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), Speed));
+        station.getTruck(0).fortressDamage(50);
+        float HPBeforeRepair = station.getTruck(0).getHP();
+        station.restoreTrucks();
+        float HPAfterRepair = station.getTruck(0).getHP();
+        assertTrue(HPAfterRepair > HPBeforeRepair);
     }
 
     @Test
-    public void TestRefill() {
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
-        for (int i=0; i<100; i++) {
-            fireTruck.attack(new Fortress(10, 10, FortressType.Walmgate));
-        }
-        float reserveBefore = fireTruck.getReserve();
-        fireTruck.refill(2);
-        float reserveAfter = fireTruck.getReserve();
-        assertTrue(reserveBefore<reserveAfter);
+    public void refillPassTest() {
+        FireStation station = new FireStation(10, 10);
+        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), Speed));
+        station.getTruck(0).setAttacking(true);
+        station.getTruck(0).attack(fortress);
+        float HPBeforeRefill = station.getTruck(0).getReserve();
+        station.restoreTrucks();
+        float HPAfterRefill = station.getTruck(0).getReserve();
+        assertTrue(HPAfterRefill > HPBeforeRefill);
     }
 
 

@@ -7,7 +7,7 @@ import org.junit.Test;
 import static com.mozarellabytes.kroy.Entities.FireTruckType.Speed;
 import static org.junit.Assert.*;
 
-//public class FireStationTest extends GameScreen{
+//public class FireStationTest extends GameScreen {
 
 //    @Test
 //    public void spawn() {
