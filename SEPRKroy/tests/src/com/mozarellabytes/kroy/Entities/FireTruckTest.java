@@ -33,12 +33,10 @@ public class FireTruckTest {
     public void TestTest(){
         assertEquals(1,1);
     }
-//    @Before
-//    FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
 
     @Test
     public void testMove(){
-        FireTruck fireTruck=new FireTruck(gameScreenMock,new Vector2(10,10),Speed);
+        FireTruck fireTruck = new FireTruck(gameScreenMock,new Vector2(10,10),Speed);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,10);
         Mockito.doReturn(true).when(gameScreenMock).isRoad(10,11);
         fireTruck.setMoving(true);
@@ -109,7 +107,7 @@ public class FireTruckTest {
     }
 
     @Test
-    public void repairTest() {
+    public void repairPassTest() {
         FireStation station = new FireStation(10, 10);
         station.spawn(new FireTruck(gameScreenMock, new Vector2(11, 10), Speed));
         station.getTruck(0).fortressDamage(50);
@@ -117,6 +115,17 @@ public class FireTruckTest {
         station.restoreTrucks();
         float HPAfterRepair = station.getTruck(0).getHP();
         assertTrue(HPAfterRepair > HPBeforeRepair);
+    }
+
+    @Test
+    public void repairFailTest() {
+        FireStation station = new FireStation(10, 10);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), Speed));
+        station.getTruck(0).fortressDamage(50);
+        float HPBeforeRepair = station.getTruck(0).getHP();
+        station.restoreTrucks();
+        float HPAfterRepair = station.getTruck(0).getHP();
+        assertFalse(HPAfterRepair > HPBeforeRepair);
     }
 
     @Test
@@ -130,6 +139,19 @@ public class FireTruckTest {
         station.restoreTrucks();
         float HPAfterRefill = station.getTruck(0).getReserve();
         assertTrue(HPAfterRefill > HPBeforeRefill);
+    }
+
+    @Test
+    public void refillFailTest() {
+        FireStation station = new FireStation(10, 10);
+        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
+        station.spawn(new FireTruck(gameScreenMock, new Vector2(20, 10), Speed));
+        station.getTruck(0).setAttacking(true);
+        station.getTruck(0).attack(fortress);
+        float HPBeforeRefill = station.getTruck(0).getReserve();
+        station.restoreTrucks();
+        float HPAfterRefill = station.getTruck(0).getReserve();
+        assertFalse(HPAfterRefill > HPBeforeRefill);
     }
 
 
