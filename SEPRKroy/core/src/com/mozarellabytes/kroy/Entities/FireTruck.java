@@ -257,8 +257,13 @@ public class FireTruck extends Sprite {
      */
     public void updateSpray() {
         if (this.spray != null) {
-            for (WaterParticle particle : this.spray) {
+            for (int i=0; i < this.spray.size(); i++) {
+                WaterParticle particle = this.spray.get(i);
                 particle.updatePosition();
+                if (particle.isHit()) {
+                    this.damage(particle);
+                    this.removeParticle(particle);
+                }
             }
         }
     }
@@ -266,7 +271,7 @@ public class FireTruck extends Sprite {
     /**
      * Remove the WaterParticle from the spray when it hits the Fortress
      *
-     * @param particle
+     * @param particle  The particle to be removed from spray
      */
     public void removeParticle(WaterParticle particle) {
         this.spray.remove(particle);
@@ -395,6 +400,8 @@ public class FireTruck extends Sprite {
     public Queue<Vector2> getPath() {
         return this.path;
     }
+
+
 
     public ArrayList<WaterParticle> getSpray() {
         return this.spray;

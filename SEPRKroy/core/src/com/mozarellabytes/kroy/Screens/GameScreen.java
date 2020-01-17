@@ -128,7 +128,7 @@ public class GameScreen implements Screen {
         spawn(FireTruckType.Speed);
 
         fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(12, 18.5f, FortressType.Default));
+        fortresses.add(new Fortress(12, 18.5f, FortressType.Revs));
         fortresses.add(new Fortress(30.5f, 17.5f, FortressType.Walmgate));
         fortresses.add(new Fortress(16, 3.5f, FortressType.Clifford));
 
@@ -219,7 +219,7 @@ public class GameScreen implements Screen {
 
         station.restoreTrucks();
         station.checkForCollisions();
-        gameState.trucksInAttackRange = 0;
+        gameState.setTrucksInAttackRange(0);
 
         for (int i = 0; i < station.getTrucks().size(); i++) {
             FireTruck truck = station.getTruck(i);
@@ -227,26 +227,16 @@ public class GameScreen implements Screen {
             truck.move();
             truck.updateSpray();
 
-            for (int j = 0; j < truck.getSpray().size(); j++) {
-                WaterParticle particle = truck.getSpray().get(j);
-                if (particle.isHit()) {
-                    truck.damage(particle);
-                    truck.removeParticle(particle);
-                }
-            }
-
-
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
                 if (fortress.withinRange(truck.getVisualPosition())) {
                     fortress.attack(truck);
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
-                    gameState.trucksInAttackRange++;
+                    gameState.incrementTrucksInAttackRange();
                     truck.attack(fortress);
                     break;
-                }
-                else if (gameState.trucksInAttackRange < 0) {
+                } else if (gameState.getTrucksInAttackRange() < 0) {
                     SoundFX.sfx_truck_attack.stop();
                 }
             }

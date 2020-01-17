@@ -15,7 +15,9 @@ public class GameState {
 
     /** The number of fortresses the player has destroyed */
     private int fortressesDestroyed;
-    public int trucksInAttackRange;
+
+    /** The number of trucks that have a fortress within their attack range */
+    private int trucksInAttackRange;
 
     /** Constructor for GameState */
     public GameState() {
@@ -59,12 +61,25 @@ public class GameState {
      *                  <code> false </code> if player has lost
      * @param game LibGDX game
      */
-    public void endGame(Boolean playerWon, Kroy game){
+    public void endGame(Boolean playerWon, Kroy game) {
         if (playerWon) {
             game.setScreen(new GameOverScreen(game, true));
         } else {
             game.setScreen(new GameOverScreen(game, false));
         }
+    }
+
+    public void setTrucksInAttackRange(int number){
+        trucksInAttackRange = number;
+    }
+
+    /** Increments the trucks in attack range */
+    public void incrementTrucksInAttackRange(){
+        trucksInAttackRange++;
+    }
+
+    public int getTrucksInAttackRange(){
+        return trucksInAttackRange;
     }
 
 

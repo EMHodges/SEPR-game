@@ -68,12 +68,8 @@ public class Fortress {
      * @param target The FireTruck being attacked
      */
     public void attack(FireTruck target) {
-        Clock constantClock = Clock.fixed(Instant.ofEpochSecond(System.currentTimeMillis()), ZoneId.systemDefault());
-        Clock clock = Clock.offset(constantClock, Duration.ofSeconds(10));
-        System.out.println(clock.millis());
-//        if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
-        if (true) {
-            this.bombs.add(new Bomb(this, target));
+        if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
+            this.bombs.add(new Bomb(this, target, false));
             target.resetTimeOfLastAttack();
             if (SoundFX.music_enabled) {
                 SoundFX.sfx_fortress_attack.play();

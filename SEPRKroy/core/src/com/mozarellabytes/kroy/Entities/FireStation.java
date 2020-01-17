@@ -91,7 +91,7 @@ public class FireStation {
      * HP
      * @param truck truck that is being refilled
      */
-    public void refill(FireTruck truck) {
+    private void refill(FireTruck truck) {
         if (truck.getReserve() < truck.type.getMaxReserve()) {
             truck.refill(0.06f);
         }
@@ -102,7 +102,7 @@ public class FireStation {
      * truck's maximum reserve
      * @param truck truck that is being repaired
      */
-    public void repair(FireTruck truck) {
+    private void repair(FireTruck truck) {
         if (truck.getHP() < truck.type.getMaxHP()) {
             truck.repair(0.04f);
         }
