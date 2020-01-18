@@ -73,7 +73,6 @@ public class GameState {
         trucksInAttackRange = number;
     }
 
-    /** Increments the trucks in attack range */
     public void incrementTrucksInAttackRange(){
         trucksInAttackRange++;
     }

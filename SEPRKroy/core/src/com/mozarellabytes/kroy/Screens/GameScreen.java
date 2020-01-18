@@ -230,7 +230,7 @@ public class GameScreen implements Screen {
             // manages attacks between trucks and fortresses
             for (Fortress fortress : this.fortresses) {
                 if (fortress.withinRange(truck.getVisualPosition())) {
-                    fortress.attack(truck);
+                    fortress.attack(truck, true);
                 }
                 if (truck.fortressInRange(fortress.getPosition())) {
                     gameState.incrementTrucksInAttackRange();
@@ -254,17 +254,9 @@ public class GameScreen implements Screen {
         for (int i = 0; i < this.fortresses.size(); i++) {
             Fortress fortress = this.fortresses.get(i);
 
-            // update bombs
-            for (int j = 0; j < fortress.getBombs().size(); j++) {
-                Bomb bomb = fortress.getBombs().get(j);
-                bomb.updatePosition();
-                if (bomb.checkHit()) {
-                    bomb.damageTruck();
-                    fortress.removeBomb(bomb);
-                    camShake.shakeIt(.2f);
-                } else if (bomb.hasReachedTargetTile()) {
-                    fortress.removeBomb(bomb);
-                }
+            boolean hitTruck = fortress.updateBombs();
+            if (hitTruck) {
+                camShake.shakeIt(.2f);
             }
 
             // check if fortress is destroyed
@@ -360,8 +352,6 @@ public class GameScreen implements Screen {
     private Vector2 getTile(Vector2 position) {
         return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
     }
-
-
 
     /**
      * Checks whether the user has clicked on a the last tile in a

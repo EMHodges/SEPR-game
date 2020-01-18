@@ -9,8 +9,15 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnit;
 import org.mockito.junit.MockitoRule;
+
+import static com.mozarellabytes.kroy.Entities.FortressType.Clifford;
+import static com.mozarellabytes.kroy.Entities.FortressType.Revs;
+import static com.mozarellabytes.kroy.Entities.FortressType.Walmgate;
 import static org.junit.Assert.*;
 
+import java.time.Clock;
+import java.time.Instant;
+import java.time.ZoneId;
 import java.util.ArrayList;
 
 @RunWith(GdxTestRunner.class)
@@ -19,23 +26,43 @@ public class FortressTest {
     @Mock
     GameScreen gameScreenMock;
 
-    @Rule
-    public MockitoRule mockitoRule = MockitoJUnit.rule();
+    @Test
+    public void differentRangeTest() {
+        assertTrue(Clifford.getRange() != Revs.getRange() && Revs.getRange() != Walmgate.getRange());
+
+    }
+
+    @Test
+    public void differentAPTest() {
+        assertTrue(Clifford.getAP() != Revs.getAP() && Revs.getAP() != Walmgate.getAP());
+    }
+
+    @Test
+    public void differentMaxHPTest() {
+        assertTrue(Clifford.getMaxHP() != Revs.getMaxHP() && Revs.getMaxHP() != Walmgate.getMaxHP());
+    }
+
+    @Test
+    public void differentFireRateTest() {
+        assertTrue(Clifford.getDelay() != Revs.getDelay() && Revs.getDelay() != Walmgate.getDelay());
+    }
 
     @Test
     public void attackTruckFromWalmgateFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
         new Bomb(fortress, fireTruck, true).damageTruck();
-        assertEquals(85.0, fireTruck.getHP(), 0.0);
+        assertEquals(135, fireTruck.getHP(), 0.0);
     }
 
     @Test
     public void attackTruckFromCliffordFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Clifford);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
-        new Bomb(fortress, fireTruck, true).damageTruck();
-        assertEquals(80.0, fireTruck.getHP(), 0.0);
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 1000);
+        fortress.attack(fireTruck, false);
+        fortress.updateBombs();
+        assertEquals(130.0, fireTruck.getHP(), 0.0);
     }
 
     @Test
@@ -43,7 +70,7 @@ public class FortressTest {
         Fortress fortress = new Fortress(10, 10, FortressType.Revs);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
         new Bomb(fortress, fireTruck, true).damageTruck();
-        assertEquals(90.0, fireTruck.getHP(), 0.0);
+        assertEquals(140.0, fireTruck.getHP(), 0.0);
     }
 
     @Test

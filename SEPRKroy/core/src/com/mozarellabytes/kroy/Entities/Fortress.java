@@ -8,10 +8,6 @@ import com.badlogic.gdx.math.Vector2;
 
 import com.mozarellabytes.kroy.Utilities.SoundFX;
 
-import java.time.Clock;
-import java.time.Duration;
-import java.time.Instant;
-import java.time.ZoneId;
 import java.util.ArrayList;
 
 public class Fortress {
@@ -64,17 +60,40 @@ public class Fortress {
 
     /**
      * Generates bombs to attack the FireTruck with
-     *
-     * @param target The FireTruck being attacked
+     * @param target        FireTruck being attacked
+     * @param randomTarget  whether the bomb hits every time or
+     *                      there is a chance it misses
      */
-    public void attack(FireTruck target) {
+    public void attack(FireTruck target, boolean randomTarget) {
         if (target.getTimeOfLastAttack() + fortressType.getDelay() < System.currentTimeMillis()) {
-            this.bombs.add(new Bomb(this, target, false));
-            target.resetTimeOfLastAttack();
+            this.bombs.add(new Bomb(this, target, randomTarget));
+            target.setTimeOfLastAttack(System.currentTimeMillis());
             if (SoundFX.music_enabled) {
                 SoundFX.sfx_fortress_attack.play();
             }
         }
+    }
+
+    /**
+     * Updates the position of all the bombs and checks whether
+     * they have hit their target. If they have, it should deal
+     * damage to the truck, remove the bomb and shake the screen
+     * @return  <code>true</code> if bomb hits a truck
+     *          <code>false</code> if bomb does nt hit a true
+     */
+    public boolean updateBombs() {
+        for (int i = 0; i < this.getBombs().size(); i++) {
+            Bomb bomb = this.getBombs().get(i);
+            bomb.updatePosition();
+            if (bomb.checkHit()) {
+                bomb.damageTruck();
+                this.removeBomb(bomb);
+                return true;
+            } else if (bomb.hasReachedTargetTile()) {
+                this.removeBomb(bomb);
+            }
+        }
+        return false;
     }
 
     /**
@@ -130,4 +149,5 @@ public class Fortress {
     public ArrayList<Bomb> getBombs() {
         return this.bombs;
     }
+
 }

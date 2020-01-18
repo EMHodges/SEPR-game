@@ -17,8 +17,8 @@ public enum FireTruckType {
     /** The preset values for the different truck types includes the type's:
      * maximum reserve, speed, trailColour, name, attack range, attack points
      */
-    Speed(100, 2, Color.RED, "Speed Truck", 5, 0.08f),
-    Ocean(250, 1, Color.CYAN, "Ocean Truck", 8, 0.16f);
+    Speed(100, 2, Color.RED, "Speed Truck", 5, 0.08f, 150),
+    Ocean(250, 1, Color.CYAN, "Ocean Truck", 8, 0.16f, 100);
 
     /** The maximum amount of water this type of truck can have,
      * also the value of the truck's reserve when it is spawned */
@@ -64,9 +64,9 @@ public enum FireTruckType {
      * @param AP the attack points for this type of truck
      *
      */
-    FireTruckType(int maxReserve, int speed, Color trailColour, String name, float range, float AP) {
+    FireTruckType(int maxReserve, int speed, Color trailColour, String name, float range, float AP, float maxHP) {
         this.maxReserve = maxReserve;
-        this.maxHP = 100;
+        this.maxHP = maxHP;
         this.speed = speed;
         this.trailColour = trailColour;
         this.name = name;

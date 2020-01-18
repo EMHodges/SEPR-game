@@ -39,28 +39,23 @@ public class Bomb extends Sprite {
      *
      * @param fortress  Fortress that the bomb came from
      * @param target    FireTruck being targeted
+     * @param isRandom  <code>true</code> bomb heads towards
+     *                  the target
+     *                  <code>false</code> chance that
+     *                  bomb doesnt head towards target
      */
-    public Bomb(Fortress fortress, FireTruck target, boolean isTest) {
+    public Bomb(Fortress fortress, FireTruck target, boolean isRandom) {
         this.target = target;
         this.truckPosition = new Vector2(getMiddleOfTile(target.getPosition()));
         this.startPosition = new Vector2(fortress.getPosition());
         this.currentPosition = this.startPosition;
-        // Note: Target position is different to the truck position
-        // Target position is the tile where the bomb "lands" which is not always the tile where the Truck is
-        if (isTest) {
-            this.targetPosition = getMiddleOfTile(this.truckPosition);
-        } else {
+        if (isRandom) {
             this.targetPosition = getMiddleOfTile(generateBombTarget());
+        } else {
+            this.targetPosition = getMiddleOfTile(this.truckPosition);
+
         }
         this.damage = fortress.getFortressType().getAP();
-    }
-
-    /**
-     *
-     * @return Position of the Bomb
-     */
-    public Vector2 getPosition() {
-        return this.currentPosition;
     }
 
     /**
@@ -136,10 +131,6 @@ public class Bomb extends Sprite {
         shapeMapRenderer.setColor(Color.RED);
         shapeMapRenderer.circle(this.currentPosition.x, this.currentPosition.y, 0.2f, 40);
         shapeMapRenderer.setColor(Color.WHITE);
-    }
-
-    public Vector2 getTargetPosition() {
-        return this.targetPosition;
     }
 }
 

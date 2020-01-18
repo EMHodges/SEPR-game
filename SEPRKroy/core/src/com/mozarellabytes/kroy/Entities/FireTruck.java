@@ -355,10 +355,11 @@ public class FireTruck extends Sprite {
     }
 
     /**
-     * Sets the timeOfLastAttack to the current system time as a Unix Timestamp
+     * Sets time of last attack to unix timestamp provided
+     * @param unix  timestamp set as time of last attack
      */
-    public void resetTimeOfLastAttack() {
-        this.timeOfLastAttack = System.currentTimeMillis();
+    public void setTimeOfLastAttack(long unix) {
+        this.timeOfLastAttack = unix;
     }
 
     public void setAttacking(boolean b) {
@@ -400,8 +401,6 @@ public class FireTruck extends Sprite {
     public Queue<Vector2> getPath() {
         return this.path;
     }
-
-
 
     public ArrayList<WaterParticle> getSpray() {
         return this.spray;
