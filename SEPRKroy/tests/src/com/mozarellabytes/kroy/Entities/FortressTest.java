@@ -29,12 +29,6 @@ public class FortressTest {
     @Test
     public void differentRangeTest() {
         assertTrue(Clifford.getRange() != Revs.getRange() && Revs.getRange() != Walmgate.getRange());
-
-    }
-
-    @Test
-    public void differentAPTest() {
-        assertTrue(Clifford.getAP() != Revs.getAP() && Revs.getAP() != Walmgate.getAP());
     }
 
     @Test
@@ -45,6 +39,11 @@ public class FortressTest {
     @Test
     public void differentFireRateTest() {
         assertTrue(Clifford.getDelay() != Revs.getDelay() && Revs.getDelay() != Walmgate.getDelay());
+    }
+
+    @Test
+    public void differentAPTest() {
+        assertTrue(Clifford.getAP() != Revs.getAP() && Revs.getAP() != Walmgate.getAP());
     }
 
     @Test
@@ -143,28 +142,6 @@ public class FortressTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertFalse(withinRange);
-    }
-
-    @Test
-    public void attackTruckFromCliffordFortressDestroyPassTest() { // TODO this is not actually testing our code
-        ArrayList<Fortress> fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(10, 10, FortressType.Clifford));
-        fortresses.get(0).damage(150);
-        if (fortresses.get(0).getHP() <= 0) {
-            fortresses.remove(fortresses.get(0));
-        }
-        assertEquals(new ArrayList<Fortress>(), fortresses);
-    }
-
-    @Test
-    public void attackTruckFromCliffordFortressDestroyFailTest() { // TODO this is not actually testing our code
-        ArrayList<Fortress> fortresses = new ArrayList<Fortress>();
-        fortresses.add(new Fortress(10, 10, FortressType.Clifford));
-        fortresses.get(0).damage(100);
-        if (fortresses.get(0).getHP() <= 0) {
-            fortresses.remove(fortresses.get(0));
-        }
-        assertNotEquals(new ArrayList<Fortress>(), fortresses);
     }
 
 }

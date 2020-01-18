@@ -283,7 +283,7 @@ public class FireTruck extends Sprite {
      * @param particle
      */
     public void damage(WaterParticle particle) {
-        particle.getTarget().damage(this.type.getAP());
+        particle.getTarget().damage(Math.min(this.type.getAP(), particle.getTarget().getHP()));
     }
 
     /**
@@ -297,7 +297,7 @@ public class FireTruck extends Sprite {
         if (SoundFX.music_enabled) {
             SoundFX.sfx_truck_damage.play();
         }
-        this.HP -= HP;
+        this.HP -= Math.min(HP, this.HP);
     }
 
     /**
@@ -356,10 +356,10 @@ public class FireTruck extends Sprite {
 
     /**
      * Sets time of last attack to unix timestamp provided
-     * @param unix  timestamp set as time of last attack
+     * @param timestamp  timestamp set as time of last attack
      */
-    public void setTimeOfLastAttack(long unix) {
-        this.timeOfLastAttack = unix;
+    public void setTimeOfLastAttack(long timestamp) {
+        this.timeOfLastAttack = timestamp;
     }
 
     public void setAttacking(boolean b) {

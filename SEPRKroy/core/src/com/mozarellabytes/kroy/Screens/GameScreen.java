@@ -391,7 +391,8 @@ public class GameScreen implements Screen {
     }
 
     /**
-     * TODO decide whether we want to use ScreenHandler or if it makes things more complicated
+     * Changes from GameScreen to Control screen, passing "game" so that when
+     * the player exits the control screen, it knows to return to the Game
      */
     public void toControlScreen() {
         game.setScreen(new ControlsScreen(game, this, "game"));
