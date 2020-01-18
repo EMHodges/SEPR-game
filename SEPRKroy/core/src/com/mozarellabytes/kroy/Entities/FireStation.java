@@ -93,7 +93,7 @@ public class FireStation {
      */
     private void refill(FireTruck truck) {
         if (truck.getReserve() < truck.type.getMaxReserve()) {
-            truck.refill(0.06f);
+            truck.refill(Math.min(0.06f, truck.getType().getMaxReserve() - truck.getReserve()));
         }
     }
 
@@ -104,7 +104,7 @@ public class FireStation {
      */
     private void repair(FireTruck truck) {
         if (truck.getHP() < truck.type.getMaxHP()) {
-            truck.repair(0.04f);
+            truck.repair(Math.min(0.04f, truck.getType().getMaxHP() - truck.getHP()));
         }
     }
 
