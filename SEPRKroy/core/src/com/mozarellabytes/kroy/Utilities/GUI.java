@@ -322,10 +322,10 @@ public class GUI {
     public void changeSound() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOnIdleTexture;
-            SoundFX.StopMusic();
+            SoundFX.stopMusic();
         } else {
             currentSoundTexture = soundOffIdleTexture;
-            SoundFX.PlayGameMusic();
+            SoundFX.playGameMusic();
         }
     }
 

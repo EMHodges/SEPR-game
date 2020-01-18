@@ -235,10 +235,10 @@ public class MenuScreen implements Screen {
     public void changeSound() {
         if (SoundFX.music_enabled){
             currentSoundTexture = soundOnIdleTexture;
-            SoundFX.StopMusic();
+            SoundFX.stopMusic();
         } else {
             currentSoundTexture = soundOffIdleTexture;
-            SoundFX.PlayMenuMusic();
+            SoundFX.playMenuMusic();
         }
     }
 

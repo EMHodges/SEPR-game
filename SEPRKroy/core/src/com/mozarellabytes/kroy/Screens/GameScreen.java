@@ -1,8 +1,8 @@
 package com.mozarellabytes.kroy.Screens;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
@@ -236,8 +236,6 @@ public class GameScreen implements Screen {
                     gameState.incrementTrucksInAttackRange();
                     truck.attack(fortress);
                     break;
-                } else if (gameState.getTrucksInAttackRange() < 0) {
-                    SoundFX.sfx_truck_attack.stop();
                 }
             }
 
@@ -269,6 +267,17 @@ public class GameScreen implements Screen {
             }
 
         }
+
+        if (Gdx.input.isKeyPressed(Input.Keys.A)) {
+            if (gameState.getTrucksInAttackRange() > 0) {
+                SoundFX.playTruckAttack();
+            }
+            else {
+                SoundFX.stopTruckAttack();
+            }
+        }
+
+        System.out.println(SoundFX.isPlaying);
 
         shapeMapRenderer.end();
         shapeMapRenderer.setColor(Color.WHITE);

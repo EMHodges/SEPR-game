@@ -43,9 +43,9 @@ public class GameInputHandler implements InputProcessor {
                 System.exit(1);
                 break;
             case Input.Keys.A:
+                System.out.println(gameScreen.gameState.getTrucksInAttackRange());
                 if (SoundFX.music_enabled && gameScreen.gameState.getTrucksInAttackRange() > 0) {
-                    SoundFX.sfx_truck_attack.loop();
-                    SoundFX.sfx_truck_attack.play();
+                    SoundFX.playTruckAttack();
                 }
                 for (FireTruck truck: gameScreen.getStation().getTrucks()){
                     truck.setAttacking(true);
@@ -70,7 +70,7 @@ public class GameInputHandler implements InputProcessor {
     public boolean keyUp(int keycode) {
         if (this.gameScreen.getState().equals(GameScreen.PlayState.PLAY)) {
             if (keycode == Input.Keys.A) {
-                SoundFX.sfx_truck_attack.stop();
+                SoundFX.stopTruckAttack();
                 for (FireTruck truck : gameScreen.getStation().getTrucks()) {
                     truck.setAttacking(false);
                 }

@@ -50,7 +50,7 @@ public class GameOverInputHandler implements InputProcessor {
      * @return whether the input was processed */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
-        SoundFX.StopMusic();
+        SoundFX.stopMusic();
         game.setScreen(new MenuScreen(game));
         return true;
     }

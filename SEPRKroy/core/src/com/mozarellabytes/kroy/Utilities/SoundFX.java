@@ -10,6 +10,11 @@ import com.badlogic.gdx.audio.Sound;
  */
 
 public class SoundFX {
+
+    /** Used only for the truck attacking sound. True if it is playing, false if it isn't */
+    public static boolean isPlaying = false;
+
+    /** All sounds can be played when this is true, else no sound will play */
     public static boolean music_enabled = true;
 
     public static final Music sfx_menu = Gdx.audio.newMusic(Gdx.files.internal("sounds/menu.mp3"));
@@ -25,20 +30,34 @@ public class SoundFX {
     public static final Sound sfx_horn = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/horn.mp3"));
     public static final Sound sfx_button_clicked = Gdx.audio.newSound(Gdx.files.internal("sounds/sfx/button_clicked.wav"));
 
+    /** Plays attacking sound for FireTrucks only if it isn't already playing */
+    public static void playTruckAttack() {
+        if (!isPlaying) {
+            sfx_truck_attack.loop();
+            sfx_truck_attack.play();
+            isPlaying = true;
+        }
+    }
+
+    /** Stops the sound of FireTrucks attacking and resets isPlaying to false */
+    public static void stopTruckAttack() {
+        sfx_truck_attack.stop();
+        isPlaying = false;
+    }
     /** Plays game music */
-    public static void PlayGameMusic() {
+    public static void playGameMusic() {
         sfx_soundtrack.play();
         music_enabled = true;
     }
 
     /** Plays menu music */
-    public static void PlayMenuMusic() {
+    public static void playMenuMusic() {
         sfx_menu.play();
         music_enabled = true;
     }
 
     /** Stops both menu music and game music */
-    public static void StopMusic() {
+    public static void stopMusic() {
         sfx_soundtrack.stop();
         sfx_menu.stop();
         music_enabled = false;
