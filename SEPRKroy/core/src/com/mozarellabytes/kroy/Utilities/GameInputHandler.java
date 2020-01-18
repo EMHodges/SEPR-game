@@ -229,6 +229,8 @@ public class GameInputHandler implements InputProcessor {
             gui.clickedPauseButton();
         } else if (gui.getSoundButton().contains(position2d)) {
             gui.clickedSoundButton();
+        } else if (gui.getInfoButton().contains(position2d)) {
+            gui.clickedInfoButton();
         }
         return true;
     }
@@ -278,6 +280,10 @@ public class GameInputHandler implements InputProcessor {
             gameScreen.changeState();
         } else {
             gui.idlePauseButton();
+        }
+
+        if (gui.getInfoButton().contains(screenCoords)){
+            gameScreen.toControlScreen();
         }
         return true;
     }

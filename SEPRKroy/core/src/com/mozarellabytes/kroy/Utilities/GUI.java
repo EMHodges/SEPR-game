@@ -52,6 +52,15 @@ public class GUI {
     /** Texture of the pauseButton that is rendered to the screen */
     private Texture currentPauseTexture;
 
+    /** Rectangle containing the infoButton's coordinates, height and width */
+    private final Rectangle infoButton;
+    /** Texture of the infoButton when it is not being clicked on */
+    private final Texture infoButtonIdle;
+    /** Texture of the infoButton when it's being clicked */
+    private final Texture infoButtonClicked;
+    /** Texture of the infoButton that is rendered to the screen */
+    private Texture currentInfoTexture;
+
     /** Rectangle containing the soundButton's coordinates, height and width */
     private final Rectangle soundButton;
     /** Texture of the soundButton when music is off to turn the music on
@@ -95,6 +104,11 @@ public class GUI {
         pauseButtonClicked = new Texture(Gdx.files.internal("ui/pause_clicked.png"), true);
         pauseButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
 
+        infoButtonIdle = new Texture(Gdx.files.internal("ui/info_idle.png"), true);
+        infoButtonIdle.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+        infoButtonClicked = new Texture(Gdx.files.internal("ui/info_clicked.png"), true);
+        infoButtonClicked.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
+
         soundOnIdleTexture = new Texture(Gdx.files.internal("ui/sound_on_idle.png"), true);
         soundOnIdleTexture.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
         soundOffIdleTexture = new Texture(Gdx.files.internal("ui/sound_off_idle.png"), true);
@@ -106,6 +120,7 @@ public class GUI {
 
         currentHomeTexture = homeButtonIdle;
         currentPauseTexture = pauseButtonIdle;
+        currentInfoTexture = infoButtonIdle;
 
         if (SoundFX.music_enabled) {
             currentSoundTexture = soundOffIdleTexture;
@@ -116,6 +131,7 @@ public class GUI {
         homeButton = new Rectangle(Gdx.graphics.getWidth() - 33, Gdx.graphics.getHeight() - 33, 30, 30);
         soundButton = new Rectangle(Gdx.graphics.getWidth() - 70, Gdx.graphics.getHeight() - 33, 30, 30);
         pauseButton = new Rectangle(Gdx.graphics.getWidth() - 107, Gdx.graphics.getHeight() - 33, 30, 30);
+        infoButton = new Rectangle(Gdx.graphics.getWidth() - 144, Gdx.graphics.getHeight() - 33, 30, 30);
 
         pauseCamera = new OrthographicCamera();
         pauseCamera.setToOrtho(false, Gdx.graphics.getDisplayMode().width, Gdx.graphics.getDisplayMode().height);
@@ -259,6 +275,7 @@ public class GUI {
         game.batch.draw(currentSoundTexture, soundButton.x, soundButton.y, soundButton.width, soundButton.height);
         game.batch.draw(currentHomeTexture, homeButton.x, homeButton.y, homeButton.width, homeButton.height);
         game.batch.draw(currentPauseTexture, pauseButton.x, pauseButton.y, pauseButton.width, pauseButton.height);
+        game.batch.draw(currentInfoTexture, infoButton.x, infoButton.y, infoButton.width, infoButton.height);
         game.batch.end();
     }
 
@@ -269,6 +286,14 @@ public class GUI {
             SoundFX.sfx_button_clicked.play();
         }
         currentHomeTexture = homeButtonClicked;
+    }
+
+    public void clickedInfoButton() {
+        if (currentInfoTexture == infoButtonIdle) {
+            currentInfoTexture = infoButtonClicked;
+        } else {
+            currentInfoTexture = infoButtonIdle;
+        }
     }
 
     /** Sets the soundButton texture to either soundOffClickedTexture or
@@ -307,6 +332,8 @@ public class GUI {
     public void idlePauseButton() {
         currentPauseTexture = pauseButtonIdle;
     }
+
+    public void idleInfoButton() { currentInfoTexture = infoButtonIdle; }
 
     /** Sets the soundButton texture that is rendered to the screen */
     public void idleSoundButton() {
@@ -349,5 +376,7 @@ public class GUI {
     public Rectangle getSoundButton() { return this.soundButton; }
 
     public Rectangle getPauseButton() { return this.pauseButton; }
+
+    public Rectangle getInfoButton() { return this.infoButton; }
 
 }

@@ -213,6 +213,7 @@ public class ControlsScreen implements Screen {
         if (this.screen.equals("game")) {
             GUI gui = new GUI(game, (GameScreen) parent);
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent, gui));
+            gui.clickedInfoButton();
             this.game.setScreen(parent);
         } else if (this.screen.equals("menu")){
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
