@@ -219,10 +219,8 @@ public class GameInputHandler implements InputProcessor {
     /** Checks if the user clicked on the home, pause or sound button
      * and changes the sprite accordingly
      * @param position2d The tile that was clicked
-     * @return <code> true </code> If a button has been clicked
-     *         <code> false </code> Otherwise
      */
-    private boolean checkButtonClick(Vector2 position2d){
+    private void checkButtonClick(Vector2 position2d){
         if (gui.getHomeButton().contains(position2d)) {
             gui.clickedHomeButton();
         } else if (gui.getPauseButton().contains(position2d)){
@@ -232,7 +230,6 @@ public class GameInputHandler implements InputProcessor {
         } else if (gui.getInfoButton().contains(position2d)) {
             gui.clickedInfoButton();
         }
-        return true;
     }
 
     /** Checks if user clicked on a fortress, if it did this fortress
@@ -258,10 +255,8 @@ public class GameInputHandler implements InputProcessor {
      * appropriate action
      * @param screenX The x coordinate, origin is in the upper left corner
      * @param screenY The y coordinate, origin is in the upper left corner
-     * @return <code> true </code> If the user has clicked up over a button
-     *         <code> false </code> Otherwise
      */
-    private boolean checkButtonUnclick(int screenX, int screenY){
+    private void checkButtonUnclick(int screenX, int screenY){
         Vector2 screenCoords = new Vector2(screenX, Gdx.graphics.getHeight() - screenY);
 
         if (gui.getHomeButton().contains(screenCoords)) {
@@ -285,6 +280,5 @@ public class GameInputHandler implements InputProcessor {
         if (gui.getInfoButton().contains(screenCoords)){
             gameScreen.toControlScreen();
         }
-        return true;
     }
 }

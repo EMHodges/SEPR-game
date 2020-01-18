@@ -213,7 +213,7 @@ public class ControlsScreen implements Screen {
         if (this.screen.equals("game")) {
             GUI gui = new GUI(game, (GameScreen) parent);
             Gdx.input.setInputProcessor(new GameInputHandler((GameScreen) parent, gui));
-            gui.clickedInfoButton();
+            gui.idleInfoButton();
             this.game.setScreen(parent);
         } else if (this.screen.equals("menu")){
             Gdx.input.setInputProcessor(new MenuInputHandler((MenuScreen)parent));
@@ -221,12 +221,14 @@ public class ControlsScreen implements Screen {
         }
     }
 
+    /** Draws the image being shown behind the controls panel */
     private void drawBackgroundImage(){
         game.batch.begin();
         game.batch.draw(backgroundImage, 0, 0, camera.viewportWidth, camera.viewportHeight);
         game.batch.end();
     }
 
+    /** Draws the black rectangle over which the controls are shown */
     private void drawFilledBackgroundBox(){
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.rect(screenWidth / 25.6f,screenHeight / 16, screenWidth / 1.085f , screenHeight / 1.14f, Color.BLACK, Color.BLACK,Color.BLACK, Color.BLACK);

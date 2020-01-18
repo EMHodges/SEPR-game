@@ -288,6 +288,8 @@ public class GUI {
         currentHomeTexture = homeButtonClicked;
     }
 
+    /** Sets the infoButton texture to "Idle" if the previous was "Clicked",
+     * else it sets it to "Clicked" */
     public void clickedInfoButton() {
         if (currentInfoTexture == infoButtonIdle) {
             currentInfoTexture = infoButtonClicked;
@@ -333,7 +335,9 @@ public class GUI {
         currentPauseTexture = pauseButtonIdle;
     }
 
-    public void idleInfoButton() { currentInfoTexture = infoButtonIdle; }
+    public void idleInfoButton() {
+        currentInfoTexture = infoButtonIdle;
+    }
 
     /** Sets the soundButton texture that is rendered to the screen */
     public void idleSoundButton() {

@@ -62,7 +62,7 @@ public class MenuInputHandler implements InputProcessor {
      * @param screenY The y coordinate, origin is in the upper left corner
      * @param pointer the pointer for the event.
      * @param button the button
-     * @return whether the input was processed */
+     * @return the input was processed */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
@@ -77,6 +77,14 @@ public class MenuInputHandler implements InputProcessor {
         return true;
     }
 
+    /** Executes the action according to the button clicked by the user.
+     * i.e. if the user clicks down on the Start button but lifts their
+     * click somewhere else, the game will not start.
+     * @param screenX The x coordinate, origin is in the upper left corner
+     * @param screenY The y coordinate, origin is in the upper left corner
+     * @param pointer the pointer for the event.
+     * @param button the button
+     * @return the input was processed */
     @Override
     public boolean touchUp(int screenX, int screenY, int pointer, int button) {
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
