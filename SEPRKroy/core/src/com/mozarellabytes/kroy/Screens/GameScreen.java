@@ -213,7 +213,7 @@ public class GameScreen implements Screen {
      *
      * @param delta The time in seconds since the last render
      */
-    public void update(float delta) {
+    private void update(float delta) {
         gameState.hasGameEnded(game);
         CameraShake.update(delta, camera, new Vector2(camera.viewportWidth / 2f, camera.viewportHeight / 2f));
 
@@ -340,24 +340,6 @@ public class GameScreen implements Screen {
      * @param position  coordinates of truck
      * @return          coordinates of closest tile
      */
-    private Vector2 getsTile(Vector2 position) {
-        return new Vector2((int)position.x,(int)position.y);
-    }
-
-    public boolean checksClick(Vector2 position) {
-        Vector2 squareClicked = new Vector2((float)Math.floor(position.x), (float)Math.floor(position.y));
-        for (int i = this.station.getTrucks().size() - 1; i >= 0; i--) {
-            FireTruck selectedTruck = this.station.getTruck(i);
-            Vector2 truckTile = getTile(selectedTruck.getPosition());
-            if (squareClicked.equals(truckTile) ) {
-                this.selectedTruck = selectedTruck;
-                this.selectedEntity = selectedTruck;
-                return true;
-            }
-        }
-        return false;
-    }
-
     private Vector2 getTile(Vector2 position) {
         return new Vector2((float) Math.round((position.x)), (float) Math.round(position.y));
     }
@@ -418,7 +400,7 @@ public class GameScreen implements Screen {
      * Creates a new FireEngine, plays a sound and adds it gameState to track
      * @param type Type of truck to be spawned (Ocean, Speed)
      */
-    public void spawn(FireTruckType type) {
+    private void spawn(FireTruckType type) {
         SoundFX.sfx_truck_spawn.play();
         station.spawn(new FireTruck(this, new Vector2(6,2), type));
         gameState.addFireTruck();

@@ -18,8 +18,8 @@ public enum FortressType {
      * name, delay between firing bombs, attack range, maximum health points,
      * attack points, width, height and sprite.
      */
-    Revs ("Revolution", 2500, 5, 100, 10, 5, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_revs.png"))),
-    Walmgate ("Walmgate Bar", 3000, 7, 200, 15, 5, 5, new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png"))),
+    Revs ("Revolution", 2500, 7, 100, 10, 5, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_revs.png"))),
+    Walmgate ("Walmgate Bar", 1500, 8, 200, 15, 5, 5, new Texture(Gdx.files.internal("sprites/fortress/fortress_walmgate.png"))),
     Clifford ("Clifford's Tower", 500, 4, 150, 20, 4, 3, new Texture(Gdx.files.internal("sprites/fortress/fortress_clifford.png")));
 
     /** The name for the fortress, visible once the fortress has been clicked on */

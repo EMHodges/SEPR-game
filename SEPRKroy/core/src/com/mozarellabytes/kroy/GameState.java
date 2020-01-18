@@ -61,7 +61,7 @@ public class GameState {
      *                  <code> false </code> if player has lost
      * @param game LibGDX game
      */
-    public void endGame(Boolean playerWon, Kroy game) {
+    private void endGame(Boolean playerWon, Kroy game) {
         if (playerWon) {
             game.setScreen(new GameOverScreen(game, true));
         } else {

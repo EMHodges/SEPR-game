@@ -79,9 +79,9 @@ public class ControlsScreen implements Screen {
         screenHeight = camera.viewportHeight;
 
         Gdx.input.setInputProcessor(new ControlScreenInputHandler(this));
-        if (screen == "menu" ){
+        if (screen.equals("menu")) {
             backgroundImage = new Texture(Gdx.files.internal("menuscreen_blank_2.png"), true);
-        } else if (screen == "game"){
+        } else if (screen.equals("game")) {
             backgroundImage = new Texture(Gdx.files.internal("images/YorkMapEdit.png"), true);
         }
 
@@ -110,11 +110,11 @@ public class ControlsScreen implements Screen {
 
     }
 
-    @Override
     /** Renders the control screen including explaining how to move
      * the firetrucks and attack the fortresses
      *
      * @param delta The time in seconds since the last render. */
+    @Override
     public void render(float delta) {
 
         camera.update();
@@ -237,7 +237,7 @@ public class ControlsScreen implements Screen {
 
     /** Function causing damage to the fortress to deplete
      * it's health bar */
-    public void damageFortressHP() {
+    private void damageFortressHP() {
         if (HP == 0) {
             HP = 200;
         } else {
@@ -251,7 +251,7 @@ public class ControlsScreen implements Screen {
         game.shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
         game.shapeRenderer.rect(screenWidth / 1.4713f,  screenHeight / 2.58f, 35, 60);
         game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24, 50, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK, Color.FIREBRICK);
-        game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24,  HP / 4, Color.RED, Color.RED, Color.RED, Color.RED);
+        game.shapeRenderer.rect(screenWidth / 1.4629f, screenHeight / 2.5297f, 24,  HP / 4f, Color.RED, Color.RED, Color.RED, Color.RED);
         game.shapeRenderer.end();
 
         if (count <= 30) {

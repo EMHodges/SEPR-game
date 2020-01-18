@@ -3,22 +3,14 @@ package com.mozarellabytes.kroy.Entities;
 import com.badlogic.gdx.math.Vector2;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.junit.MockitoJUnit;
-import org.mockito.junit.MockitoRule;
 
 import static com.mozarellabytes.kroy.Entities.FortressType.Clifford;
 import static com.mozarellabytes.kroy.Entities.FortressType.Revs;
 import static com.mozarellabytes.kroy.Entities.FortressType.Walmgate;
 import static org.junit.Assert.*;
-
-import java.time.Clock;
-import java.time.Instant;
-import java.time.ZoneId;
-import java.util.ArrayList;
 
 @RunWith(GdxTestRunner.class)
 public class FortressTest {
@@ -74,24 +66,24 @@ public class FortressTest {
 
     @Test
     public void attackTruckFromWalmgateFortressBeforeRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 7
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16, 10), FireTruckType.Speed);
-        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
-        assertTrue(withinRange);
-    }
-
-    @Test
-    public void attackTruckFromWalmgateFortressOnRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 7
+        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 8
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertTrue(withinRange);
     }
 
     @Test
-    public void attackTruckFromWalmgateFortressAfterRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 7
+    public void attackTruckFromWalmgateFortressOnRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 8
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18, 10), FireTruckType.Speed);
+        boolean withinRange = fortress.withinRange(fireTruck.getPosition());
+        assertTrue(withinRange);
+    }
+
+    @Test
+    public void attackTruckFromWalmgateFortressAfterRangeBoundaryTest() {
+        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate); // range = 8
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(19, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertFalse(withinRange);
     }
@@ -122,24 +114,24 @@ public class FortressTest {
 
     @Test
     public void attackTruckFromRevolutionFortressBeforeRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(14, 10), FireTruckType.Speed);
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 7
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertTrue(withinRange);
     }
 
     @Test
     public void attackTruckFromRevolutionFortressOnRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(15, 10), FireTruckType.Speed);
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 7
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(17, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertTrue(withinRange);
     }
 
     @Test
     public void attackTruckFromRevolutionFortressAfterRangeBoundaryTest() {
-        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 5
-        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(16, 10), FireTruckType.Speed);
+        Fortress fortress = new Fortress(10, 10, FortressType.Revs); // range = 7
+        FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(18, 10), FireTruckType.Speed);
         boolean withinRange = fortress.withinRange(fireTruck.getPosition());
         assertFalse(withinRange);
     }

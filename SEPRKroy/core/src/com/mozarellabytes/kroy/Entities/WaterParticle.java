@@ -25,7 +25,7 @@ public class WaterParticle {
     /** The position where the water particle starts from (the position
      * of the truck)
      */
-    private Vector2 startPosition;
+    private final Vector2 startPosition;
 
     /** The current position of the water particle */
     private Vector2 currentPosition;

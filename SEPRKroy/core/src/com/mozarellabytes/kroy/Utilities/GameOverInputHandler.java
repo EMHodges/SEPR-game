@@ -12,7 +12,7 @@ import com.mozarellabytes.kroy.Screens.MenuScreen;
 
 public class GameOverInputHandler implements InputProcessor {
 
-    private Kroy game;
+    private final Kroy game;
 
     /** Constructs the GameOverInputHandler
      * @param game needs the game to be able to return to the menu screen */

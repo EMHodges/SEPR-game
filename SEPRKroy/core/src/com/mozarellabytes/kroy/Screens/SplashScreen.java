@@ -24,7 +24,7 @@ public class SplashScreen implements Screen {
 
     /** Constructor for the splash screen
      *
-     * @param game
+     * @param game LibGDX game
      */
     public SplashScreen(Kroy game) {
         this.game = game;
@@ -32,9 +32,8 @@ public class SplashScreen implements Screen {
         backgroundLogo.setFilter(Texture.TextureFilter.MipMapLinearNearest, Texture.TextureFilter.MipMapLinearNearest);
     }
 
-
-    @Override
     /** Logs the time that the screen was first rendered */
+    @Override
     public void show() {
         startTime = TimeUtils.millis();
     }

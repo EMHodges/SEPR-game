@@ -31,7 +31,7 @@ public class GameOverScreen implements Screen {
     private String text;
 
     /** Constructor for the game screen
-     * @param game
+     * @param game  LibGdx game
      * @param won <code> true </code> if the game was won
      *            <code> false </code> if th game was lost
      */

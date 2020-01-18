@@ -68,7 +68,7 @@ public class MenuScreen implements Screen {
 
     /** Constructs the MenuScreen
      *
-     * @param game
+     * @param game  LibGdx game
      */
     public MenuScreen(final Kroy game) {
         this.game = game;

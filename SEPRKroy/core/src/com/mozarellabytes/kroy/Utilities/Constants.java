@@ -11,8 +11,6 @@ public final class Constants {
 
     public static final float TILE_WxH = 48f; //Tile width and height in pixels
 
-    public static final float TARGET_FPS = 60f;
-
     private Constants() {
     }
 }

@@ -24,9 +24,6 @@ public class Fortress {
     /*** List of bombs that are active */
     private final ArrayList<Bomb> bombs;
 
-    /*** Timestamp when the last bomb was shot */
-    private long lastFire;
-
     /*** Gives Fortress certain stats */
     private final FortressType fortressType;
 
@@ -102,7 +99,7 @@ public class Fortress {
      *
      * @param bomb bomb being removed
      */
-    public void removeBomb(Bomb bomb) {
+    private void removeBomb(Bomb bomb) {
         this.bombs.remove(bomb);
     }
 
@@ -120,7 +117,7 @@ public class Fortress {
     /**
      * Draws the Fortress on the map
      *
-     * @param mapBatch
+     * @param mapBatch  the renderer in line with the map
      */
     public void draw(Batch mapBatch) {
         mapBatch.draw(this.getFortressType().getTexture(), this.getArea().x, this.getArea().y, this.getArea().width, this.getArea().height);

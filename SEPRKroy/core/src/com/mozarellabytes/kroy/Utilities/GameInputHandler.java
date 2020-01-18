@@ -179,17 +179,6 @@ public class GameInputHandler implements InputProcessor {
         return false;
     }
 
-    private boolean doTrucksHaveSameLastTile(FireTruck selectedTruck, FireTruck truck2) {
-        if (!truck2.getTrailPath().isEmpty()){
-            if (truck2.trailPath.last().equals(selectedTruck.trailPath.last())){
-                return true;
-            }
-        } else if (truck2.getPosition().equals(selectedTruck.trailPath.last())) {
-            return true;
-        }
-        return false;
-    }
-
     /** The method for giving trucks that have the same end tiles adjacent end tiles
      * so that they do not end up on the same tile
      * @param selectedTruck the truck that has to be moved so the two trucks end up
@@ -211,8 +200,7 @@ public class GameInputHandler implements InputProcessor {
     private Vector2 generateClickCoordinates(int screenX, int screenY){
         Vector2 clickCoordinates = new Vector2(screenX, screenY);
         Vector3 position = gameScreen.getCamera().unproject(new Vector3(clickCoordinates.x, clickCoordinates.y, 0));
-        Vector2 position2d = new Vector2((int) position.x, (int) position.y);
-        return position2d;
+        return new Vector2((int) position.x, (int) position.y);
     }
 
 

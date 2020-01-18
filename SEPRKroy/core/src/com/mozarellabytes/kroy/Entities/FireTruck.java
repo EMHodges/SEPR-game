@@ -72,7 +72,7 @@ public class FireTruck extends Sprite {
 
     /** List of particles that the truck uses to attack
      * a Fortress */
-    private ArrayList<WaterParticle> spray;
+    private final ArrayList<WaterParticle> spray;
 
     /** Texture for each direction the
      * truck is facing */
@@ -273,16 +273,16 @@ public class FireTruck extends Sprite {
      *
      * @param particle  The particle to be removed from spray
      */
-    public void removeParticle(WaterParticle particle) {
+    private void removeParticle(WaterParticle particle) {
         this.spray.remove(particle);
     }
 
     /**
      * Damages the Fortress depending on the truck's AP
      *
-     * @param particle
+     * @param particle  the particle which damages the fortress
      */
-    public void damage(WaterParticle particle) {
+    private void damage(WaterParticle particle) {
         particle.getTarget().damage(Math.min(this.type.getAP(), particle.getTarget().getHP()));
     }
 
@@ -402,7 +402,7 @@ public class FireTruck extends Sprite {
         return this.path;
     }
 
-    public ArrayList<WaterParticle> getSpray() {
+    private ArrayList<WaterParticle> getSpray() {
         return this.spray;
     }
 

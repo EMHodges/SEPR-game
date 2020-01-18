@@ -1,7 +1,6 @@
 package com.mozarellabytes.kroy.Entities;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.utils.Queue;
 import com.mozarellabytes.kroy.GdxTestRunner;
 import com.mozarellabytes.kroy.Screens.GameScreen;
 import org.junit.Rule;
@@ -159,9 +158,9 @@ public class FireTruckTest {
 
     @Test
     public void checkDifferentRangeTest() {
-        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(10, 17), Speed);
-        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10, 17), Ocean);
-        Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
+        FireTruck fireTruck1 = new FireTruck(gameScreenMock, new Vector2(10, 15), Speed);
+        FireTruck fireTruck2 = new FireTruck(gameScreenMock, new Vector2(10, 15), Ocean);
+        Fortress fortress = new Fortress(10, 10, FortressType.Clifford);
         fireTruck1.fortressInRange(fortress.getPosition());
         assertNotEquals(fireTruck1.fortressInRange(fortress.getPosition()), fireTruck2.fortressInRange(fortress.getPosition()));
     }
