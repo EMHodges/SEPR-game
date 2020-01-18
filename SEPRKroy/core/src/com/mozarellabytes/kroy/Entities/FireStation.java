@@ -39,7 +39,6 @@ public class FireStation {
      * @link FireTruck */
     private final ArrayList<FireTruck> trucks;
 
-
     /**
      * Constructs the Firestation with at a given position with locations
      * for the repair and refill tiles and the spawn tiles.
@@ -70,7 +69,6 @@ public class FireStation {
         }
         this.trucks.add(truck);
     }
-
 
     /**
      * Calls the repair and refill methods. When a truck is within the station
@@ -117,7 +115,6 @@ public class FireStation {
     public void destroyTruck(FireTruck truck) {
         this.trucks.remove(truck);
     }
-
 
     /**
      * Checks that no more than one truck occupies a tile at a time by checking trucks
@@ -177,7 +174,7 @@ public class FireStation {
     /** Draws the firetruck to the gameScreen
      * @param mapBatch batch being used to render to the gameScreen */
     public void draw(Batch mapBatch) {
-        mapBatch.draw(this.getTexture(), this.x, this.y, 5, 3);
+        mapBatch.draw(this.texture, this.x, this.y, 5, 3);
     }
 
     public ArrayList<FireTruck> getTrucks() {
@@ -186,9 +183,5 @@ public class FireStation {
 
     public FireTruck getTruck(int i) {
         return this.trucks.get(i);
-    }
-
-    public Texture getTexture() {
-        return this.texture;
     }
 }

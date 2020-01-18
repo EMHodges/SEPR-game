@@ -1,0 +1,172 @@
+
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html id="htmlId">
+<head>
+  <title>Coverage Report :: FortressType</title>
+  <style type="text/css">
+    @import "../../.css/coverage.css";
+  </style>
+</head>
+
+<body>
+<div class="header"></div>
+
+<div class="content">
+<div class="breadCrumbs">
+    [ <a href="../../index.html">all classes</a> ]
+    [ <a href="../index.html">com.mozarellabytes.kroy.Entities</a> ]
+</div>
+
+<h1>Coverage Summary for Class: FortressType (com.mozarellabytes.kroy.Entities)</h1>
+
+<table class="coverageStats">
+<tr>
+  <th class="name">Class</th>
+<th class="coverageStat 
+">
+  Class, %
+</th>
+<th class="coverageStat 
+">
+  Method, %
+</th>
+<th class="coverageStat 
+">
+  Line, %
+</th>
+</tr>
+<tr>
+  <td class="name">FortressType</td>
+<td class="coverageStat">
+  <span class="percent">
+    100%
+  </span>
+  <span class="absValue">
+    (1/ 1)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    81.8%
+  </span>
+  <span class="absValue">
+    (9/ 11)
+  </span>
+</td>
+<td class="coverageStat">
+  <span class="percent">
+    90.9%
+  </span>
+  <span class="absValue">
+    (20/ 22)
+  </span>
+</td>
+</tr>
+
+</table>
+
+<br/>
+<br/>
+
+
+<div class="sourceCode"><i>1</i>&nbsp;package com.mozarellabytes.kroy.Entities;
+<i>2</i>&nbsp;
+<i>3</i>&nbsp;import com.badlogic.gdx.Gdx;
+<i>4</i>&nbsp;import com.badlogic.gdx.graphics.Texture;
+<i>5</i>&nbsp;
+<i>6</i>&nbsp;/**
+<i>7</i>&nbsp; * FortressType is an enum defining the fortresses that can be present in the game.
+<i>8</i>&nbsp; * Each fortress type has a unique name, delay between firing bombs, attack range,
+<i>9</i>&nbsp; * maximum health points, attack points, width, height and sprite.
+<i>10</i>&nbsp; * This allows there to be numerous different types of fortresses without having
+<i>11</i>&nbsp; * to randomly generate values which may make the game unplayable in some instances
+<i>12</i>&nbsp; * and too easy in other instances.
+<i>13</i>&nbsp; */
+<i>14</i>&nbsp;
+<b class="fc"><i>15</i>&nbsp;public enum FortressType {</b>
+<i>16</i>&nbsp;
+<i>17</i>&nbsp;    /** The preset values for the different fortress types includes the type&#39;s:
+<i>18</i>&nbsp;     * name, delay between firing bombs, attack range, maximum health points,
+<i>19</i>&nbsp;     * attack points, width, height and sprite.
+<i>20</i>&nbsp;     */
+<b class="fc"><i>21</i>&nbsp;    Revs (&quot;Revolution&quot;, 2500, 5, 100, 10, 5, 3, new Texture(Gdx.files.internal(&quot;sprites/fortress/fortress_revs.png&quot;))),</b>
+<b class="fc"><i>22</i>&nbsp;    Walmgate (&quot;Walmgate Bar&quot;, 3000, 7, 200, 15, 5, 5, new Texture(Gdx.files.internal(&quot;sprites/fortress/fortress_walmgate.png&quot;))),</b>
+<b class="fc"><i>23</i>&nbsp;    Clifford (&quot;Clifford&#39;s Tower&quot;, 500, 4, 150, 20, 4, 3, new Texture(Gdx.files.internal(&quot;sprites/fortress/fortress_clifford.png&quot;)));</b>
+<i>24</i>&nbsp;
+<i>25</i>&nbsp;    /** The name for the fortress, visible once the fortress has been clicked on */
+<i>26</i>&nbsp;    private final String name;
+<i>27</i>&nbsp;
+<i>28</i>&nbsp;    /** The time between firing bombs */
+<i>29</i>&nbsp;    private final int delay;
+<i>30</i>&nbsp;
+<i>31</i>&nbsp;    /** The range that the fortress can see and attack firetrucks */
+<i>32</i>&nbsp;    private final float range;
+<i>33</i>&nbsp;
+<i>34</i>&nbsp;    /** The maximum health points for the fortress - always 100 */
+<i>35</i>&nbsp;    private final float maxHP;
+<i>36</i>&nbsp;
+<i>37</i>&nbsp;    /** Attack points - how much damage the fortress can inflict */
+<i>38</i>&nbsp;    private final float AP;
+<i>39</i>&nbsp;
+<i>40</i>&nbsp;    /** The width of the sprite measured in tiles */
+<i>41</i>&nbsp;    private final int w;
+<i>42</i>&nbsp;
+<i>43</i>&nbsp;    /** The height of the sprite measured in tiles */
+<i>44</i>&nbsp;    private final int h;
+<i>45</i>&nbsp;
+<i>46</i>&nbsp;    /** The sprite for the fortress */
+<i>47</i>&nbsp;    private final Texture texture;
+<i>48</i>&nbsp;
+<i>49</i>&nbsp;    /**
+<i>50</i>&nbsp;     * Constructs the FortressType
+<i>51</i>&nbsp;     *
+<i>52</i>&nbsp;     * @param name The name for this type of fortress
+<i>53</i>&nbsp;     * @param delay The delay between firing bombs in milliseconds
+<i>54</i>&nbsp;     * @param range The attack range for this type of fortress in tiles
+<i>55</i>&nbsp;     * @param maxHP The maximum health points for this type of fortress
+<i>56</i>&nbsp;     * @param AP The attack points for this type of fortress
+<i>57</i>&nbsp;     * @param w The width of the sprite for this type of fortress in tiles
+<i>58</i>&nbsp;     * @param h The height of the sprite for this type of fortress in tiles
+<i>59</i>&nbsp;     * @param texture The sprite for this type of fortress
+<i>60</i>&nbsp;     *
+<i>61</i>&nbsp;     */
+<b class="fc"><i>62</i>&nbsp;    FortressType(String name, int delay, float range, float maxHP, float AP, int w, int h, Texture texture) {</b>
+<b class="fc"><i>63</i>&nbsp;        this.name = name;</b>
+<b class="fc"><i>64</i>&nbsp;        this.delay = delay;</b>
+<b class="fc"><i>65</i>&nbsp;        this.range = range;</b>
+<b class="fc"><i>66</i>&nbsp;        this.maxHP = maxHP;</b>
+<b class="fc"><i>67</i>&nbsp;        this.AP = AP;</b>
+<b class="fc"><i>68</i>&nbsp;        this.w = w;</b>
+<b class="fc"><i>69</i>&nbsp;        this.h = h;</b>
+<b class="fc"><i>70</i>&nbsp;        this.texture = texture;</b>
+<b class="fc"><i>71</i>&nbsp;    }</b>
+<i>72</i>&nbsp;
+<b class="nc"><i>73</i>&nbsp;    public String getName() { return name; }</b>
+<i>74</i>&nbsp;
+<b class="fc"><i>75</i>&nbsp;    public int getDelay() { return delay; }</b>
+<i>76</i>&nbsp;
+<b class="fc"><i>77</i>&nbsp;    public float getRange() { return range; }</b>
+<i>78</i>&nbsp;
+<b class="fc"><i>79</i>&nbsp;    public float getMaxHP() { return maxHP; }</b>
+<i>80</i>&nbsp;
+<b class="fc"><i>81</i>&nbsp;    public float getAP() { return AP; }</b>
+<i>82</i>&nbsp;
+<b class="fc"><i>83</i>&nbsp;    public int getW() { return w; }</b>
+<i>84</i>&nbsp;
+<b class="fc"><i>85</i>&nbsp;    public int getH() { return h; }</b>
+<i>86</i>&nbsp;
+<b class="nc"><i>87</i>&nbsp;    public Texture getTexture() { return texture; }</b>
+<i>88</i>&nbsp;
+<i>89</i>&nbsp;}
+</div>
+</div>
+
+<div class="footer">
+    
+    <div style="float:right;">generated on 2020-01-18 18:59</div>
+</div>
+</body>
+</html>
