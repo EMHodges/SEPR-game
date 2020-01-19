@@ -42,7 +42,9 @@ public class FortressTest {
     public void attackTruckFromWalmgateFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Walmgate);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
-        new Bomb(fortress, fireTruck, true).damageTruck();
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
+        fortress.attack(fireTruck, false);
+        fortress.updateBombs();
         assertEquals(135, fireTruck.getHP(), 0.0);
     }
 
@@ -50,7 +52,7 @@ public class FortressTest {
     public void attackTruckFromCliffordFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Clifford);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
-        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 1000);
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
         fortress.attack(fireTruck, false);
         fortress.updateBombs();
         assertEquals(130.0, fireTruck.getHP(), 0.0);
@@ -60,7 +62,9 @@ public class FortressTest {
     public void attackTruckFromRevolutionFortressDamageTest() {
         Fortress fortress = new Fortress(10, 10, FortressType.Revs);
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), FireTruckType.Speed);
-        new Bomb(fortress, fireTruck, true).damageTruck();
+        fireTruck.setTimeOfLastAttack(System.currentTimeMillis() - 5000);
+        fortress.attack(fireTruck, false);
+        fortress.updateBombs();
         assertEquals(140.0, fireTruck.getHP(), 0.0);
     }
 
