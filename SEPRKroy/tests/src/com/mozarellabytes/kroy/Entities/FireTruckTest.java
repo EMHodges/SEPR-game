@@ -172,7 +172,7 @@ public class FireTruckTest {
         fireTruck.setAttacking(true);
         float healthBefore = fortress.getHP();
         fireTruck.attack(fortress);
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<200; i++) {
             fireTruck.updateSpray();
         }
         float healthAfter = fortress.getHP();
@@ -199,7 +199,7 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Speed);
         fireTruck.setAttacking(true);
         fireTruck.attack(fortress);
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<200; i++) {
             fireTruck.updateSpray();
         }
         float fortressHealthAfter = fortress.getHP();
@@ -225,7 +225,7 @@ public class FireTruckTest {
         FireTruck fireTruck = new FireTruck(gameScreenMock, new Vector2(10, 10), Ocean);
         fireTruck.setAttacking(true);
         fireTruck.attack(fortress);
-        for (int i=0; i<100; i++) {
+        for (int i=0; i<200; i++) {
             fireTruck.updateSpray();
         }
         float fortressHealthAfter = fortress.getHP();
